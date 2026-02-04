@@ -7,6 +7,7 @@ use App\Models\AvailableSlot;
 use App\Mail\AppointmentBooked;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -74,13 +75,6 @@ class AppointmentController extends Controller
      */
     public function store(Request $request, AvailableSlot $slot)
     {
-        // Recheck slot availability
-        $slot->refresh();
-        if ($slot->status !== 'available') {
-            return redirect()->route('appointments.index')
-                ->with('error', 'This appointment slot is no longer available. Please select another slot.');
-        }
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -97,35 +91,47 @@ class AppointmentController extends Controller
         }
 
         try {
-            // Mark slot as pending
-            $slot->update(['status' => 'pending']);
+            return DB::transaction(function () use ($request, $slot) {
+                // Lock the slot row for update to prevent race conditions
+                $lockedSlot = AvailableSlot::where('id', $slot->id)
+                    ->lockForUpdate()
+                    ->first();
 
-            // Create pending appointment
-            $pendingAppointment = PendingAppointment::create([
-                'user_id' => Auth::id(),
-                'available_slot_id' => $slot->id,
-                'vehicle_id' => $request->vehicle_id,
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'service' => $request->service,
-                'notes' => $request->notes,
-                'status' => 'pending',
-            ]);
+                // Check if slot is still available after locking
+                if (!$lockedSlot || $lockedSlot->status !== 'available') {
+                    return redirect()->route('appointments.index')
+                        ->with('error', 'This appointment slot is no longer available. Please select another slot.');
+                }
 
-            // Send confirmation email
-            Mail::to($pendingAppointment->email)->send(new AppointmentBooked($pendingAppointment));
+                // Mark slot as pending
+                $lockedSlot->update(['status' => 'pending']);
 
-            return redirect()->route('appointments.confirmation')
-                ->with('success', 'Your appointment request has been submitted and is pending approval!');
+                // Create pending appointment
+                $pendingAppointment = PendingAppointment::create([
+                    'user_id' => Auth::id(),
+                    'available_slot_id' => $lockedSlot->id,
+                    'vehicle_id' => $request->vehicle_id,
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'service' => $request->service,
+                    'notes' => $request->notes,
+                    'status' => 'pending',
+                ]);
+
+                // Send confirmation email
+                Mail::to($pendingAppointment->email)->send(new AppointmentBooked($pendingAppointment));
+
+                return redirect()->route('appointments.confirmation')
+                    ->with('success', 'Your appointment request has been submitted and is pending approval!');
+            });
         } catch (\Exception $e) {
-            $slot->update(['status' => 'available']);
             \Log::error('Appointment submission error: ' . $e->getMessage(), [
                 'exception' => $e,
                 'request_data' => $request->all()
             ]);
             return redirect()->back()
-                ->with('error', 'An error occurred while submitting your request: ' . $e->getMessage())
+                ->with('error', 'An error occurred while submitting your request. Please try again.')
                 ->withInput();
         }
     }
