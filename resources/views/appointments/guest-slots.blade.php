@@ -1,13 +1,59 @@
-<x-app-layout>
-    <div class="py-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen">
-        <div class="max-w-[95%] mx-auto sm:px-4 lg:px-6">
-            <!-- Header Section -->
-            <div class="mb-8 mt-8 text-center">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ __('messages.select_appointment_slot') }} - {{ config('app.name') }}</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="font-sans antialiased bg-white dark:bg-gray-900">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center">
+                        <img src="{{ asset('images/logo.png') }}" alt="CBM Auto" class="h-20 w-auto max-w-none">
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/#about" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_about') }}</a>
+                    <a href="/#services" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_services') }}</a>
+                    <a href="/#contact" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_contact') }}</a>
+                    
+                    <!-- Language Toggle -->
+                    <div class="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+                        <a href="{{ route('language.switch', 'en') }}" class="px-3 py-1.5 rounded {{ app()->getLocale() == 'en' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition">EN</a>
+                        <a href="{{ route('language.switch', 'hu') }}" class="px-3 py-1.5 rounded {{ app()->getLocale() == 'hu' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition">HU</a>
+                    </div>
+
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="px-6 py-2.5 bg-gray-800 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-900 dark:hover:bg-gray-600 font-semibold transition">
+                            {{ __('messages.nav_dashboard') }}
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg hover:shadow-xl">
+                            {{ __('messages.nav_login') }}
+                        </a>
+                    @endauth
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 pt-24 pb-8">
+        <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="text-center mb-8 mt-8">
                 <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-3">
-                    {{ __('messages.appointments_available') }}
+                    {{ __('messages.select_appointment_slot') }}
                 </h1>
                 <p class="text-lg text-gray-600 dark:text-gray-300">
-                    {{ __('messages.appointments_select_time') }}
+                    {{ __('messages.guest_slots_description') }}
                 </p>
             </div>
 
@@ -23,9 +69,15 @@
                 </div>
             @endif
 
+            @if (session('info'))
+                <div class="mb-6 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-lg">
+                    <p class="text-blue-800 dark:text-blue-200">{{ session('info') }}</p>
+                </div>
+            @endif
+
             <!-- Filters -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mb-6">
-                <form method="GET" action="{{ route('appointments.index') }}" class="flex flex-wrap items-end gap-4">
+                <form method="GET" action="{{ route('guest.slots') }}" class="flex flex-wrap items-end gap-4">
                     <div class="flex-1 min-w-[200px]">
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.date_from') }}
@@ -111,25 +163,28 @@
                                 <div x-show="expanded" x-collapse class="px-3 pb-3">
                                     <div class="flex overflow-x-auto gap-3 pt-3">
                                     @foreach($slotsOnDate as $slot)
-                                        <a href="{{ route('appointments.show', $slot->id) }}" class="flex-shrink-0 w-[140px] bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 hover:border-red-500 dark:hover:border-red-500 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 flex flex-col items-center justify-center space-y-2 hover:bg-red-50 dark:hover:bg-red-900/20">
-                                            <div class="flex items-center justify-center">
-                                                <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                                                </svg>
-                                            </div>
-                                            <div class="flex flex-col items-center justify-center space-y-1">
-                                                <span class="text-xl font-bold text-gray-900 dark:text-white">
-                                                    {{ \Carbon\Carbon::parse($slot->start_time)->format('H:i') }}
-                                                </span>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400">to</span>
-                                                <span class="text-xl font-bold text-gray-900 dark:text-white">
-                                                    {{ \Carbon\Carbon::parse($slot->end_time)->format('H:i') }}
-                                                </span>
-                                            </div>
-                                            <div class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-semibold rounded-full">
-                                                {{ __('messages.available') }}
-                                            </div>
-                                        </a>
+                                        <form action="{{ route('guest.slots.select', $slot->id) }}" method="POST" class="flex-shrink-0">
+                                            @csrf
+                                            <button type="submit" class="w-[140px] bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 hover:border-red-500 dark:hover:border-red-500 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 flex flex-col items-center justify-center space-y-2 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                                <div class="flex items-center justify-center">
+                                                    <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="flex flex-col items-center justify-center space-y-1">
+                                                    <span class="text-xl font-bold text-gray-900 dark:text-white">
+                                                        {{ \Carbon\Carbon::parse($slot->start_time)->format('H:i') }}
+                                                    </span>
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400">to</span>
+                                                    <span class="text-xl font-bold text-gray-900 dark:text-white">
+                                                        {{ \Carbon\Carbon::parse($slot->end_time)->format('H:i') }}
+                                                    </span>
+                                                </div>
+                                                <div class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-semibold rounded-full">
+                                                    {{ __('messages.available') }}
+                                                </div>
+                                            </button>
+                                        </form>
                                     @endforeach
                                     </div>
                                 </div>
@@ -137,6 +192,7 @@
                         @endforeach
                     </div>
                 @endif
+            </div>
             </div>
         </div>
     </div>
@@ -154,4 +210,5 @@
             </svg>
         </button>
     </div>
-</x-app-layout>
+</body>
+</html>

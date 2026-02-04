@@ -19,12 +19,11 @@ class AppointmentController extends Controller
     {
         $query = AvailableSlot::available();
 
-        // Filter by week
-        if ($request->filled('week')) {
-            $weekStart = now()->startOfWeek()->addWeeks((int) $request->week);
-            $weekEnd = $weekStart->copy()->endOfWeek();
-            $query->whereBetween('start_time', [$weekStart, $weekEnd]);
-        }
+        // Filter by date range
+        $dateFrom = $request->filled('date_from') ? $request->date_from : now()->format('Y-m-d');
+        $dateTo = $request->filled('date_to') ? $request->date_to : now()->addWeeks(2)->format('Y-m-d');
+        
+        $query->whereBetween('start_time', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59']);
 
         // Filter by day of week (SQLite compatible) - supports multiple days
         if ($request->filled('days') && is_array($request->days)) {
@@ -75,9 +74,11 @@ class AppointmentController extends Controller
      */
     public function store(Request $request, AvailableSlot $slot)
     {
+        // Recheck slot availability
+        $slot->refresh();
         if ($slot->status !== 'available') {
             return redirect()->route('appointments.index')
-                ->with('error', 'This appointment slot is no longer available.');
+                ->with('error', 'This appointment slot is no longer available. Please select another slot.');
         }
 
         $validator = Validator::make($request->all(), [
@@ -139,5 +140,60 @@ class AppointmentController extends Controller
         }
 
         return view('appointments.confirmation');
+    }
+
+    /**
+     * Show available slots for guest users
+     */
+    public function guestSlots(Request $request)
+    {
+        $query = AvailableSlot::available();
+
+        // Filter by date range
+        $dateFrom = $request->filled('date_from') ? $request->date_from : now()->format('Y-m-d');
+        $dateTo = $request->filled('date_to') ? $request->date_to : now()->addWeeks(2)->format('Y-m-d');
+        
+        $query->whereBetween('start_time', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59']);
+
+        // Filter by time of day
+        if ($request->filled('time_period')) {
+            switch ($request->time_period) {
+                case 'morning':
+                    $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 6 AND CAST(strftime('%H', start_time) AS INTEGER) < 12");
+                    break;
+                case 'afternoon':
+                    $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 12 AND CAST(strftime('%H', start_time) AS INTEGER) < 17");
+                    break;
+                case 'evening':
+                    $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 17 AND CAST(strftime('%H', start_time) AS INTEGER) < 21");
+                    break;
+            }
+        }
+
+        $availableSlots = $query->orderBy('start_time', 'asc')->get();
+        
+        return view('appointments.guest-slots', compact('availableSlots'));
+    }
+
+    /**
+     * Handle guest slot selection and redirect to login/register
+     */
+    public function selectGuestSlot(Request $request, $slotId)
+    {
+        $slot = AvailableSlot::findOrFail($slotId);
+        
+        if ($slot->status !== 'available') {
+            return redirect()->route('guest.slots')
+                ->with('error', 'This slot is no longer available. Please select another.');
+        }
+
+        // Store the selected slot in session
+        session(['selected_slot_id' => $slotId]);
+        session(['intended_booking' => true]);
+
+        // Redirect to login with a message
+        return redirect()->route('login')
+            ->with('info', 'Please login or register to complete your booking for ' . 
+                   \Carbon\Carbon::parse($slot->start_time)->format('l, F j \a\t H:i'));
     }
 }

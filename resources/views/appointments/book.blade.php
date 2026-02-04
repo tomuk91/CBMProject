@@ -198,9 +198,9 @@
                                 </select>
                                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                                     Don't see your vehicle? 
-                                    <a href="{{ route('vehicles.index') }}" class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-semibold">
+                                    <button type="button" onclick="openAddVehicleModal()" class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-semibold">
                                         {{ __('messages.add_vehicle') }}
-                                    </a>
+                                    </button>
                                 </p>
                                 @error('vehicle_id')
                                     <p class="mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center">
@@ -229,12 +229,12 @@
                                             <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-2">
                                                 {{ __('messages.no_vehicles') }}
                                             </p>
-                                            <a href="{{ route('vehicles.index') }}" class="inline-flex items-center text-sm font-bold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition">
+                                            <button type="button" onclick="openAddVehicleModal()" class="inline-flex items-center text-sm font-bold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition">
                                                 <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
                                                     <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
                                                 </svg>
                                                 {{ __('messages.add_your_first_vehicle') }}
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -422,4 +422,27 @@
             </div>
         </div>
     </div>
+
+    @include('profile.partials.vehicle-modal')
+    
+    <script>
+        function openAddVehicleModal() {
+            document.getElementById('vehicleModalTitle').textContent = '{{ __("messages.add_vehicle") }}';
+            document.getElementById('vehicleForm').action = '{{ route("vehicles.store") }}';
+            document.getElementById('vehicleMethod').value = 'POST';
+            document.getElementById('vehicleForm').reset();
+            document.getElementById('vehicleModal').classList.remove('hidden');
+        }
+
+        function closeVehicleModal() {
+            document.getElementById('vehicleModal').classList.add('hidden');
+            document.getElementById('vehicleForm').reset();
+        }
+
+        // Reload page after successfully adding a vehicle
+        document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+            // Form will submit normally, and Laravel will redirect back
+            // The vehicle will now be available in the dropdown
+        });
+    </script>
 </x-app-layout>

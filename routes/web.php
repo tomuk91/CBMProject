@@ -19,6 +19,10 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+// Guest appointment slot selection (before login)
+Route::get('/slots', [AppointmentController::class, 'guestSlots'])->name('guest.slots');
+Route::post('/slots/{slot}/select', [AppointmentController::class, 'selectGuestSlot'])->name('guest.slots.select');
+
 Route::get('/dashboard', function () {
     $appointments = Appointment::where('user_id', Auth::id())
         ->orderBy('appointment_date', 'desc')

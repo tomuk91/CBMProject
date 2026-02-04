@@ -38,7 +38,7 @@
                         <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">
                             {{ __('messages.nav_login') }}
                         </a>
-                        <a href="{{ route('register') }}" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg hover:shadow-xl">
+                        <a href="{{ route('guest.slots') }}" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg hover:shadow-xl">
                             {{ __('messages.hero_cta_primary') }}
                         </a>
                     @endauth
@@ -67,7 +67,7 @@
                     <a href="{{ route('dashboard') }}" class="block px-4 py-2 bg-gray-800 text-white text-center rounded-lg font-semibold">{{ __('messages.nav_dashboard') }}</a>
                 @else
                     <a href="{{ route('login') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_login') }}</a>
-                    <a href="{{ route('register') }}" class="block px-4 py-2 bg-red-600 text-white text-center rounded-lg font-semibold">{{ __('messages.hero_cta_primary') }}</a>
+                    <a href="{{ route('guest.slots') }}" class="block px-4 py-2 bg-red-600 text-white text-center rounded-lg font-semibold">{{ __('messages.hero_cta_primary') }}</a>
                 @endauth
             </div>
         </div>
@@ -90,12 +90,21 @@
                 <p class="text-xl lg:text-2xl text-gray-200 mb-8 leading-relaxed">
                     {{ __('messages.hero_main_description') }}
                 </p>
-                <a href="{{ route('appointments.index') }}" class="inline-flex items-center px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold text-lg transition shadow-lg hover:shadow-xl transform hover:scale-105">
-                    {{ __('messages.hero_cta_primary') }}
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </a>
+                @auth
+                    <a href="{{ route('appointments.index') }}" class="inline-flex items-center px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold text-lg transition shadow-lg hover:shadow-xl transform hover:scale-105">
+                        {{ __('messages.hero_cta_primary') }}
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                @else
+                    <a href="{{ route('guest.slots') }}" class="inline-flex items-center px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold text-lg transition shadow-lg hover:shadow-xl transform hover:scale-105">
+                        {{ __('messages.hero_cta_primary') }}
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                @endauth
             </div>
         </div>
     </section>
@@ -118,7 +127,7 @@
                     <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8">
                         {{ __('messages.about_description') }}
                     </p>
-                    <a href="{{ route('appointments.index') }}" class="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg">
+                    <a href="{{ Auth::check() ? route('appointments.index') : route('guest.slots') }}" class="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg">
                         {{ __('messages.about_cta') }}
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -170,7 +179,7 @@
             </div>
 
             <div class="text-center">
-                <a href="{{ route('appointments.index') }}" class="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg">
+                <a href="{{ Auth::check() ? route('appointments.index') : route('guest.slots') }}" class="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg">
                     {{ __('messages.brands_cta') }}
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -306,7 +315,7 @@
                     <ul class="space-y-3">
                         <li><a href="#about" class="text-gray-400 hover:text-red-500 transition">{{ __('messages.nav_about') }}</a></li>
                         <li><a href="#services" class="text-gray-400 hover:text-red-500 transition">{{ __('messages.nav_services') }}</a></li>
-                        <li><a href="{{ route('appointments.index') }}" class="text-gray-400 hover:text-red-500 transition">{{ __('messages.nav_book') }}</a></li>
+                        <li><a href="{{ Auth::check() ? route('appointments.index') : route('guest.slots') }}" class="text-gray-400 hover:text-red-500 transition">{{ __('messages.nav_book') }}</a></li>
                         @auth
                             <li><a href="{{ route('dashboard') }}" class="text-gray-400 hover:text-red-500 transition">{{ __('messages.nav_dashboard') }}</a></li>
                         @else

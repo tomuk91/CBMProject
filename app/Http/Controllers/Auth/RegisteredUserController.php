@@ -50,6 +50,18 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        // Check if user was trying to book an appointment
+        if (session('intended_booking') && session('selected_slot_id')) {
+            $slotId = session('selected_slot_id');
+            
+            // Clear the booking intent flags
+            session()->forget(['intended_booking', 'selected_slot_id']);
+            
+            // Redirect to booking page with the selected slot
+            return redirect()->route('appointments.show', $slotId)
+                ->with('success', 'Welcome! Please complete your booking below.');
+        }
+
         return redirect(route('dashboard', absolute: false));
     }
 }
