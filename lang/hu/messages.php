@@ -364,6 +364,7 @@ return [
     'confirm_complete_appointment' => 'Befejezettként jelöli ezt az időpontot?',
     'appointment_completed_success' => 'Az időpont befejezettként megjelölve!',
     'error_generic' => 'Hiba történt. Kérjük, próbálja újra.',
+    'error_slot_in_past' => 'Múltbeli időpontot nem lehet létrehozni. Kérjük, válasszon jövőbeli dátumot és időpontot.',
     'old_slots_cleaned' => 'A régi időpontok eltávolításra kerültek',
     'msg_saved' => 'Sikeresen mentve',
     'msg_deleted' => 'Sikeresen törölve',

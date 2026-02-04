@@ -540,7 +540,7 @@ class AppointmentController extends Controller
     public function storeSlot(Request $request)
     {
         $request->validate([
-            'start_date' => 'required|date|after:now',
+            'start_date' => 'required|date',
             'start_time' => 'required',
             'duration' => 'required|integer|min:15|max:480',
             'bulk_type' => 'nullable|in:single,daily,weekly',
@@ -550,6 +550,14 @@ class AppointmentController extends Controller
             'selected_days.*' => 'integer|min:0|max:6',
             'force_create' => 'nullable|in:0,1',
         ]);
+
+        // Check if the slot start time is in the past
+        $startDateTime = \Carbon\Carbon::parse($request->start_date . ' ' . $request->start_time);
+        if ($startDateTime->isPast()) {
+            return redirect()->back()
+                ->with('error', __('messages.error_slot_in_past'))
+                ->withInput();
+        }
 
         $createdCount = 0;
         $skippedCount = 0;
@@ -561,7 +569,6 @@ class AppointmentController extends Controller
 
         if ($request->bulk_type === 'single' || !$request->bulk_type) {
             // Single slot creation
-            $startDateTime = \Carbon\Carbon::parse($request->start_date . ' ' . $request->start_time);
             $endDateTime = $startDateTime->copy()->addMinutes($duration);
 
             // Check for conflicts only if not forcing

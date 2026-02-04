@@ -60,8 +60,8 @@
             @endif
 
             <!-- Create New Slot Form -->
-            <div x-data="{ expanded: false }" class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
-                <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
+            <div x-data="{ expanded: {{ $errors->any() || old('start_date') ? 'true' : 'false' }} }" class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
+                <div @click="expanded = !expanded" class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 cursor-pointer hover:from-red-700 hover:to-red-800 transition-all duration-200">
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-xl font-bold text-white flex items-center">
@@ -72,16 +72,14 @@
                             </h3>
                             <p class="text-red-100 text-sm mt-1">Create single or multiple slots using bulk patterns</p>
                         </div>
-                        <button type="button" 
-                                @click="expanded = !expanded"
-                                class="ml-4 p-2 rounded-lg bg-red-700/50 hover:bg-red-700 transition-all duration-200 text-white">
+                        <div class="ml-4 p-2 rounded-lg bg-red-700/50 text-white">
                             <svg x-show="!expanded" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                             <svg x-show="expanded" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
                             </svg>
-                        </button>
+                        </div>
                     </div>
                 </div>
                 <div x-show="expanded" 
@@ -105,15 +103,15 @@
                             </label>
                             <div class="space-y-3">
                                 <label class="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 border-2 border-transparent has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/20">
-                                    <input type="radio" name="bulk_type" value="single" checked class="creation-mode text-red-600 focus:ring-red-500" data-mode="single">
+                                    <input type="radio" name="bulk_type" value="single" {{ old('bulk_type', 'single') == 'single' ? 'checked' : '' }} class="creation-mode text-red-600 focus:ring-red-500" data-mode="single">
                                     <span class="ml-3 text-gray-900 dark:text-gray-100">📌 <strong>{{ __('messages.create_mode_single') }}</strong> - <span class="text-sm text-gray-600 dark:text-gray-400">{{ __('messages.create_mode_single_desc') }}</span></span>
                                 </label>
                                 <label class="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 border-2 border-transparent has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/20">
-                                    <input type="radio" name="bulk_type" value="daily" class="creation-mode text-red-600 focus:ring-red-500" data-mode="daily">
+                                    <input type="radio" name="bulk_type" value="daily" {{ old('bulk_type') == 'daily' ? 'checked' : '' }} class="creation-mode text-red-600 focus:ring-red-500" data-mode="daily">
                                     <span class="ml-3 text-gray-900 dark:text-gray-100">📅 <strong>{{ __('messages.create_mode_daily') }}</strong> - <span class="text-sm text-gray-600 dark:text-gray-400">{{ __('messages.create_mode_daily_desc') }}</span></span>
                                 </label>
                                 <label class="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 border-2 border-transparent has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/20">
-                                    <input type="radio" name="bulk_type" value="weekly" class="creation-mode text-red-600 focus:ring-red-500" data-mode="weekly">
+                                    <input type="radio" name="bulk_type" value="weekly" {{ old('bulk_type') == 'weekly' ? 'checked' : '' }} class="creation-mode text-red-600 focus:ring-red-500" data-mode="weekly">
                                     <span class="ml-3 text-gray-900 dark:text-gray-100">🔄 <strong>{{ __('messages.create_mode_weekly') }}</strong> - <span class="text-sm text-gray-600 dark:text-gray-400">{{ __('messages.create_mode_weekly_desc') }}</span></span>
                                 </label>
                             </div>
@@ -135,19 +133,58 @@
                                     <input type="date" 
                                            id="start_date" 
                                            name="start_date" 
+                                           value="{{ old('start_date') }}"
                                            min="{{ date('Y-m-d') }}"
                                            required
-                                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                           class="w-full px-4 py-3 rounded-lg border-2 @error('start_date') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                    @error('start_date')
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                                <div>
-                                    <label for="start_time" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                @php
+                                    $oldTime = old('start_time', '09:00');
+                                    $timeParts = explode(':', $oldTime);
+                                    $oldHour = $timeParts[0] ?? '09';
+                                    $oldMinute = $timeParts[1] ?? '00';
+                                @endphp
+                                <div x-data="{ 
+                                    hour: '{{ $oldHour }}', 
+                                    minute: '{{ $oldMinute }}',
+                                    updateTime() {
+                                        document.getElementById('start_time').value = this.hour + ':' + this.minute;
+                                    }
+                                }" x-init="updateTime()">
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                         {{ __('messages.create_start_time') }} <span class="text-red-600">*</span>
                                     </label>
-                                    <input type="time" 
-                                           id="start_time" 
-                                           name="start_time" 
-                                           required
-                                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                    <div class="flex gap-2">
+                                        <div class="flex-1">
+                                            <select x-model="hour" 
+                                                    @change="updateTime()"
+                                                    class="w-full px-4 py-3 rounded-lg border-2 @error('start_time') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                                @for($h = 0; $h < 24; $h++)
+                                                    <option value="{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}">{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                        <div class="flex items-center justify-center text-2xl font-bold text-gray-500 dark:text-gray-400">
+                                            :
+                                        </div>
+                                        <div class="flex-1">
+                                            <select x-model="minute" 
+                                                    @change="updateTime()"
+                                                    class="w-full px-4 py-3 rounded-lg border-2 @error('start_time') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                                <option value="00">00</option>
+                                                <option value="15">15</option>
+                                                <option value="30">30</option>
+                                                <option value="45">45</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="start_time" name="start_time" value="{{ old('start_time', '09:00') }}" required>
+                                    @error('start_time')
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label for="duration" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
@@ -156,12 +193,15 @@
                                     <select id="duration" 
                                             name="duration" 
                                             required
-                                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                                        <option value="30">30 minutes</option>
-                                        <option value="60" selected>1 hour</option>
-                                        <option value="90">1.5 hours</option>
-                                        <option value="120">2 hours</option>
+                                            class="w-full px-4 py-3 rounded-lg border-2 @error('duration') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                        <option value="30" {{ old('duration') == '30' ? 'selected' : '' }}>30 minutes</option>
+                                        <option value="60" {{ old('duration', '60') == '60' ? 'selected' : '' }}>1 hour</option>
+                                        <option value="90" {{ old('duration') == '90' ? 'selected' : '' }}>1.5 hours</option>
+                                        <option value="120" {{ old('duration') == '120' ? 'selected' : '' }}>2 hours</option>
                                     </select>
+                                    @error('duration')
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -175,31 +215,31 @@
                                 </label>
                                 <div class="grid grid-cols-7 gap-2">
                                     <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="1" class="mb-1 text-red-600 focus:ring-red-500">
+                                        <input type="checkbox" name="selected_days[]" value="1" {{ is_array(old('selected_days')) && in_array('1', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
                                         <span class="text-xs font-semibold">{{ __('messages.day_monday') }}</span>
                                     </label>
                                     <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="2" class="mb-1 text-red-600 focus:ring-red-500">
+                                        <input type="checkbox" name="selected_days[]" value="2" {{ is_array(old('selected_days')) && in_array('2', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
                                         <span class="text-xs font-semibold">{{ __('messages.day_tuesday') }}</span>
                                     </label>
                                     <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="3" class="mb-1 text-red-600 focus:ring-red-500">
+                                        <input type="checkbox" name="selected_days[]" value="3" {{ is_array(old('selected_days')) && in_array('3', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
                                         <span class="text-xs font-semibold">{{ __('messages.day_wednesday') }}</span>
                                     </label>
                                     <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="4" class="mb-1 text-red-600 focus:ring-red-500">
+                                        <input type="checkbox" name="selected_days[]" value="4" {{ is_array(old('selected_days')) && in_array('4', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
                                         <span class="text-xs font-semibold">{{ __('messages.day_thursday') }}</span>
                                     </label>
                                     <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="5" class="mb-1 text-red-600 focus:ring-red-500">
+                                        <input type="checkbox" name="selected_days[]" value="5" {{ is_array(old('selected_days')) && in_array('5', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
                                         <span class="text-xs font-semibold">{{ __('messages.day_friday') }}</span>
                                     </label>
                                     <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="6" class="mb-1 text-red-600 focus:ring-red-500">
+                                        <input type="checkbox" name="selected_days[]" value="6" {{ is_array(old('selected_days')) && in_array('6', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
                                         <span class="text-xs font-semibold">{{ __('messages.day_saturday') }}</span>
                                     </label>
                                     <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="0" class="mb-1 text-red-600 focus:ring-red-500">
+                                        <input type="checkbox" name="selected_days[]" value="0" {{ is_array(old('selected_days')) && in_array('0', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
                                         <span class="text-xs font-semibold">{{ __('messages.day_sunday') }}</span>
                                     </label>
                                 </div>
@@ -214,10 +254,14 @@
                                     <input type="number" 
                                            id="bulk_count" 
                                            name="bulk_count" 
+                                           value="{{ old('bulk_count') }}"
                                            min="1" 
                                            max="30"
-                                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
+                                           class="w-full px-4 py-3 rounded-lg border-2 @error('bulk_count') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
                                            placeholder="e.g., 4">
+                                    @error('bulk_count')
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" id="countHelp"></p>
                                 </div>
                                 <div>
@@ -227,10 +271,14 @@
                                     <input type="number" 
                                            id="bulk_interval" 
                                            name="bulk_interval" 
+                                           value="{{ old('bulk_interval') }}"
                                            min="0" 
                                            max="480"
-                                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
+                                           class="w-full px-4 py-3 rounded-lg border-2 @error('bulk_interval') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
                                            placeholder="e.g., 60 (1 hour gap)">
+                                    @error('bulk_interval')
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" id="intervalHelp"></p>
                                 </div>
                             </div>
@@ -362,6 +410,9 @@
                 document.querySelectorAll('input[name="selected_days[]"]').forEach(checkbox => {
                     checkbox.addEventListener('change', updatePreview);
                 });
+
+                // Initialize UI on page load (in case of validation errors with old values)
+                updateUI();
 
                 // Form submission with conflict check
                 form.addEventListener('submit', async function(e) {

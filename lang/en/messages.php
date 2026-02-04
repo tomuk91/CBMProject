@@ -376,6 +376,7 @@ return [
     'confirm_complete_appointment' => 'Mark this appointment as completed?',
     'appointment_completed_success' => 'Appointment marked as completed!',
     'error_generic' => 'An error occurred. Please try again.',
+    'error_slot_in_past' => 'Cannot create slots in the past. Please select a future date and time.',
     'old_slots_cleaned' => 'Old slots have been removed',
     'msg_saved' => 'Successfully saved',
     'msg_deleted' => 'Successfully deleted',
