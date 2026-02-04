@@ -170,11 +170,11 @@
                                     </span>
                                 </div>
                                 <div class="flex gap-2">
-                                    <button @click="Object.keys(showDetails).forEach(key => showDetails[key] = true)" class="text-red-600 dark:text-red-400 hover:text-red-700 font-medium">
+                                    <button @click="[{{ $pendingAppointments->pluck('id')->implode(',') }}].forEach(id => showDetails[id] = true)" class="text-red-600 dark:text-red-400 hover:text-red-700 font-medium">
                                         {{ __('messages.expand_all') }}
                                     </button>
                                     <span class="text-gray-300 dark:text-gray-600">|</span>
-                                    <button @click="showDetails = {}" class="text-red-600 dark:text-red-400 hover:text-red-700 font-medium">
+                                    <button @click="[{{ $pendingAppointments->pluck('id')->implode(',') }}].forEach(id => showDetails[id] = false)" class="text-red-600 dark:text-red-400 hover:text-red-700 font-medium">
                                         {{ __('messages.collapse_all') }}
                                     </button>
                                 </div>
@@ -182,12 +182,14 @@
 
                             <div class="space-y-3">
                             @foreach ($pendingAppointments as $appointment)
-                                <div x-data="{ expanded: showDetails[{{ $appointment->id }}] ?? false }" 
-                                     x-init="$watch('showDetails[{{ $appointment->id }}]', value => expanded = value ?? false)"
+                                <div x-data="{ 
+                                        get expanded() { return showDetails[{{ $appointment->id }}] ?? false },
+                                        set expanded(value) { showDetails[{{ $appointment->id }}] = value }
+                                     }"
                                      class="border-2 border-gray-100 dark:border-gray-700 rounded-xl hover:border-red-200 dark:hover:border-red-900/30 hover:shadow-lg transition-all duration-300 bg-gradient-to-r from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-800/50">
                                     
                                     <!-- Compact Header (Always Visible) -->
-                                    <div class="p-4 flex items-center justify-between cursor-pointer" @click="expanded = !expanded; showDetails[{{ $appointment->id }}] = expanded">
+                                    <div class="p-4 flex items-center justify-between cursor-pointer" @click="expanded = !expanded">
                                         <div class="flex items-center gap-3 flex-1">
                                             <input type="checkbox" 
                                                    value="{{ $appointment->id }}" 
