@@ -26,8 +26,12 @@ class AppointmentController extends Controller
             ->orderBy('appointment_date', 'asc')
             ->take(5)
             ->get();
-        $availableSlotsCount = AvailableSlot::where('status', 'available')->count();
-        $bookedSlotsCount = AvailableSlot::where('status', 'booked')->count();
+        $availableSlotsCount = AvailableSlot::where('status', 'available')
+            ->where('start_time', '>=', now())
+            ->count();
+        $bookedSlotsCount = Appointment::where('status', 'confirmed')
+            ->where('appointment_date', '>=', now())
+            ->count();
 
         return view('admin.appointments.dashboard', compact('pendingCount', 'upcomingAppointments', 'availableSlotsCount', 'bookedSlotsCount'));
     }
@@ -47,14 +51,64 @@ class AppointmentController extends Controller
     /**
      * Display pending appointments for approval
      */
-    public function pending()
+    public function pending(Request $request)
     {
-        $pendingAppointments = PendingAppointment::with(['user', 'availableSlot', 'vehicleDetails'])
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        $query = PendingAppointment::with(['user', 'availableSlot', 'vehicleDetails'])
+            ->where('status', 'pending');
 
-        return view('admin.appointments.pending', compact('pendingAppointments'));
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('vehicle', 'like', "%{$search}%");
+            });
+        }
+
+        // Service filter
+        if ($request->filled('service')) {
+            $query->where('service', $request->service);
+        }
+
+        // Date range filter
+        if ($request->filled('date_from')) {
+            $query->whereHas('availableSlot', function($q) use ($request) {
+                $q->where('start_time', '>=', $request->date_from . ' 00:00:00');
+            });
+        }
+        if ($request->filled('date_to')) {
+            $query->whereHas('availableSlot', function($q) use ($request) {
+                $q->where('start_time', '<=', $request->date_to . ' 23:59:59');
+            });
+        }
+
+        // Sorting
+        $sort = $request->get('sort', 'created_at');
+        $direction = $request->get('direction', 'desc');
+        
+        if ($sort === 'name') {
+            $query->orderBy('name', $direction);
+        } elseif ($sort === 'date') {
+            $query->whereHas('availableSlot')->with(['availableSlot' => function($q) use ($direction) {
+                $q->orderBy('start_time', $direction);
+            }]);
+        } else {
+            $query->orderBy('created_at', $direction);
+        }
+
+        $pendingAppointments = $query->paginate(20)->appends($request->except('page'));
+        
+        // Get unique services for filter dropdown
+        $services = PendingAppointment::where('status', 'pending')
+            ->distinct()
+            ->pluck('service')
+            ->filter()
+            ->sort()
+            ->values();
+
+        return view('admin.appointments.pending', compact('pendingAppointments', 'services'));
     }
 
     /**
@@ -147,6 +201,60 @@ class AppointmentController extends Controller
 
         return redirect()->back()
             ->with('success', 'Appointment rejected and slot made available again.');
+    }
+
+    /**
+     * Bulk reject pending appointments
+     */
+    public function bulkReject(Request $request)
+    {
+        $request->validate([
+            'appointment_ids' => 'required|string',
+        ]);
+
+        $appointmentIds = explode(',', $request->appointment_ids);
+        $rejectedCount = 0;
+
+        DB::beginTransaction();
+        try {
+            foreach ($appointmentIds as $id) {
+                $pendingAppointment = PendingAppointment::find($id);
+                
+                if ($pendingAppointment && $pendingAppointment->status === 'pending') {
+                    // Make slot available again
+                    if ($pendingAppointment->availableSlot) {
+                        $pendingAppointment->availableSlot->update(['status' => 'available']);
+                    }
+
+                    $pendingAppointment->update([
+                        'status' => 'rejected',
+                        'admin_notes' => 'Bulk rejected by admin',
+                    ]);
+
+                    // Log activity
+                    ActivityLog::log(
+                        'rejected',
+                        "Bulk rejected appointment for {$pendingAppointment->name} - {$pendingAppointment->service}",
+                        $pendingAppointment,
+                        ['reason' => 'Bulk rejection']
+                    );
+
+                    // Send rejection email
+                    Mail::to($pendingAppointment->email)->send(new AppointmentRejected($pendingAppointment, 'Your appointment request was not approved at this time.'));
+                    
+                    $rejectedCount++;
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->back()
+                ->with('success', "{$rejectedCount} appointment(s) rejected successfully.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error', 'Failed to reject appointments: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -700,6 +808,31 @@ class AppointmentController extends Controller
 
         return redirect()->back()
             ->with('success', 'Available slot deleted successfully.');
+    }
+
+    /**
+     * Bulk delete available slots
+     */
+    public function bulkDestroySlots(Request $request)
+    {
+        $request->validate([
+            'slot_ids' => 'required|string',
+        ]);
+
+        $slotIds = explode(',', $request->slot_ids);
+        
+        // Only delete slots that are available (not booked or pending)
+        $deletedCount = AvailableSlot::whereIn('id', $slotIds)
+            ->where('status', 'available')
+            ->delete();
+
+        if ($deletedCount > 0) {
+            return redirect()->back()
+                ->with('success', "{$deletedCount} slot(s) deleted successfully.");
+        }
+
+        return redirect()->back()
+            ->with('error', 'No available slots were deleted. Cannot delete booked or pending slots.');
     }
 
     /**

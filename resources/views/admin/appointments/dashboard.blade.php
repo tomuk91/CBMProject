@@ -72,7 +72,7 @@
                         </div>
                         <p class="text-5xl font-bold text-red-600 dark:text-red-400 mb-2">{{ $availableSlotsCount }}</p>
                         <p class="text-gray-600 dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">{{ __('messages.status_available') }}</p>
-                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">{{ __('messages.slots_available') }}</p>
+                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">Available Appointments</p>
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@
                         </div>
                         <p class="text-5xl font-bold text-red-700 dark:text-red-400 mb-2">{{ $bookedSlotsCount }}</p>
                         <p class="text-gray-600 dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">{{ __('messages.status_booked') }}</p>
-                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">{{ __('messages.status_confirmed') }}</p>
+                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">Bookings Confirmed</p>
                     </div>
                 </div>
 

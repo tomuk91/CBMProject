@@ -241,6 +241,11 @@ return [
     'book_vehicle_year' => 'Year',
     'book_confirm' => 'Confirm Booking',
     
+    // Common Fields
+    'name' => 'Name',
+    'email' => 'Email',
+    'phone' => 'Phone',
+    
     // Calendar
     'calendar_title' => 'Appointment Calendar',
     'calendar_month' => 'Month',
@@ -261,6 +266,7 @@ return [
     // Vehicle Info
     'vehicle_management' => 'Vehicle Management',
     'vehicle_information' => 'Vehicle Information',
+    'registration' => 'Registration',
     'vehicle_example' => 'e.g., 2019 Toyota Camry',
     'vehicle_make' => 'Make',
     'vehicle_model' => 'Model',
@@ -494,4 +500,16 @@ return [
     'select_this_slot' => 'Select This Slot',
     'slot' => 'slot',
     'slots' => 'slots',
+    'search' => 'Search',
+    'service' => 'Service',
+    'all_services' => 'All Services',
+    'search_placeholder' => 'Name, email, phone, vehicle...',
+    'showing' => 'Showing',
+    'of' => 'of',
+    'pending_requests' => 'pending requests',
+    'expand_all' => 'Expand All',
+    'collapse_all' => 'Collapse All',
+    'reject_selected' => 'Reject Selected',
+    'selected' => 'selected',
+    'requests_selected' => 'request(s) selected',
 ];

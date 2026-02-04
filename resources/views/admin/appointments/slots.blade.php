@@ -683,11 +683,36 @@
                             <p class="text-sm text-gray-500 dark:text-gray-500">Create your first slot using the form above.</p>
                         </div>
                     @else
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-900/50">
-                                    <tr>
-                                        <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                        <!-- Bulk Actions Bar -->
+                        <div x-data="{ selectedSlots: [], selectAll: false }" x-init="$watch('selectAll', value => { if(value) { selectedSlots = [...document.querySelectorAll('.slot-checkbox:not(:disabled)')].map(cb => cb.value) } else { selectedSlots = [] } })">
+                            <div x-show="selectedSlots.length > 0" x-transition class="mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-red-600 dark:text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span class="text-sm font-semibold text-red-900 dark:text-red-100"><span x-text="selectedSlots.length"></span> slot(s) selected</span>
+                                </div>
+                                <form method="POST" action="{{ route('admin.appointments.slots.bulk-delete') }}" onsubmit="return confirm('Are you sure you want to delete the selected slots? This action cannot be undone.')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="slot_ids" x-model="selectedSlots.join(',')">
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
+                                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Delete Selected
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                    <thead class="bg-gray-50 dark:bg-gray-900/50">
+                                        <tr>
+                                            <th class="px-6 py-3.5 w-12">
+                                                <input type="checkbox" x-model="selectAll" class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            </th>
+                                            <th class="px-6 py-3.5 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                                             <a href="{{ route('admin.appointments.slots', array_merge(request()->all(), ['sort' => 'date', 'direction' => request('sort') === 'date' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}" 
                                                class="flex items-center space-x-1 hover:text-red-600 dark:hover:text-red-400 transition-colors">
                                                 <span>{{ __('messages.slots_date') }}</span>
@@ -739,6 +764,13 @@
                                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                     @foreach ($slots as $slot)
                                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                            <td class="px-6 py-4 w-12">
+                                                @if($slot->status === 'available')
+                                                    <input type="checkbox" value="{{ $slot->id }}" x-model="selectedSlots" class="slot-checkbox w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                @else
+                                                    <input type="checkbox" disabled class="slot-checkbox w-4 h-4 text-gray-400 bg-gray-100 border-gray-300 rounded cursor-not-allowed dark:bg-gray-700 dark:border-gray-600">
+                                                @endif
+                                            </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                                                 {{ $slot->start_time->format('M d, Y') }}
                                             </td>
@@ -802,10 +834,11 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
+                            </div>
 
-                        <div class="mt-4">
-                            {{ $slots->links() }}
+                            <div class="mt-4">
+                                {{ $slots->links() }}
+                            </div>
                         </div>
                     @endif
                 </div>

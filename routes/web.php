@@ -71,9 +71,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/appointments/slots', [AdminAppointmentController::class, 'storeSlot'])->name('appointments.slots.store');
         Route::post('/appointments/slots/{slot}/book', [AdminAppointmentController::class, 'bookSlot'])->name('appointments.slots.book');
         Route::delete('/appointments/slots/{slot}', [AdminAppointmentController::class, 'destroySlot'])->name('appointments.slots.destroy');
+        Route::delete('/appointments/slots/bulk-delete', [AdminAppointmentController::class, 'bulkDestroySlots'])->name('appointments.slots.bulk-delete');
         Route::get('/appointments/api', [AdminAppointmentController::class, 'getAppointments'])->name('appointments.api');
         Route::post('/appointments/pending/{pendingAppointment}/approve', [AdminAppointmentController::class, 'approve'])->name('appointments.approve');
         Route::post('/appointments/pending/{pendingAppointment}/reject', [AdminAppointmentController::class, 'reject'])->name('appointments.reject');
+        Route::post('/appointments/bulk-reject', [AdminAppointmentController::class, 'bulkReject'])->name('appointments.bulk-reject');
         Route::post('/appointments/{appointment}/status', [AdminAppointmentController::class, 'updateStatus'])->name('appointments.status');
         Route::post('/appointments/{appointment}/complete', [AdminAppointmentController::class, 'complete'])->name('appointments.complete');
         Route::post('/appointments/{appointment}/update-time', [AdminAppointmentController::class, 'updateTime'])->name('appointments.updateTime');

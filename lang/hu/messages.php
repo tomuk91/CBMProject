@@ -231,6 +231,11 @@ return [
     'book_vehicle_year' => 'Évjárat',
     'book_confirm' => 'Foglalás megerősítése',
     
+    // Common Fields
+    'name' => 'Név',
+    'email' => 'Email',
+    'phone' => 'Telefon',
+    
     // Calendar
     'calendar_title' => 'Időpont naptár',
     'calendar_month' => 'Hónap',
@@ -250,8 +255,7 @@ return [
     
     // Vehicle Info
     'vehicle_management' => 'Járműkezelés',
-    'vehicle_information' => 'Jármű információ',
-    'vehicle_example' => 'pl. 2019 Toyota Camry',
+    'vehicle_information' => 'Jármű információ',    'registration' => 'Rendszám',    'vehicle_example' => 'pl. 2019 Toyota Camry',
     'vehicle_make' => 'Gyártó',
     'vehicle_model' => 'Modell',
     'vehicle_year' => 'Évjárat',
@@ -479,4 +483,16 @@ return [
     'select_this_slot' => 'Ezt az időpontot választom',
     'slot' => 'időpont',
     'slots' => 'időpont',
+    'search' => 'Keresés',
+    'service' => 'Szolgáltatás',
+    'all_services' => 'Minden szolgáltatás',
+    'search_placeholder' => 'Név, email, telefon, jármű...',
+    'showing' => 'Megjelenítve',
+    'of' => '/',
+    'pending_requests' => 'függőben lévő kérelmek',
+    'expand_all' => 'Összes kibontása',
+    'collapse_all' => 'Összes összecsukása',
+    'reject_selected' => 'Kijelöltek elutasítása',
+    'selected' => 'kiválasztva',
+    'requests_selected' => 'kérelem kiválasztva',
 ];
