@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ __('messages.select_appointment_slot') }} - {{ config('app.name') }}</title>
+    
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-white dark:bg-gray-900">
@@ -82,14 +86,14 @@
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.date_from') }}
                         </label>
-                        <input type="date" name="date_from" value="{{ request('date_from', now()->format('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
+                        <input type="date" id="dateFrom" name="date_from" value="{{ request('date_from', now()->format('Y-m-d')) }}" data-min-today class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
                     </div>
 
                     <div class="flex-1 min-w-[200px]">
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.date_to') }}
                         </label>
-                        <input type="date" name="date_to" value="{{ request('date_to', now()->addWeeks(2)->format('Y-m-d')) }}" class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
+                        <input type="date" id="dateTo" name="date_to" value="{{ request('date_to', now()->addWeeks(2)->format('Y-m-d')) }}" data-min-today class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
                     </div>
 
                     <div class="flex-1 min-w-[200px]">
@@ -141,14 +145,14 @@
                                     <div class="flex items-center">
                                         <div class="bg-red-600 text-white rounded-lg p-2 mr-3 text-center min-w-[60px]">
                                             <div class="text-xl font-bold">{{ $dateObj->format('d') }}</div>
-                                            <div class="text-xs uppercase">{{ $dateObj->format('M') }}</div>
+                                            <div class="text-xs uppercase">{{ $dateObj->translatedFormat('M') }}</div>
                                         </div>
                                         <div>
                                             <h3 class="text-lg font-bold text-gray-900 dark:text-white">
-                                                {{ $dateObj->format('l') }}
+                                                {{ $dateObj->translatedFormat('l') }}
                                             </h3>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">
-                                                {{ $dateObj->format('F j, Y') }} • {{ $slotsOnDate->count() }} {{ $slotsOnDate->count() === 1 ? 'slot' : 'slots' }}
+                                                {{ $dateObj->translatedFormat('F j, Y') }} • {{ $slotsOnDate->count() }} {{ $slotsOnDate->count() === 1 ? __('messages.slot') : __('messages.slots') }}
                                             </p>
                                         </div>
                                     </div>
@@ -210,5 +214,75 @@
             </svg>
         </button>
     </div>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/hu.js"></script>
+    
+    <!-- Initialize Flatpickr -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all date inputs with Flatpickr
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            const locale = '{{ app()->getLocale() }}';
+            
+            dateInputs.forEach(input => {
+                flatpickr(input, {
+                    dateFormat: 'Y-m-d',
+                    altInput: true,
+                    altFormat: 'F j, Y',
+                    allowInput: true,
+                    minDate: input.hasAttribute('data-min-today') ? 'today' : null,
+                    theme: 'light',
+                    disableMobile: true,
+                    locale: locale === 'hu' ? 'hu' : 'default',
+                    onReady: function(selectedDates, dateStr, instance) {
+                        // Apply custom styling to match red theme
+                        instance.calendarContainer.style.setProperty('--flatpickr-primary', '#dc2626');
+                        instance.calendarContainer.classList.add('flatpickr-red-theme');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        /* Custom Flatpickr Red Theme */
+        .flatpickr-red-theme .flatpickr-day.selected,
+        .flatpickr-red-theme .flatpickr-day.startRange,
+        .flatpickr-red-theme .flatpickr-day.endRange,
+        .flatpickr-red-theme .flatpickr-day.selected.inRange,
+        .flatpickr-red-theme .flatpickr-day.startRange.inRange,
+        .flatpickr-red-theme .flatpickr-day.endRange.inRange,
+        .flatpickr-red-theme .flatpickr-day.selected:focus,
+        .flatpickr-red-theme .flatpickr-day.startRange:focus,
+        .flatpickr-red-theme .flatpickr-day.endRange:focus,
+        .flatpickr-red-theme .flatpickr-day.selected:hover,
+        .flatpickr-red-theme .flatpickr-day.startRange:hover,
+        .flatpickr-red-theme .flatpickr-day.endRange:hover,
+        .flatpickr-red-theme .flatpickr-day.endRange.startRange:hover,
+        .flatpickr-red-theme .flatpickr-day.selected.startRange:hover,
+        .flatpickr-red-theme .flatpickr-day.endRange.startRange:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+        }
+
+        .flatpickr-red-theme .flatpickr-day.today {
+            border-color: #dc2626;
+        }
+
+        .flatpickr-red-theme .flatpickr-day.today:hover,
+        .flatpickr-red-theme .flatpickr-day.today:focus {
+            border-color: #dc2626;
+            background: #dc2626;
+            color: white;
+        }
+
+        .flatpickr-red-theme .flatpickr-months .flatpickr-prev-month:hover svg,
+        .flatpickr-red-theme .flatpickr-months .flatpickr-next-month:hover svg {
+            fill: #dc2626;
+        }
+    </style>
+
 </body>
 </html>

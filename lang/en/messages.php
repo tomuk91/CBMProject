@@ -492,4 +492,6 @@ return [
     'try_different_filters' => 'Try adjusting your filters to see more options',
     'available' => 'Available',
     'select_this_slot' => 'Select This Slot',
+    'slot' => 'slot',
+    'slots' => 'slots',
 ];

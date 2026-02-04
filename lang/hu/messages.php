@@ -477,4 +477,6 @@ return [
     'try_different_filters' => 'Próbáljon más szűrőket használni',
     'available' => 'Elérhető',
     'select_this_slot' => 'Ezt az időpontot választom',
+    'slot' => 'időpont',
+    'slots' => 'időpont',
 ];

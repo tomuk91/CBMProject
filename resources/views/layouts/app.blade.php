@@ -38,12 +38,14 @@
 
         <!-- Flatpickr JS -->
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/hu.js"></script>
         
         <!-- Initialize Flatpickr -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Initialize all date inputs with Flatpickr
                 const dateInputs = document.querySelectorAll('input[type="date"], .datepicker');
+                const locale = '{{ app()->getLocale() }}';
                 
                 dateInputs.forEach(input => {
                     flatpickr(input, {
@@ -54,6 +56,7 @@
                         minDate: input.hasAttribute('data-min-today') ? 'today' : null,
                         theme: 'light',
                         disableMobile: true,
+                        locale: locale === 'hu' ? 'hu' : 'default',
                         onReady: function(selectedDates, dateStr, instance) {
                             // Apply custom styling to match red theme
                             instance.calendarContainer.style.setProperty('--flatpickr-primary', '#dc2626');
@@ -76,6 +79,7 @@
                         minDate: input.hasAttribute('data-min-today') ? 'today' : null,
                         theme: 'light',
                         disableMobile: true,
+                        locale: locale === 'hu' ? 'hu' : 'default',
                         onReady: function(selectedDates, dateStr, instance) {
                             instance.calendarContainer.style.setProperty('--flatpickr-primary', '#dc2626');
                             instance.calendarContainer.classList.add('flatpickr-red-theme');
