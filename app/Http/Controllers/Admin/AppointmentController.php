@@ -9,6 +9,7 @@ use App\Models\AvailableSlot;
 use App\Models\ActivityLog;
 use App\Mail\AppointmentApproved;
 use App\Mail\AppointmentRejected;
+use App\Mail\NewClientAccountCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -854,29 +855,50 @@ class AppointmentController extends Controller
                 'new_email' => 'required|email|unique:users,email',
                 'new_phone' => 'required|string|max:20',
                 'new_password' => 'required|string|min:6',
-                'new_vehicle' => 'required|string|max:255',
+                'new_vehicle_make' => 'required|string|max:255',
+                'new_vehicle_model' => 'required|string|max:255',
+                'new_vehicle_year' => 'required|integer|min:1900|max:2100',
+                'new_vehicle_plate' => 'nullable|string|max:20',
                 'service' => 'required|string|max:255',
             ]);
+
+            // Store the plain password before hashing to send in email
+            $temporaryPassword = $request->new_password;
 
             $user = \App\Models\User::create([
                 'name' => $request->new_name,
                 'email' => $request->new_email,
                 'phone' => $request->new_phone,
-                'password' => bcrypt($request->new_password),
+                'password' => bcrypt($temporaryPassword),
             ]);
+
+            // Create vehicle for the new user
+            $vehicle = \App\Models\Vehicle::create([
+                'user_id' => $user->id,
+                'make' => $request->new_vehicle_make,
+                'model' => $request->new_vehicle_model,
+                'year' => $request->new_vehicle_year,
+                'plate' => $request->new_vehicle_plate,
+            ]);
+
+            $vehicleString = "{$vehicle->year} {$vehicle->make} {$vehicle->model}" . ($vehicle->plate ? " ({$vehicle->plate})" : "");
 
             // Create pending appointment for new client
             $pendingAppointment = PendingAppointment::create([
                 'user_id' => $user->id,
                 'available_slot_id' => $slot->id,
+                'vehicle_id' => $vehicle->id,
                 'name' => $request->new_name,
                 'email' => $request->new_email,
-                'phone' => $request->new_phone,
-                'vehicle' => $request->new_vehicle,
+                'phone' => $request->new_phone ?? 'Not provided',
+                'vehicle' => $vehicleString,
                 'service' => $request->service,
                 'notes' => $request->notes,
                 'status' => 'pending',
             ]);
+
+            // Send welcome email with temporary password
+            Mail::to($user->email)->send(new NewClientAccountCreated($user, $temporaryPassword));
         } else {
             // Existing client
             $request->validate([
@@ -890,15 +912,26 @@ class AppointmentController extends Controller
             $vehicleId = null;
             $vehicleString = null;
             
-            if ($request->filled('vehicle_id')) {
+            if ($request->filled('new_vehicle_make') && $request->filled('new_vehicle_model') && $request->filled('new_vehicle_year')) {
+                // Create new vehicle for the user
+                $vehicle = \App\Models\Vehicle::create([
+                    'user_id' => $user->id,
+                    'make' => $request->new_vehicle_make,
+                    'model' => $request->new_vehicle_model,
+                    'year' => $request->new_vehicle_year,
+                    'plate' => $request->new_vehicle_plate,
+                ]);
+                $vehicleId = $vehicle->id;
+                $vehicleString = "{$vehicle->year} {$vehicle->make} {$vehicle->model}" . ($vehicle->plate ? " ({$vehicle->plate})" : "");
+            } elseif ($request->filled('vehicle_id')) {
                 // Using selected vehicle from dropdown
                 $vehicleId = $request->vehicle_id;
                 $vehicle = \App\Models\Vehicle::find($vehicleId);
                 if ($vehicle) {
-                    $vehicleString = "{$vehicle->year} {$vehicle->make} {$vehicle->model} ({$vehicle->plate})";
+                    $vehicleString = "{$vehicle->year} {$vehicle->make} {$vehicle->model}" . ($vehicle->plate ? " ({$vehicle->plate})" : "");
                 }
             } elseif ($request->filled('vehicle')) {
-                // Manual entry
+                // Manual entry (not saved to profile)
                 $vehicleString = $request->vehicle;
             }
 
@@ -909,7 +942,7 @@ class AppointmentController extends Controller
                 'vehicle_id' => $vehicleId,
                 'name' => $user->name,
                 'email' => $user->email,
-                'phone' => $user->phone,
+                'phone' => $user->phone ?? 'Not provided',
                 'vehicle' => $vehicleString,
                 'service' => $request->service,
                 'notes' => $request->notes,
@@ -922,5 +955,14 @@ class AppointmentController extends Controller
 
         return redirect()->route('admin.appointments.pending')
             ->with('success', 'Appointment request created successfully and is pending approval.');
+    }
+
+    /**
+     * Get user's vehicles for AJAX
+     */
+    public function getUserVehicles($userId)
+    {
+        $vehicles = \App\Models\Vehicle::where('user_id', $userId)->get();
+        return response()->json($vehicles);
     }
 }

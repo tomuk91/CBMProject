@@ -59,6 +59,31 @@
                 </div>
             @endif
 
+            @if ($errors->any())
+                <div x-data="{ show: true }" x-show="show" x-transition class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-5 h-5 text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                </svg>
+                                <p class="text-red-800 dark:text-red-200 font-semibold">There were some errors with your submission:</p>
+                            </div>
+                            <ul class="list-disc list-inside text-red-700 dark:text-red-300 text-sm space-y-1 ml-8">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <button @click="show = false" class="text-red-500 hover:text-red-700 ml-4">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            @endif
+
             <!-- Create New Slot Form -->
             <div x-data="{ expanded: {{ $errors->any() || old('start_date') ? 'true' : 'false' }} }" class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
                 <div @click="expanded = !expanded" class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 cursor-pointer hover:from-red-700 hover:to-red-800 transition-all duration-200">
@@ -941,15 +966,70 @@
                                 <label for="client_vehicle_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                     Select Vehicle <span class="text-red-600">*</span>
                                 </label>
-                                <select id="client_vehicle_id" name="vehicle_id" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                <select id="client_vehicle_id" name="vehicle_id" onchange="displayVehicleDetails()" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                     <option value="">Select a vehicle...</option>
+                                    <option value="add_new">+ Add New Vehicle</option>
                                 </select>
-                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400" id="vehicle_selection_hint">
-                                    The client doesn't have any vehicles registered. Vehicle information fields will be shown below.
-                                </p>
+                                
+                                <!-- Vehicle Details Display -->
+                                <div id="vehicle_details_display" class="hidden mt-3 p-4 bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-lg">
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                        <div>
+                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">Make</p>
+                                            <p class="text-sm text-blue-900 dark:text-blue-100" id="detail_make"></p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">Model</p>
+                                            <p class="text-sm text-blue-900 dark:text-blue-100" id="detail_model"></p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">Year</p>
+                                            <p class="text-sm text-blue-900 dark:text-blue-100" id="detail_year"></p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">Registration</p>
+                                            <p class="text-sm text-blue-900 dark:text-blue-100" id="detail_plate"></p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Manual Vehicle Entry for Existing Client (when no vehicles available) -->
+                            <!-- Add New Vehicle Form (for existing client) -->
+                            <div id="add_new_vehicle_form" class="hidden mt-4 p-4 bg-gray-50 dark:bg-gray-700/50 border-2 border-gray-200 dark:border-gray-600 rounded-lg">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">Add New Vehicle</h4>
+                                    <button type="button" onclick="cancelAddVehicle()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Make *</label>
+                                        <input type="text" id="new_vehicle_make" name="new_vehicle_make" 
+                                               class="w-full px-3 py-2 text-sm rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Model *</label>
+                                        <input type="text" id="new_vehicle_model" name="new_vehicle_model"
+                                               class="w-full px-3 py-2 text-sm rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Year *</label>
+                                        <input type="number" id="new_vehicle_year" name="new_vehicle_year" min="1900" max="2100"
+                                               class="w-full px-3 py-2 text-sm rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Registration</label>
+                                        <input type="text" id="new_vehicle_plate" name="new_vehicle_plate"
+                                               class="w-full px-3 py-2 text-sm rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Vehicle will be saved to the customer's profile</p>
+                            </div>
+
+                            <!-- Manual Vehicle Entry (when no vehicle selected or no vehicles) -->
                             <div id="manual_vehicle_entry" class="hidden mt-4">
                                 <label for="manual_vehicle" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                     Vehicle Information <span class="text-red-600">*</span>
@@ -957,6 +1037,7 @@
                                 <input type="text" id="manual_vehicle" name="vehicle"
                                        placeholder="e.g., 2020 Honda Civic (ABC123)"
                                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Enter vehicle details manually or select "Add New Vehicle" to save to customer profile</p>
                             </div>
 
                             <!-- Service Selection for Existing Client -->
@@ -1009,41 +1090,71 @@
                                     <label for="new_password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                         {{ __('messages.book_temp_password') }} <span class="text-red-600">*</span>
                                     </label>
-                                    <input type="text" id="new_password" name="new_password" value="{{ Str::random(8) }}"
-                                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                    <div class="relative">
+                                        <input type="text" id="new_password" name="new_password" value="{{ Str::random(8) }}"
+                                               class="w-full px-4 py-3 pr-24 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                        <button type="button" onclick="copyPassword()" class="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded transition-colors">
+                                            Copy
+                                        </button>
+                                    </div>
+                                    <p class="mt-1 text-xs text-blue-600 dark:text-blue-400">
+                                        💡 This password will be emailed to the client automatically
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Vehicle and Service Information -->
-                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6" id="new_client_vehicle_service">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Vehicle and Service Information for New Clients -->
+                        <div class="hidden border-t border-gray-200 dark:border-gray-700 pt-6" id="new_client_vehicle_service">
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-4">Vehicle Information</h4>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <label for="new_vehicle" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                        Vehicle <span class="text-red-600">*</span>
+                                    <label for="new_client_vehicle_make" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Make <span class="text-red-600">*</span>
                                     </label>
-                                    <input type="text" id="new_vehicle" name="new_vehicle" required
-                                           placeholder="e.g., 2020 Honda Civic (ABC123)"
+                                    <input type="text" id="new_client_vehicle_make" name="new_vehicle_make"
                                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                 </div>
                                 <div>
-                                    <label for="new_service" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                        Service <span class="text-red-600">*</span>
+                                    <label for="new_client_vehicle_model" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Model <span class="text-red-600">*</span>
                                     </label>
-                                    <select id="new_service" name="service" required
-                                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                                        <option value="">Select a service...</option>
-                                        <option value="General Inspection">General Inspection</option>
-                                        <option value="Oil Change">Oil Change</option>
-                                        <option value="Brake Service">Brake Service</option>
-                                        <option value="Tire Service">Tire Service</option>
-                                        <option value="Engine Diagnostics">Engine Diagnostics</option>
-                                        <option value="Transmission Service">Transmission Service</option>
-                                        <option value="Air Conditioning">Air Conditioning</option>
-                                        <option value="Battery Service">Battery Service</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                                    <input type="text" id="new_client_vehicle_model" name="new_vehicle_model"
+                                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                 </div>
+                                <div>
+                                    <label for="new_client_vehicle_year" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Year <span class="text-red-600">*</span>
+                                    </label>
+                                    <input type="number" id="new_client_vehicle_year" name="new_vehicle_year" min="1900" max="2100"
+                                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                </div>
+                                <div>
+                                    <label for="new_client_vehicle_plate" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Registration
+                                    </label>
+                                    <input type="text" id="new_client_vehicle_plate" name="new_vehicle_plate"
+                                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <label for="new_service" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                    Service <span class="text-red-600">*</span>
+                                </label>
+                                <select id="new_service" name="service" disabled
+                                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                    <option value="">Select a service...</option>
+                                    <option value="General Inspection">General Inspection</option>
+                                    <option value="Oil Change">Oil Change</option>
+                                    <option value="Brake Service">Brake Service</option>
+                                    <option value="Tire Service">Tire Service</option>
+                                    <option value="Engine Diagnostics">Engine Diagnostics</option>
+                                    <option value="Transmission Service">Transmission Service</option>
+                                    <option value="Air Conditioning">Air Conditioning</option>
+                                    <option value="Battery Service">Battery Service</option>
+                                    <option value="Other">Other</option>
+                                </select>
                             </div>
                         </div>
 
@@ -1089,28 +1200,69 @@
                     clearClientSelection();
                 }
 
+                // Initialize client fields on page load
+                toggleClientFields();
+                
+                // Form submission handler (with optional debugging)
+                document.getElementById('bookingForm')?.addEventListener('submit', function(e) {
+                    // Form will submit normally
+                });
+
                 function toggleClientFields() {
                     const clientType = document.querySelector('input[name="client_type"]:checked').value;
                     const existingFields = document.getElementById('existingClientFields');
                     const newFields = document.getElementById('newClientFields');
+                    const newClientVehicleService = document.getElementById('new_client_vehicle_service');
                     const userIdInput = document.getElementById('user_id');
                     
                     if (clientType === 'existing') {
                         existingFields.classList.remove('hidden');
                         newFields.classList.add('hidden');
+                        newClientVehicleService.classList.add('hidden');
                         userIdInput.setAttribute('required', 'required');
-                        // Remove required from new client fields
+                        // Disable and remove required from new client fields to prevent submission
                         document.getElementById('new_name').removeAttribute('required');
+                        document.getElementById('new_name').disabled = true;
                         document.getElementById('new_email').removeAttribute('required');
+                        document.getElementById('new_email').disabled = true;
                         document.getElementById('new_phone').removeAttribute('required');
+                        document.getElementById('new_phone').disabled = true;
+                        document.getElementById('new_password').disabled = true;
+                        document.getElementById('new_client_vehicle_make').removeAttribute('required');
+                        document.getElementById('new_client_vehicle_make').disabled = true;
+                        document.getElementById('new_client_vehicle_model').removeAttribute('required');
+                        document.getElementById('new_client_vehicle_model').disabled = true;
+                        document.getElementById('new_client_vehicle_year').removeAttribute('required');
+                        document.getElementById('new_client_vehicle_year').disabled = true;
+                        document.getElementById('new_client_vehicle_plate').disabled = true;
+                        document.getElementById('new_service').removeAttribute('required');
+                        document.getElementById('new_service').disabled = true;
+                        // Enable existing client service field
+                        document.getElementById('existing_service').disabled = false;
                     } else {
                         existingFields.classList.add('hidden');
                         newFields.classList.remove('hidden');
+                        newClientVehicleService.classList.remove('hidden');
                         userIdInput.removeAttribute('required');
-                        // Add required to new client fields
+                        // Enable and add required to new client fields
                         document.getElementById('new_name').setAttribute('required', 'required');
+                        document.getElementById('new_name').disabled = false;
                         document.getElementById('new_email').setAttribute('required', 'required');
+                        document.getElementById('new_email').disabled = false;
                         document.getElementById('new_phone').setAttribute('required', 'required');
+                        document.getElementById('new_phone').disabled = false;
+                        document.getElementById('new_password').disabled = false;
+                        document.getElementById('new_client_vehicle_make').setAttribute('required', 'required');
+                        document.getElementById('new_client_vehicle_make').disabled = false;
+                        document.getElementById('new_client_vehicle_model').setAttribute('required', 'required');
+                        document.getElementById('new_client_vehicle_model').disabled = false;
+                        document.getElementById('new_client_vehicle_year').setAttribute('required', 'required');
+                        document.getElementById('new_client_vehicle_year').disabled = false;
+                        document.getElementById('new_client_vehicle_plate').disabled = false;
+                        document.getElementById('new_service').setAttribute('required', 'required');
+                        document.getElementById('new_service').disabled = false;
+                        // Disable existing client service field
+                        document.getElementById('existing_service').disabled = true;
                     }
                 }
 
@@ -1190,19 +1342,22 @@
                     fetchUserVehicles(id);
                 }
 
+                // Store vehicles data globally for later use
+                let currentUserVehicles = [];
+
                 async function fetchUserVehicles(userId) {
                     try {
                         const response = await fetch(`/admin/api/users/${userId}/vehicles`);
                         const vehicles = await response.json();
+                        currentUserVehicles = vehicles; // Store for later use
                         
                         const vehicleSelect = document.getElementById('client_vehicle_id');
                         const vehicleSection = document.getElementById('client_vehicles_section');
-                        const vehicleHint = document.getElementById('vehicle_selection_hint');
                         const manualEntry = document.getElementById('manual_vehicle_entry');
                         const manualVehicleInput = document.getElementById('manual_vehicle');
                         
-                        // Clear existing options
-                        vehicleSelect.innerHTML = '<option value="">Select a vehicle...</option>';
+                        // Clear existing options except first two
+                        vehicleSelect.innerHTML = '<option value="">Select a vehicle...</option><option value="add_new">+ Add New Vehicle</option>';
                         
                         if (vehicles.length > 0) {
                             // Populate vehicle dropdown
@@ -1210,39 +1365,105 @@
                                 const option = document.createElement('option');
                                 option.value = vehicle.id;
                                 option.textContent = `${vehicle.year} ${vehicle.make} ${vehicle.model}${vehicle.plate ? ' (' + vehicle.plate + ')' : ''}`;
+                                option.dataset.make = vehicle.make;
+                                option.dataset.model = vehicle.model;
+                                option.dataset.year = vehicle.year;
+                                option.dataset.plate = vehicle.plate || 'N/A';
                                 vehicleSelect.appendChild(option);
                             });
                             
-                            // Show vehicle dropdown section and hide hint
+                            // Show vehicle dropdown section
                             vehicleSection.classList.remove('hidden');
-                            vehicleHint.classList.add('hidden');
-                            vehicleSelect.setAttribute('required', 'required');
                             
-                            // Hide manual vehicle entry
-                            manualEntry.classList.add('hidden');
-                            manualVehicleInput.removeAttribute('required');
-                            
-                            // Auto-select if only one vehicle
+                            // Auto-select if only one vehicle and display its details
                             if (vehicles.length === 1) {
                                 vehicleSelect.value = vehicles[0].id;
+                                displayVehicleDetails();
                             }
                         } else {
-                            // No vehicles found - show manual entry
+                            // No vehicles found - show vehicle section with manual entry option
                             vehicleSection.classList.remove('hidden');
-                            vehicleHint.classList.remove('hidden');
-                            vehicleSelect.removeAttribute('required');
-                            
-                            // Show manual vehicle entry and add required
                             manualEntry.classList.remove('hidden');
-                            manualVehicleInput.setAttribute('required', 'required');
                         }
+                        
+                        vehicleSelect.setAttribute('required', 'required');
                     } catch (error) {
                         console.error('Error fetching vehicles:', error);
                         // On error, show manual entry
-                        document.getElementById('client_vehicles_section').classList.add('hidden');
+                        document.getElementById('client_vehicles_section').classList.remove('hidden');
                         document.getElementById('manual_vehicle_entry').classList.remove('hidden');
-                        document.getElementById('manual_vehicle').setAttribute('required', 'required');
                     }
+                }
+
+                function displayVehicleDetails() {
+                    const vehicleSelect = document.getElementById('client_vehicle_id');
+                    const selectedOption = vehicleSelect.options[vehicleSelect.selectedIndex];
+                    const vehicleDetailsDisplay = document.getElementById('vehicle_details_display');
+                    const addNewVehicleForm = document.getElementById('add_new_vehicle_form');
+                    const manualEntry = document.getElementById('manual_vehicle_entry');
+                    
+                    if (vehicleSelect.value === 'add_new') {
+                        // Show add new vehicle form
+                        vehicleDetailsDisplay.classList.add('hidden');
+                        addNewVehicleForm.classList.remove('hidden');
+                        manualEntry.classList.add('hidden');
+                        vehicleSelect.removeAttribute('required');
+                        
+                        // Make new vehicle fields required
+                        document.getElementById('new_vehicle_make').setAttribute('required', 'required');
+                        document.getElementById('new_vehicle_model').setAttribute('required', 'required');
+                        document.getElementById('new_vehicle_year').setAttribute('required', 'required');
+                    } else if (vehicleSelect.value) {
+                        // Display vehicle details
+                        document.getElementById('detail_make').textContent = selectedOption.dataset.make || 'N/A';
+                        document.getElementById('detail_model').textContent = selectedOption.dataset.model || 'N/A';
+                        document.getElementById('detail_year').textContent = selectedOption.dataset.year || 'N/A';
+                        document.getElementById('detail_plate').textContent = selectedOption.dataset.plate || 'N/A';
+                        
+                        vehicleDetailsDisplay.classList.remove('hidden');
+                        addNewVehicleForm.classList.add('hidden');
+                        manualEntry.classList.add('hidden');
+                        
+                        // Remove required from new vehicle fields
+                        document.getElementById('new_vehicle_make').removeAttribute('required');
+                        document.getElementById('new_vehicle_model').removeAttribute('required');
+                        document.getElementById('new_vehicle_year').removeAttribute('required');
+                    } else {
+                        // No selection - show manual entry if no vehicles exist
+                        vehicleDetailsDisplay.classList.add('hidden');
+                        addNewVehicleForm.classList.add('hidden');
+                        if (currentUserVehicles.length === 0) {
+                            manualEntry.classList.remove('hidden');
+                        }
+                    }
+                }
+
+                function cancelAddVehicle() {
+                    const vehicleSelect = document.getElementById('client_vehicle_id');
+                    const addNewVehicleForm = document.getElementById('add_new_vehicle_form');
+                    const manualEntry = document.getElementById('manual_vehicle_entry');
+                    
+                    // Reset selection
+                    vehicleSelect.value = '';
+                    addNewVehicleForm.classList.add('hidden');
+                    
+                    // Clear new vehicle form
+                    document.getElementById('new_vehicle_make').value = '';
+                    document.getElementById('new_vehicle_model').value = '';
+                    document.getElementById('new_vehicle_year').value = '';
+                    document.getElementById('new_vehicle_plate').value = '';
+                    
+                    // Remove required from new vehicle fields
+                    document.getElementById('new_vehicle_make').removeAttribute('required');
+                    document.getElementById('new_vehicle_model').removeAttribute('required');
+                    document.getElementById('new_vehicle_year').removeAttribute('required');
+                    
+                    // Show manual entry if no vehicles exist
+                    if (currentUserVehicles.length === 0) {
+                        manualEntry.classList.remove('hidden');
+                    }
+                    
+                    vehicleSelect.setAttribute('required', 'required');
                 }
 
                 function clearClientSelection() {
@@ -1253,8 +1474,12 @@
                     
                     // Hide vehicle selection section
                     document.getElementById('client_vehicles_section').classList.add('hidden');
-                    document.getElementById('client_vehicle_id').innerHTML = '<option value="">Select a vehicle...</option>';
+                    document.getElementById('client_vehicle_id').innerHTML = '<option value="">Select a vehicle...</option><option value="add_new">+ Add New Vehicle</option>';
                     document.getElementById('client_vehicle_id').removeAttribute('required');
+                    
+                    // Hide vehicle details and forms
+                    document.getElementById('vehicle_details_display').classList.add('hidden');
+                    document.getElementById('add_new_vehicle_form').classList.add('hidden');
                     
                     // Hide manual vehicle entry
                     document.getElementById('manual_vehicle_entry').classList.add('hidden');
@@ -1265,12 +1490,32 @@
                     document.getElementById('existing_service').removeAttribute('required');
                     document.getElementById('existing_service').value = '';
                     
-                    // Show and reset manual vehicle fields
-                    document.getElementById('manual_vehicle_section').classList.remove('hidden');
-                    const vehicleFields = document.querySelectorAll('#vehicle_make, #vehicle_model, #vehicle_year');
-                    vehicleFields.forEach(field => {
-                        field.value = '';
-                        field.setAttribute('required', 'required');
+                    // Reset current user vehicles
+                    currentUserVehicles = [];
+                }
+
+                // Copy password to clipboard
+                function copyPassword() {
+                    const passwordInput = document.getElementById('new_password');
+                    passwordInput.select();
+                    passwordInput.setSelectionRange(0, 99999); // For mobile devices
+                    
+                    navigator.clipboard.writeText(passwordInput.value).then(function() {
+                        // Show feedback
+                        const button = event.target;
+                        const originalText = button.textContent;
+                        button.textContent = 'Copied!';
+                        button.classList.add('bg-green-600');
+                        button.classList.remove('bg-red-600', 'hover:bg-red-700');
+                        
+                        setTimeout(function() {
+                            button.textContent = originalText;
+                            button.classList.remove('bg-green-600');
+                            button.classList.add('bg-red-600', 'hover:bg-red-700');
+                        }, 2000);
+                    }).catch(function(err) {
+                        console.error('Failed to copy password:', err);
+                        alert('Password: ' + passwordInput.value);
                     });
                 }
 
