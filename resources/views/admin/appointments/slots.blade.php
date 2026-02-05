@@ -160,6 +160,7 @@
                                            name="start_date" 
                                            value="{{ old('start_date') }}"
                                            min="{{ date('Y-m-d') }}"
+                                           data-min-today
                                            required
                                            class="w-full px-4 py-3 rounded-lg border-2 @error('start_date') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                     @error('start_date')
@@ -371,11 +372,12 @@
                             document.getElementById('countHelp').textContent = 'How many slots on each selected day';
                             document.getElementById('intervalLabel').textContent = 'Gap Between Slots (minutes)';
                             document.getElementById('intervalHelp').textContent = 'Minutes between when one slot ends and the next begins (e.g., 60 = 1-hour gap)';
+                            document.getElementById('bulk_interval').parentElement.style.display = 'block';
                         } else if (mode === 'weekly') {
                             document.getElementById('countLabel').textContent = 'Number of Weeks';
                             document.getElementById('countHelp').textContent = 'How many weeks to repeat this slot';
-                            document.getElementById('intervalLabel').textContent = 'Interval (ignored for weekly)';
-                            document.getElementById('intervalHelp').textContent = 'Set to any value; slots will repeat weekly on the same day/time';
+                            document.getElementById('bulk_interval').parentElement.style.display = 'none';
+                            document.getElementById('bulk_interval').removeAttribute('required');
                         }
                     }
 
@@ -648,6 +650,7 @@
                                    id="filter_date_from" 
                                    name="filter_date_from" 
                                    value="{{ request('filter_date_from') }}"
+                                   min="{{ date('Y-m-d') }}"
                                    class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-sm">
                         </div>
                         <div class="flex-1 min-w-[200px]">
@@ -661,6 +664,7 @@
                                    id="filter_date_to" 
                                    name="filter_date_to" 
                                    value="{{ request('filter_date_to') }}"
+                                   min="{{ date('Y-m-d') }}"
                                    class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-sm">
                         </div>
                         <div class="flex-1 min-w-[200px]">
@@ -679,7 +683,23 @@
                                 <option value="booked" {{ request('filter_status') === 'booked' ? 'selected' : '' }}>{{ __('messages.status_booked') }}</option>
                             </select>
                         </div>
-                        <div class="flex gap-2">
+                        <div class="flex gap-3 items-center">
+                            <label class="inline-flex items-center cursor-pointer group">
+                                <input type="hidden" name="show_old" value="0">
+                                <input type="checkbox" 
+                                       id="show_old" 
+                                       name="show_old" 
+                                       value="1"
+                                       {{ request('show_old') ? 'checked' : '' }}
+                                       onchange="this.form.submit()"
+                                       class="sr-only peer">
+                                <div class="relative w-11 h-6 bg-gray-300 dark:bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                                <span class="ms-3 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors whitespace-nowrap">
+                                    <i class="fas fa-history mr-1.5 text-gray-500 dark:text-gray-400"></i>
+                                    {{ __('messages.show_old_booked_slots') }}
+                                </span>
+                            </label>
+                            <div class="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
                             <button type="submit" 
                                     class="px-5 py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white rounded-lg transition-all duration-200 text-sm font-semibold shadow-sm hover:shadow-md flex items-center">
                                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">

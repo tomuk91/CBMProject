@@ -473,6 +473,12 @@ class AppointmentController extends Controller
 
         $query = AvailableSlot::query();
 
+        // Hide old and booked slots by default unless toggle is checked
+        if (!$request->has('show_old') || !$request->show_old) {
+            $query->where('start_time', '>=', now())
+                  ->where('status', '!=', 'booked');
+        }
+
         // Apply filters
         if ($request->filled('filter_date_from')) {
             $filterDateFrom = \Carbon\Carbon::parse($request->filter_date_from)->startOfDay();
@@ -571,7 +577,7 @@ class AppointmentController extends Controller
             }
             
             $currentDate = $startDateTime->copy()->startOfDay();
-            $endDate = $currentDate->copy()->addWeeks(8);
+            $endDate = $currentDate->copy()->addWeeks(1);
             
             while ($currentDate <= $endDate) {
                 if (in_array($currentDate->dayOfWeek, $selectedDays)) {
@@ -708,9 +714,9 @@ class AppointmentController extends Controller
                 $selectedDays = [$startDateTime->dayOfWeek];
             }
             
-            // Find all dates matching the selected days within a reasonable range (e.g., next 8 weeks)
+            // Find all dates matching the selected days within a reasonable range (e.g., next 1 week)
             $currentDate = $startDateTime->copy()->startOfDay();
-            $endDate = $currentDate->copy()->addWeeks(8);
+            $endDate = $currentDate->copy()->addWeeks(1);
             
             while ($currentDate <= $endDate) {
                 if (in_array($currentDate->dayOfWeek, $selectedDays)) {
@@ -789,6 +795,48 @@ class AppointmentController extends Controller
         $message = "Created $createdCount available slot(s) successfully.";
         if ($skippedCount > 0) {
             $message .= " Skipped $skippedCount slot(s) due to time conflicts.";
+        }
+
+        // Log activity for slot creation
+        if ($createdCount > 0) {
+            $bulkType = $request->bulk_type ?? 'single';
+            $startDate = \Carbon\Carbon::parse($request->start_date)->format('M d, Y');
+            
+            if ($bulkType === 'single') {
+                $description = "Created 1 slot on {$startDate} at {$request->start_time}";
+            } elseif ($bulkType === 'daily') {
+                $selectedDays = $request->selected_days ?? [];
+                $dayNames = [];
+                $dayMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                foreach ($selectedDays as $day) {
+                    $dayNames[] = $dayMap[$day];
+                }
+                $daysStr = implode(', ', $dayNames);
+                $description = "Created {$createdCount} slots using daily pattern on {$daysStr} starting {$startDate}";
+            } else { // weekly
+                $selectedDays = $request->selected_days ?? [];
+                $dayNames = [];
+                $dayMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                foreach ($selectedDays as $day) {
+                    $dayNames[] = $dayMap[$day];
+                }
+                $daysStr = implode(', ', $dayNames);
+                $description = "Created {$createdCount} slots using weekly pattern on {$daysStr} for {$request->bulk_count} weeks";
+            }
+            
+            ActivityLog::log(
+                'created',
+                $description,
+                null,
+                [
+                    'slots_created' => $createdCount,
+                    'slots_skipped' => $skippedCount,
+                    'pattern' => $bulkType,
+                    'start_date' => $request->start_date,
+                    'start_time' => $request->start_time,
+                    'duration' => $request->duration,
+                ]
+            );
         }
 
         return redirect()->back()
@@ -939,7 +987,6 @@ class AppointmentController extends Controller
             $pendingAppointment = PendingAppointment::create([
                 'user_id' => $user->id,
                 'available_slot_id' => $slot->id,
-                'vehicle_id' => $vehicleId,
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone ?? 'Not provided',

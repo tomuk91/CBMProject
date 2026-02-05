@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\AppointmentController as AdminAppointmentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -18,6 +19,10 @@ Route::get('/language/{locale}', function ($locale) {
 Route::get('/', function () {
     return view('home');
 })->name('home');
+
+// Contact form
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 // Guest appointment slot selection (before login)
 Route::get('/slots', [AppointmentController::class, 'guestSlots'])->name('guest.slots');

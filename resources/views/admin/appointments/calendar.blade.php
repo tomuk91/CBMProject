@@ -286,6 +286,7 @@
             var calendarEl = document.getElementById('calendar');
             calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: '{{ app()->getLocale() }}',
+                firstDay: 1, // Monday as first day of week (Hungary convention)
                 initialView: 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',

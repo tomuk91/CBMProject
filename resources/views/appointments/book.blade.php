@@ -86,14 +86,22 @@
                                         <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                         </svg>
-                                        {{ __('messages.profile_name') }} <span class="text-red-500 ml-1">*</span>
+                                        {{ __('messages.profile_name') }} @if(!Auth::user()->name)<span class="text-red-500 ml-1">*</span>@endif
                                     </label>
                                     <input type="text" 
                                            id="name" 
                                            name="name" 
                                            value="{{ old('name', Auth::user()->name ?? '') }}" 
-                                           required
-                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
+                                           {{ Auth::user()->name ? 'readonly' : 'required' }}
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 {{ Auth::user()->name ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
+                                    @if(Auth::user()->name)
+                                        <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                            </svg>
+                                            This information is from your profile and cannot be changed here
+                                        </p>
+                                    @endif
                                     @error('name')
                                         <p class="mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -110,14 +118,22 @@
                                         <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                         </svg>
-                                        {{ __('messages.profile_email') }} <span class="text-red-500 ml-1">*</span>
+                                        {{ __('messages.profile_email') }} @if(!Auth::user()->email)<span class="text-red-500 ml-1">*</span>@endif
                                     </label>
                                     <input type="email" 
                                            id="email" 
                                            name="email" 
                                            value="{{ old('email', Auth::user()->email ?? '') }}" 
-                                           required
-                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
+                                           {{ Auth::user()->email ? 'readonly' : 'required' }}
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 {{ Auth::user()->email ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
+                                    @if(Auth::user()->email)
+                                        <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                            </svg>
+                                            This information is from your profile and cannot be changed here
+                                        </p>
+                                    @endif
                                     @error('email')
                                         <p class="mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -134,15 +150,23 @@
                                         <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                         </svg>
-                                        {{ __('messages.profile_phone') }} <span class="text-red-500 ml-1">*</span>
+                                        {{ __('messages.profile_phone') }} @if(!Auth::user()->phone)<span class="text-red-500 ml-1">*</span>@endif
                                     </label>
                                     <input type="tel" 
                                            id="phone" 
                                            name="phone" 
-                                           value="{{ old('phone') }}" 
-                                           required
-                                           placeholder="+36 1 234 5678"
-                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
+                                           value="{{ old('phone', Auth::user()->phone ?? '') }}" 
+                                           {{ Auth::user()->phone ? 'readonly' : 'required' }}
+                                           placeholder="{{ Auth::user()->phone ? '' : '+36 1 234 5678' }}"
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 {{ Auth::user()->phone ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
+                                    @if(Auth::user()->phone)
+                                        <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                            </svg>
+                                            This information is from your profile and cannot be changed here
+                                        </p>
+                                    @endif
                                     @error('phone')
                                         <p class="mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">

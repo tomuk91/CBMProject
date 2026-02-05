@@ -225,7 +225,7 @@
                                     @if($primaryVehicle->mileage)
                                     <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
                                         <dt class="font-medium">{{ __('messages.vehicle_mileage') }}:</dt>
-                                        <dd class="font-semibold text-gray-900 dark:text-gray-100">{{ number_format($primaryVehicle->mileage) }} km</dd>
+                                        <dd class="font-semibold text-gray-900 dark:text-gray-100">{{ number_format((float)$primaryVehicle->mileage) }} km</dd>
                                     </div>
                                     @endif
                                 </dl>

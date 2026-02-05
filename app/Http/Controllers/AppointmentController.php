@@ -103,6 +103,24 @@ class AppointmentController extends Controller
                         ->with('error', 'This appointment slot is no longer available. Please select another slot.');
                 }
 
+                // Update user profile with any new information provided
+                $user = Auth::user();
+                $updateData = [];
+                
+                if (!$user->name && $request->filled('name')) {
+                    $updateData['name'] = $request->name;
+                }
+                if (!$user->email && $request->filled('email')) {
+                    $updateData['email'] = $request->email;
+                }
+                if (!$user->phone && $request->filled('phone')) {
+                    $updateData['phone'] = $request->phone;
+                }
+                
+                if (!empty($updateData)) {
+                    $user->update($updateData);
+                }
+
                 // Mark slot as pending
                 $lockedSlot->update(['status' => 'pending']);
 

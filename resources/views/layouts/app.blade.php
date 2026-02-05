@@ -6,6 +6,16 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        
+        <!-- Dark Mode Script (must be in head to prevent flash) -->
+        <script>
+            // Check for saved theme preference or default to light mode
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -40,6 +50,35 @@
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/hu.js"></script>
         
+        <!-- Dark Mode Toggle Script -->
+        <script>
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+            // Show the correct icon on page load
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                themeToggleLightIcon?.classList.remove('hidden');
+            } else {
+                themeToggleDarkIcon?.classList.remove('hidden');
+            }
+
+            themeToggleBtn?.addEventListener('click', function() {
+                // Toggle icons
+                themeToggleDarkIcon?.classList.toggle('hidden');
+                themeToggleLightIcon?.classList.toggle('hidden');
+
+                // Toggle dark mode
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        </script>
+        
         <!-- Initialize Flatpickr -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -48,12 +87,20 @@
                 const locale = '{{ app()->getLocale() }}';
                 
                 dateInputs.forEach(input => {
+                    // Check for min date from either data attribute or native min attribute
+                    let minDateValue = null;
+                    if (input.hasAttribute('data-min-today')) {
+                        minDateValue = 'today';
+                    } else if (input.hasAttribute('min')) {
+                        minDateValue = input.getAttribute('min');
+                    }
+                    
                     flatpickr(input, {
                         dateFormat: 'Y-m-d',
                         altInput: true,
                         altFormat: 'F j, Y',
                         allowInput: true,
-                        minDate: input.hasAttribute('data-min-today') ? 'today' : null,
+                        minDate: minDateValue,
                         theme: 'light',
                         disableMobile: true,
                         locale: locale === 'hu' ? 'hu' : 'default',
