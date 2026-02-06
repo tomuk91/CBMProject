@@ -20,6 +20,13 @@ class PendingAppointment extends Model
         'status',
         'admin_notes',
     ];
+    
+    /**
+     * The attributes that should be hidden for serialization.
+     */
+    protected $hidden = [
+        'admin_notes', // Don't expose admin notes in API responses
+    ];
 
     public function user(): BelongsTo
     {

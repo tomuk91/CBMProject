@@ -555,4 +555,25 @@ return [
     
     'show_old_booked_slots' => 'Show old/booked slots',
     'toggle_theme' => 'Toggle dark mode',
+    
+    // Accessibility
+    'skip_to_content' => 'Skip to main content',
+    'main_navigation' => 'Main navigation',
+    'main_content' => 'Main content',
+    'go_to_dashboard' => 'Go to dashboard',
+    'go_to_home' => 'Go to home page',
+    'logo_alt' => 'logo',
+    'language_selector' => 'Language selector',
+    'switch_to_english' => 'Switch to English',
+    'switch_to_hungarian' => 'Switch to Hungarian',
+    'toggle_mobile_menu' => 'Toggle mobile menu',
+    'mobile_navigation' => 'Mobile navigation',
+    'hero_section' => 'Hero section',
+    'book_appointment_now' => 'Book an appointment now',
+    'about_image_alt' => 'Our professional mechanics at work',
+    'section_label' => 'Section label',
+    'meta_description' => 'Professional car service and repairs in Hungary. Book your appointment online.',
+    'required_field' => 'Required field',
+    'back_to_home' => 'Back to home page',
+    'submit_contact_form' => 'Submit contact form',
 ];

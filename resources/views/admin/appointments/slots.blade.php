@@ -239,34 +239,34 @@
                                 <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                                     {{ __('messages.create_select_days') }} <span class="text-red-600">*</span>
                                 </label>
-                                <div class="grid grid-cols-7 gap-2">
-                                    <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="1" {{ is_array(old('selected_days')) && in_array('1', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs font-semibold">{{ __('messages.day_monday') }}</span>
+                                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2 sm:gap-3">
+                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
+                                        <input type="checkbox" name="selected_days[]" value="1" {{ is_array(old('selected_days')) && in_array('1', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
+                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_monday') }}</span>
                                     </label>
-                                    <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="2" {{ is_array(old('selected_days')) && in_array('2', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs font-semibold">{{ __('messages.day_tuesday') }}</span>
+                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
+                                        <input type="checkbox" name="selected_days[]" value="2" {{ is_array(old('selected_days')) && in_array('2', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
+                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_tuesday') }}</span>
                                     </label>
-                                    <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="3" {{ is_array(old('selected_days')) && in_array('3', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs font-semibold">{{ __('messages.day_wednesday') }}</span>
+                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
+                                        <input type="checkbox" name="selected_days[]" value="3" {{ is_array(old('selected_days')) && in_array('3', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
+                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_wednesday') }}</span>
                                     </label>
-                                    <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="4" {{ is_array(old('selected_days')) && in_array('4', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs font-semibold">{{ __('messages.day_thursday') }}</span>
+                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
+                                        <input type="checkbox" name="selected_days[]" value="4" {{ is_array(old('selected_days')) && in_array('4', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
+                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_thursday') }}</span>
                                     </label>
-                                    <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="5" {{ is_array(old('selected_days')) && in_array('5', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs font-semibold">{{ __('messages.day_friday') }}</span>
+                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
+                                        <input type="checkbox" name="selected_days[]" value="5" {{ is_array(old('selected_days')) && in_array('5', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
+                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_friday') }}</span>
                                     </label>
-                                    <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="6" {{ is_array(old('selected_days')) && in_array('6', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs font-semibold">{{ __('messages.day_saturday') }}</span>
+                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
+                                        <input type="checkbox" name="selected_days[]" value="6" {{ is_array(old('selected_days')) && in_array('6', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
+                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_saturday') }}</span>
                                     </label>
-                                    <label class="flex flex-col items-center p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
-                                        <input type="checkbox" name="selected_days[]" value="0" {{ is_array(old('selected_days')) && in_array('0', old('selected_days')) ? 'checked' : '' }} class="mb-1 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs font-semibold">{{ __('messages.day_sunday') }}</span>
+                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
+                                        <input type="checkbox" name="selected_days[]" value="0" {{ is_array(old('selected_days')) && in_array('0', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
+                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_sunday') }}</span>
                                     </label>
                                 </div>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Select which days to create slots on</p>
@@ -1290,13 +1290,13 @@
                 const clientsData = {!! json_encode($users->map(function($user) {
                     return [
                         'id' => $user->id,
-                        'name' => $user->name,
-                        'email' => $user->email,
-                        'vehicle_make' => $user->vehicle_make,
-                        'vehicle_model' => $user->vehicle_model,
-                        'vehicle_year' => $user->vehicle_year,
+                        'name' => e($user->name),
+                        'email' => e($user->email),
+                        'vehicle_make' => e($user->vehicle_make),
+                        'vehicle_model' => e($user->vehicle_model),
+                        'vehicle_year' => e($user->vehicle_year),
                     ];
-                })) !!};
+                }), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) !!};
 
                 const clientSearch = document.getElementById('client_search');
                 const clientResults = document.getElementById('client_results');

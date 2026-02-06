@@ -538,4 +538,25 @@ return [
     
     'show_old_booked_slots' => 'Régi/lefoglalt időpontok mutatása',
     'toggle_theme' => 'Sötét mód váltása',
+    
+    // Akadálymentesítés
+    'skip_to_content' => 'Ugrás a fő tartalomhoz',
+    'main_navigation' => 'Fő navigáció',
+    'main_content' => 'Fő tartalom',
+    'go_to_dashboard' => 'Irányítópulthoz',
+    'go_to_home' => 'Kezdőlaphoz',
+    'logo_alt' => 'logó',
+    'language_selector' => 'Nyelvválasztó',
+    'switch_to_english' => 'Váltás angol nyelvre',
+    'switch_to_hungarian' => 'Váltás magyar nyelvre',
+    'toggle_mobile_menu' => 'Mobil menü megnyitása/bezárása',
+    'mobile_navigation' => 'Mobil navigáció',
+    'hero_section' => 'Főcím szekció',
+    'book_appointment_now' => 'Foglaljon időpontot most',
+    'about_image_alt' => 'Professzionális szerelőink munkában',
+    'section_label' => 'Szekció címke',
+    'meta_description' => 'Professzionális autószerviz és javítás Magyarországon. Foglaljon időpontot online.',
+    'required_field' => 'Kötelező mező',
+    'back_to_home' => 'Vissza a kezdőlapra',
+    'submit_contact_form' => 'Űrlap elküldése',
 ];

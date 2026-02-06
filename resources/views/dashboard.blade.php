@@ -2,19 +2,19 @@
     <div class="py-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Welcome Banner -->
-            <div class="mb-8 bg-gradient-to-r from-red-600 to-red-700 rounded-2xl shadow-xl overflow-hidden">
-                <div class="px-8 py-10">
-                    <div class="flex items-center">
-                        <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
-                            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <div class="mb-6 sm:mb-8 bg-gradient-to-r from-red-600 to-red-700 rounded-xl sm:rounded-2xl shadow-xl overflow-hidden">
+                <div class="px-4 py-6 sm:px-8 sm:py-10">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="bg-white/20 backdrop-blur-sm p-3 sm:p-4 rounded-xl">
+                            <svg class="w-10 h-10 sm:w-12 sm:h-12 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                                 <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
                             </svg>
                         </div>
-                        <div class="ml-6">
-                            <h1 class="text-3xl font-bold text-white">
+                        <div class="flex-1">
+                            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
                                 {{ __('messages.dashboard_welcome') }}, {{ Auth::user()->name }}!
                             </h1>
-                            <p class="text-red-100 mt-1 text-lg">
+                            <p class="text-red-100 mt-1 text-sm sm:text-base lg:text-lg">
                                 Here's what's happening with your account
                             </p>
                         </div>
@@ -22,10 +22,10 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 <!-- Quick Stats -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-xl transition duration-300">
-                    <div class="p-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-xl transition duration-300 active:scale-95">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-red-50 dark:bg-red-900/20 rounded-xl p-3">
                                 <svg class="h-7 w-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">

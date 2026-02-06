@@ -2,7 +2,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#dc2626">
     <title>{{ __('messages.contact_title') }} - {{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -133,42 +135,63 @@
             <form action="{{ route('contact.submit') }}" method="POST" class="space-y-6">
                 @csrf
                 
-                <div class="grid md:grid-cols-2 gap-6">
+                <!-- Honeypot field - hidden from users, bots will fill it -->
+                <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+                
+                <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                         <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('messages.contact_name') }} <span class="text-red-600">*</span>
+                            {{ __('messages.contact_name') }} <span class="text-red-600" aria-label="{{ __('messages.required_field') }}">*</span>
                         </label>
                         <input type="text" id="name" name="name" value="{{ old('name') }}" required
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                               placeholder="{{ __('messages.contact_name_placeholder') }}">
+                               aria-required="true"
+                               aria-describedby="name-hint"
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-base"
+                               placeholder="{{ __('messages.contact_name_placeholder') }}"
+                               inputmode="text"
+                               autocomplete="name">
+                        @error('name')
+                            <p class="text-red-600 text-sm mt-1" id="name-error" role="alert">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label for="email" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('messages.contact_email') }} <span class="text-red-600">*</span>
+                            {{ __('messages.contact_email') }} <span class="text-red-600" aria-label="{{ __('messages.required_field') }}">*</span>
                         </label>
                         <input type="email" id="email" name="email" value="{{ old('email') }}" required
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                               placeholder="{{ __('messages.contact_email_placeholder') }}">
+                               aria-required="true"
+                               aria-describedby="email-hint"
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-base"
+                               placeholder="{{ __('messages.contact_email_placeholder') }}"
+                               inputmode="email"
+                               autocomplete="email">
+                        @error('email')
+                            <p class="text-red-600 text-sm mt-1" id="email-error" role="alert">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-6">
+                <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                         <label for="phone" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.contact_phone') }}
                         </label>
                         <input type="tel" id="phone" name="phone" value="{{ old('phone') }}"
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                               placeholder="{{ __('messages.contact_phone_placeholder') }}">
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-base"
+                               placeholder="{{ __('messages.contact_phone_placeholder') }}"
+                               inputmode="tel"
+                               autocomplete="tel">
                     </div>
 
                     <div>
                         <label for="subject" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('messages.contact_subject') }} <span class="text-red-600">*</span>
+                            {{ __('messages.contact_subject') }} <span class="text-red-600" aria-label="{{ __('messages.required_field') }}">*</span>
                         </label>
                         <select id="subject" name="subject" required
-                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                aria-required="true"
+                                aria-describedby="subject-hint"
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-base">
                             <option value="">{{ __('messages.contact_subject_select') }}</option>
                             <option value="service_inquiry" {{ old('subject') == 'service_inquiry' ? 'selected' : '' }}>{{ __('messages.contact_subject_service') }}</option>
                             <option value="booking_inquiry" {{ old('subject') == 'booking_inquiry' ? 'selected' : '' }}>{{ __('messages.contact_subject_booking') }}</option>
@@ -176,25 +199,33 @@
                             <option value="feedback" {{ old('subject') == 'feedback' ? 'selected' : '' }}>{{ __('messages.contact_subject_feedback') }}</option>
                             <option value="other" {{ old('subject') == 'other' ? 'selected' : '' }}>{{ __('messages.contact_subject_other') }}</option>
                         </select>
+                        @error('subject')
+                            <p class="text-red-600 text-sm mt-1" id="subject-error" role="alert">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <div>
                     <label for="message" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        {{ __('messages.contact_message') }} <span class="text-red-600">*</span>
+                        {{ __('messages.contact_message') }} <span class="text-red-600" aria-label="{{ __('messages.required_field') }}">*</span>
                     </label>
                     <textarea id="message" name="message" rows="6" required
-                              class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 resize-none"
+                              aria-required="true"
+                              aria-describedby="message-hint"
+                              class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 resize-none text-base"
                               placeholder="{{ __('messages.contact_message_placeholder') }}">{{ old('message') }}</textarea>
+                    @error('message')
+                        <p class="text-red-600 text-sm mt-1" id="message-error" role="alert">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <div class="flex items-center justify-between pt-4">
-                    <a href="{{ route('home') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+                    <a href="{{ route('home') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition min-h-[44px] flex items-center active:scale-95" aria-label="{{ __('messages.back_to_home') }}">
                         ← {{ __('messages.contact_back') }}
                     </a>
-                    <button type="submit" class="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center">
+                    <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold rounded-lg transition shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 flex items-center justify-center" aria-label="{{ __('messages.submit_contact_form') }}">
                         {{ __('messages.contact_submit') }}
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
                     </button>

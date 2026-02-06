@@ -2,24 +2,24 @@
     <div class="py-8 bg-gradient-to-br from-gray-50 via-gray-50 to-red-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 min-h-screen">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header -->
-            <div class="mb-8">
-                <a href="{{ route('appointments.index') }}" class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 font-medium transition mb-4">
+            <div class="mb-6 sm:mb-8">
+                <a href="{{ route('appointments.index') }}" class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 font-medium transition mb-4 min-h-[44px] active:scale-95">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
                     {{ __('messages.action_back') }}
                 </a>
-                <div class="flex items-center gap-4">
-                    <div class="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl shadow-lg flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl shadow-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
                             {{ __('messages.appointments_book') }}
                         </h1>
-                        <p class="mt-1 text-base text-gray-600 dark:text-gray-400">
+                        <p class="mt-1 text-sm sm:text-base text-gray-600 dark:text-gray-400">
                             {{ __('messages.appointments_complete_form') }}
                         </p>
                     </div>
@@ -93,7 +93,9 @@
                                            name="name" 
                                            value="{{ old('name', Auth::user()->name ?? '') }}" 
                                            {{ Auth::user()->name ? 'readonly' : 'required' }}
-                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 {{ Auth::user()->name ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
+                                           inputmode="text"
+                                           autocomplete="name"
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-base {{ Auth::user()->name ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
                                     @if(Auth::user()->name)
                                         <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400 flex items-center">
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -125,7 +127,9 @@
                                            name="email" 
                                            value="{{ old('email', Auth::user()->email ?? '') }}" 
                                            {{ Auth::user()->email ? 'readonly' : 'required' }}
-                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 {{ Auth::user()->email ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
+                                           inputmode="email"
+                                           autocomplete="email"
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-base {{ Auth::user()->email ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
                                     @if(Auth::user()->email)
                                         <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400 flex items-center">
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -158,7 +162,9 @@
                                            value="{{ old('phone', Auth::user()->phone ?? '') }}" 
                                            {{ Auth::user()->phone ? 'readonly' : 'required' }}
                                            placeholder="{{ Auth::user()->phone ? '' : '+36 1 234 5678' }}"
-                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 {{ Auth::user()->phone ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
+                                           inputmode="tel"
+                                           autocomplete="tel"
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-base {{ Auth::user()->phone ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
                                     @if(Auth::user()->phone)
                                         <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400 flex items-center">
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">

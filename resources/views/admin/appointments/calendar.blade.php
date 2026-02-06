@@ -1,17 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <h2 class="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('messages.calendar_title') }}
             </h2>
-            <div class="flex gap-3">
-                <a href="{{ route('admin.appointments.slots') }}" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+                <a href="{{ route('admin.appointments.slots') }}" class="bg-red-600 hover:bg-red-700 active:bg-red-800 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center sm:justify-start min-h-[44px]">
                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
                     </svg>
                     {{ __('messages.admin_manage_slots') }}
                 </a>
-                <a href="{{ route('admin.appointments.pending') }}" class="bg-red-700 hover:bg-red-800 dark:bg-red-800 dark:hover:bg-red-900 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+                <a href="{{ route('admin.appointments.pending') }}" class="bg-red-700 hover:bg-red-800 active:bg-red-900 dark:bg-red-800 dark:hover:bg-red-900 text-white text-sm px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center sm:justify-start min-h-[44px]">
                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                     </svg>
@@ -22,7 +22,7 @@
     </x-slot>
 
     <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-4 lg:px-6 space-y-6">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 space-y-6">
             @if (session('success'))
                 <div x-data="{ show: true }" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
                     <div class="flex items-center justify-between">
@@ -60,7 +60,7 @@
             @endif
 
             <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-100 dark:border-gray-700">
-                <div class="p-6">
+                <div class="p-2 sm:p-4 md:p-6">
                     <!-- Calendar will be rendered here -->
                     <div id="calendar"></div>
                 </div>
@@ -70,8 +70,8 @@
 
     <!-- Appointment Details Modal -->
     <div id="appointmentModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full z-50 backdrop-blur-sm">
-        <div class="relative top-20 mx-auto p-1 w-full max-w-lg">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div class="relative top-4 sm:top-20 mx-auto p-2 sm:p-1 w-full max-w-lg">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[calc(100vh-2rem)] overflow-y-auto">
                 <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
                     <h3 class="text-xl font-bold text-white flex items-center">
                         <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -85,22 +85,22 @@
                         <!-- Details will be inserted here -->
                     </div>
                 </div>
-                <div class="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 flex justify-between items-center">
-                    <div class="flex gap-2">
-                        <button id="markCompleteBtn" onclick="markAsComplete()" class="px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white text-sm rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+                <div class="bg-gray-50 dark:bg-gray-700/50 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+                    <div class="flex flex-col sm:flex-row gap-2 order-2 sm:order-1">
+                        <button id="markCompleteBtn" onclick="markAsComplete()" class="px-4 py-3 bg-green-600 hover:bg-green-700 active:bg-green-800 dark:bg-green-700 dark:hover:bg-green-800 text-white text-sm rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center min-h-[44px]">
                             <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                             {{ __('messages.action_complete') }}
                         </button>
-                        <button id="cancelAppointmentBtn" onclick="cancelAppointment()" class="px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+                        <button id="cancelAppointmentBtn" onclick="cancelAppointment()" class="px-4 py-3 bg-red-600 hover:bg-red-700 active:bg-red-800 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center min-h-[44px]">
                             <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                             </svg>
                             Cancel Appointment
                         </button>
                     </div>
-                    <button onclick="closeModal()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 text-sm rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md">
+                    <button onclick="closeModal()" class="px-4 py-3 bg-gray-200 hover:bg-gray-300 active:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 text-sm rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md order-1 sm:order-2 min-h-[44px]">
                         {{ __('messages.action_close') }}
                     </button>
                 </div>
@@ -110,7 +110,7 @@
 
     <!-- Drag/Drop Confirmation Modal -->
     <div id="rescheduleModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full z-50 backdrop-blur-sm">
-        <div class="relative top-20 mx-auto p-1 w-full max-w-md">
+        <div class="relative top-4 sm:top-20 mx-auto p-2 sm:p-1 w-full max-w-md">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <!-- Modal Header -->
                 <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-xl px-6 py-4">
@@ -275,6 +275,69 @@
         .dark .fc .fc-daygrid-day-number {
             color: #d1d5db;
         }
+        
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .fc .fc-toolbar {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+            
+            .fc .fc-toolbar-chunk {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .fc .fc-button {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
+                min-height: 44px;
+            }
+            
+            .fc .fc-toolbar-title {
+                font-size: 1.125rem;
+                text-align: center;
+            }
+            
+            .fc .fc-daygrid-day-number {
+                padding: 0.25rem;
+                font-size: 0.875rem;
+            }
+            
+            .fc .fc-col-header-cell {
+                padding: 0.5rem 0;
+                font-size: 0.625rem;
+            }
+            
+            .fc-event {
+                font-size: 0.625rem;
+                padding: 1px 2px;
+            }
+            
+            .fc .fc-button-group {
+                display: flex;
+                gap: 0.25rem;
+            }
+            
+            /* Hide week/day views on mobile, keep month and list */
+            .fc .fc-timeGridWeek-button,
+            .fc .fc-timeGridDay-button {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 641px) and (max-width: 768px) {
+            .fc .fc-toolbar-title {
+                font-size: 1.25rem;
+            }
+            
+            .fc .fc-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
     </style>
 
     <script>
@@ -284,14 +347,19 @@
         
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
+            
+            // Detect mobile and adjust initial view
+            const isMobile = window.innerWidth < 640;
+            const isTablet = window.innerWidth >= 640 && window.innerWidth < 1024;
+            
             calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: '{{ app()->getLocale() }}',
                 firstDay: 1, // Monday as first day of week (Hungary convention)
-                initialView: 'dayGridMonth',
+                initialView: isMobile ? 'listWeek' : 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                    right: isMobile ? 'dayGridMonth,listWeek' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
                 },
                 buttonText: {
                     today: '{{ __('messages.calendar_today') }}',
@@ -309,8 +377,8 @@
                 eventClick: function(info) {
                     showAppointmentDetails(info.event);
                 },
-                editable: true,
-                droppable: true,
+                editable: !isMobile, // Disable drag/drop on mobile
+                droppable: !isMobile,
                 eventDrop: function(info) {
                     showRescheduleConfirmation(info);
                 },
@@ -318,6 +386,8 @@
                     showRescheduleConfirmation(info);
                 },
                 height: 'auto',
+                contentHeight: isMobile ? 500 : 'auto',
+                aspectRatio: isMobile ? 1 : 1.8,
                 eventTimeFormat: {
                     hour: '2-digit',
                     minute: '2-digit',
@@ -331,9 +401,30 @@
                     daysOfWeek: [1, 2, 3, 4, 5],
                     startTime: '09:00',
                     endTime: '17:00'
+                },
+                // Mobile-specific settings
+                dayMaxEvents: isMobile ? 2 : true,
+                moreLinkClick: 'popover',
+                navLinks: true,
+                navLinkDayClick: function(date, jsEvent) {
+                    if (isMobile) {
+                        calendar.changeView('listWeek', date);
+                    }
                 }
             });
             calendar.render();
+            
+            // Handle window resize
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    const nowMobile = window.innerWidth < 640;
+                    if ((isMobile && !nowMobile) || (!isMobile && nowMobile)) {
+                        location.reload(); // Reload to apply proper mobile/desktop config
+                    }
+                }, 250);
+            });
         });
 
         function showRescheduleConfirmation(info) {

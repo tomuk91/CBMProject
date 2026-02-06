@@ -22,7 +22,9 @@ Route::get('/', function () {
 
 // Contact form
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
-Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+Route::post('/contact', [ContactController::class, 'submit'])
+    ->middleware('throttle:10,60')
+    ->name('contact.submit');
 
 // Guest appointment slot selection (before login)
 Route::get('/slots', [AppointmentController::class, 'guestSlots'])->name('guest.slots');
@@ -54,15 +56,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/vehicles/{vehicle}/set-primary', [\App\Http\Controllers\VehicleController::class, 'setPrimary'])->name('vehicles.set-primary');
     Route::get('/api/vehicles/{vehicle}', function(\App\Models\Vehicle $vehicle) {
         if ($vehicle->user_id !== Auth::id()) {
-            abort(403);
+            abort(403, 'Unauthorized access to vehicle data');
         }
-        return response()->json($vehicle);
-    });
+        return response()->json($vehicle->only(['id', 'make', 'model', 'year', 'color', 'plate', 'mileage']));
+    })->middleware('throttle:60,1');
     
     // Customer appointment routes
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
     Route::get('/appointments/{slot}', [AppointmentController::class, 'show'])->name('appointments.show');
-    Route::post('/appointments/{slot}/book', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::post('/appointments/{slot}/book', [AppointmentController::class, 'store'])
+        ->middleware('throttle:30,60')
+        ->name('appointments.store');
     Route::get('/appointments/confirmation/success', [AppointmentController::class, 'confirmation'])->name('appointments.confirmation');
     
     // Admin appointment routes
@@ -89,8 +93,11 @@ Route::middleware('auth')->group(function () {
         
         // API endpoint to get user vehicles
         Route::get('/api/users/{user}/vehicles', function(\App\Models\User $user) {
-            return response()->json($user->vehicles);
-        })->name('api.user.vehicles');
+            // Only return essential vehicle information
+            return response()->json($user->vehicles->map(function($vehicle) {
+                return $vehicle->only(['id', 'make', 'model', 'year', 'plate', 'is_primary']);
+            }));
+        })->middleware('throttle:60,1')->name('api.user.vehicles');
     });
 });
 

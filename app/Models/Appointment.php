@@ -26,6 +26,13 @@ class Appointment extends Model
         'appointment_date' => 'datetime',
         'appointment_end' => 'datetime',
     ];
+    
+    /**
+     * The attributes that should be hidden for serialization.
+     */
+    protected $hidden = [
+        'admin_notes', // Don't expose admin notes in API responses
+    ];
 
     public function user(): BelongsTo
     {

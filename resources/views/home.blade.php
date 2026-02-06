@@ -2,10 +2,72 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="{{ __('messages.meta_description') }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#dc2626">
     <title>{{ __('messages.hero_title') }} - {{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
+        /* Skip Link for Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #dc2626;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 100;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Enhanced Focus Indicators */
+        *:focus-visible {
+            outline: 3px solid #dc2626;
+            outline-offset: 2px;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            /* Prevent text size adjustment */
+            html {
+                -webkit-text-size-adjust: 100%;
+                text-size-adjust: 100%;
+            }
+            
+            /* Better hero sizing on mobile */
+            .hero-section {
+                min-height: 400px;
+                height: auto;
+            }
+            
+            /* Improve tap targets */
+            button, a {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            /* Optimize mobile menu */
+            #mobileMenu {
+                max-height: calc(100vh - 80px);
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        
+        /* Active states for touch devices */
+        @media (hover: none) {
+            button:active, a:active {
+                transform: scale(0.95);
+                transition: transform 0.1s;
+            }
+        }
+        
         /* Scroll Animation Styles */
         .scroll-animate {
             opacity: 0;
@@ -61,14 +123,17 @@
     </style>
 </head>
 <body class="bg-white dark:bg-gray-900">
+    <!-- Skip Link for Keyboard Navigation -->
+    <a href="#main-content" class="skip-link">{{ __('messages.skip_to_content') }}</a>
+    
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-sm z-50">
+    <nav class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-sm z-50" role="navigation" aria-label="{{ __('messages.main_navigation') }}">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="/" class="flex items-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="CBM Auto" class="h-20 w-auto max-w-none">
+                    <a href="/" class="flex items-center" aria-label="{{ __('messages.go_to_home') }}">
+                        <img src="{{ asset('images/logo.png') }}" alt="CBM Auto {{ __('messages.logo_alt') }}" class="h-20 w-auto max-w-none">
                     </a>
                 </div>
 
@@ -79,9 +144,15 @@
                     <a href="{{ route('contact.show') }}" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_contact') }}</a>
                     
                     <!-- Language Toggle -->
-                    <div class="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
-                        <a href="{{ route('language.switch', 'en') }}" class="px-3 py-1.5 rounded {{ app()->getLocale() == 'en' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition">EN</a>
-                        <a href="{{ route('language.switch', 'hu') }}" class="px-3 py-1.5 rounded {{ app()->getLocale() == 'hu' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition">HU</a>
+                    <div class="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg" role="group" aria-label="{{ __('messages.language_selector') }}">
+                        <a href="{{ route('language.switch', 'en') }}" 
+                           class="px-3 py-1.5 rounded {{ app()->getLocale() == 'en' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition"
+                           aria-label="{{ __('messages.switch_to_english') }}"
+                           {{ app()->getLocale() == 'en' ? 'aria-current="true"' : '' }}>EN</a>
+                        <a href="{{ route('language.switch', 'hu') }}" 
+                           class="px-3 py-1.5 rounded {{ app()->getLocale() == 'hu' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition"
+                           aria-label="{{ __('messages.switch_to_hungarian') }}"
+                           {{ app()->getLocale() == 'hu' ? 'aria-current="true"' : '' }}>HU</a>
                     </div>
 
                     @auth
@@ -99,8 +170,13 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button class="md:hidden text-gray-700 dark:text-gray-300" onclick="toggleMobileMenu()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button class="md:hidden text-gray-700 dark:text-gray-300" 
+                        onclick="toggleMobileMenu()" 
+                        aria-label="{{ __('messages.toggle_mobile_menu') }}"
+                        aria-expanded="false"
+                        aria-controls="mobileMenu"
+                        id="mobile-menu-button">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
@@ -108,7 +184,7 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900" role="navigation" aria-label="{{ __('messages.mobile_navigation') }}">
             <div class="px-4 py-4 space-y-3">
                 <a href="#about" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_about') }}</a>
                 <a href="#services" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_services') }}</a>
@@ -127,26 +203,30 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative h-[600px] mt-20 overflow-hidden">
-        <!-- Background Image -->
-        <div class="absolute inset-0">
-            <img src="{{ asset('images/hero-mechanic.jpg') }}" alt="Professional car service" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30"></div>
-        </div>
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="hero-section relative h-[400px] sm:h-[500px] md:h-[600px] mt-20 overflow-hidden" aria-label="{{ __('messages.hero_section') }}">
+            <!-- Background Image -->
+            <div class="absolute inset-0" aria-hidden="true">
+                <img src="{{ asset('images/hero-mechanic.jpg') }}" alt="" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30"></div>
+            </div>
         
         <!-- Hero Content -->
         <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-            <div class="max-w-2xl text-white">
-                <h1 class="text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            <div class="max-w-2xl text-white py-8">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 sm:mb-6">
                     {{ __('messages.hero_main_title') }}
                 </h1>
-                <p class="text-xl lg:text-2xl text-gray-200 mb-8 leading-relaxed">
+                <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 mb-6 sm:mb-8 leading-relaxed">
                     {{ __('messages.hero_main_description') }}
                 </p>
-                <a href="{{ Auth::check() ? route('appointments.index') : route('guest.slots') }}" class="inline-flex items-center px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold text-lg transition shadow-lg hover:shadow-xl transform hover:scale-105">
+                <a href="{{ Auth::check() ? route('appointments.index') : route('guest.slots') }}" 
+                   class="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold text-base sm:text-lg transition shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+                   aria-label="{{ __('messages.book_appointment_now') }}">
                     {{ __('messages.hero_cta_primary') }}
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
                 </a>
@@ -155,17 +235,20 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
+    <section id="about" class="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900" aria-labelledby="about-heading">
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <!-- Image -->
                 <div class="relative scroll-animate-left">
-                    <img src="{{ asset('images/hero-mechanic.jpg') }}" alt="Our story" class="rounded-2xl shadow-2xl w-full h-[500px] object-cover">
+                    <img src="{{ asset('images/hero-mechanic.jpg') }}" 
+                         alt="{{ __('messages.about_image_alt') }}" 
+                         class="rounded-2xl shadow-2xl w-full h-[500px] object-cover">
                 </div>
                 
                 <!-- Content -->
                 <div class="scroll-animate-right">
-                    <h2 class="text-red-600 font-bold text-lg mb-4">{{ __('messages.about_badge') }}</h2>
+                    <p class="text-red-600 font-bold text-lg mb-4" aria-label="{{ __('messages.section_label') }}">{{ __('messages.about_badge') }}</p>
+                    <h2 id="about-heading" class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                     <h3 class="text-4xl font-bold text-gray-900 dark:text-white mb-6">
                         {{ __('messages.about_title') }}
                     </h3>
@@ -565,18 +648,27 @@
     </footer>
 
     <script>
+        // Mobile menu toggle with accessibility support
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
+            const button = document.getElementById('mobile-menu-button');
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            
             menu.classList.toggle('hidden');
+            button.setAttribute('aria-expanded', !isExpanded);
         }
 
         // Close mobile menu when clicking outside
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('mobileMenu');
             const button = event.target.closest('button');
+            const menuButton = document.getElementById('mobile-menu-button');
             
             if (!menu.contains(event.target) && !button && !menu.classList.contains('hidden')) {
                 menu.classList.add('hidden');
+                if (menuButton) {
+                    menuButton.setAttribute('aria-expanded', 'false');
+                }
             }
         });
 
