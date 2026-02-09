@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-4 lg:px-6">
+    <div class="py-2 sm:py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
             <!-- Header -->
-            <div class="mb-4">
-                <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition font-medium">
+            <div class="mb-2 sm:mb-4">
+                <a href="{{ route('dashboard') }}" class="inline-flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition font-medium">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
@@ -11,10 +11,26 @@
                 </a>
             </div>
 
-            <div class="flex gap-4">
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-toggle" class="lg:hidden mb-3 inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition shadow-sm">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+                {{ __('messages.menu') }}
+            </button>
+
+            <div class="flex gap-4 relative">
                 <!-- Sidebar Navigation -->
-                <div class="w-64 flex-shrink-0">
-                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
+                <div id="mobile-menu" class="w-64 flex-shrink-0 fixed lg:static inset-0 z-50 lg:z-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+                    <!-- Mobile Overlay -->
+                    <div id="mobile-overlay" class="lg:hidden fixed inset-0 bg-gray-900/50 backdrop-blur-sm" style="display: none;"></div>
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden h-full lg:h-auto relative">
+                        <!-- Mobile Close Button -->
+                        <button id="mobile-menu-close" class="lg:hidden absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition z-10">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
                         <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700/50">
                             <h2 class="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center">
                                 <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
@@ -86,25 +102,25 @@
                 <div class="flex-1 space-y-4">
                     <!-- Page Header -->
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-2xl border border-gray-100 dark:border-gray-700">
-                        <div class="bg-gradient-to-r from-red-600 via-red-700 to-red-800 px-8 py-10">
-                            <div class="flex items-center justify-between">
+                        <div class="bg-gradient-to-r from-red-600 via-red-700 to-red-800 px-4 py-6 sm:px-6 sm:py-8 md:px-8 md:py-10">
+                            <div class="flex items-center justify-between flex-wrap gap-4">
                                 <div class="flex items-center">
-                                    <div class="bg-white/20 backdrop-blur-lg p-4 rounded-2xl mr-5 shadow-xl">
-                                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <div class="bg-white/20 backdrop-blur-lg p-3 sm:p-4 rounded-2xl mr-3 sm:mr-5 shadow-xl">
+                                        <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
                                             <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
                                         </svg>
                                     </div>
                                     <div>
-                                        <h1 class="text-3xl font-bold text-white">
+                                        <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-white">
                                             {{ __('messages.vehicle_management') }}
                                         </h1>
-                                        <p class="text-red-100 mt-2 text-lg">{{ __('messages.vehicle_manage_description') }}</p>
+                                        <p class="text-red-100 mt-1 sm:mt-2 text-sm sm:text-base md:text-lg">{{ __('messages.vehicle_manage_description') }}</p>
                                     </div>
                                 </div>
                                 <button onclick="openAddVehicleModal()" 
-                                        class="px-6 py-3 bg-white hover:bg-gray-50 text-red-600 font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl flex items-center">
-                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        class="px-4 py-2 sm:px-6 sm:py-3 bg-white hover:bg-gray-50 text-red-600 font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl flex items-center text-sm sm:text-base">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
                                     </svg>
                                     {{ __('messages.add_vehicle') }}
@@ -114,17 +130,17 @@
 
                         <!-- Stats Summary -->
                         <div class="grid grid-cols-3 divide-x divide-gray-200 dark:divide-gray-700">
-                            <div class="px-6 py-4 text-center">
-                                <div class="text-3xl font-bold text-red-600 dark:text-red-400">{{ $vehicles->count() }}</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('messages.total_vehicles') }}</div>
+                            <div class="px-3 py-3 sm:px-6 sm:py-4 text-center">
+                                <div class="text-xl sm:text-2xl md:text-3xl font-bold text-red-600 dark:text-red-400">{{ $vehicles->count() }}</div>
+                                <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('messages.total_vehicles') }}</div>
                             </div>
-                            <div class="px-6 py-4 text-center">
-                                <div class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $vehicles->where('is_primary', true)->count() }}</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('messages.primary_vehicle') }}</div>
+                            <div class="px-3 py-3 sm:px-6 sm:py-4 text-center">
+                                <div class="text-xl sm:text-2xl md:text-3xl font-bold text-green-600 dark:text-green-400">{{ $vehicles->where('is_primary', true)->count() }}</div>
+                                <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('messages.primary_vehicle') }}</div>
                             </div>
-                            <div class="px-6 py-4 text-center">
-                                <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ $vehicles->pluck('make')->unique()->count() }}</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('messages.different_makes') }}</div>
+                            <div class="px-3 py-3 sm:px-6 sm:py-4 text-center">
+                                <div class="text-xl sm:text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400">{{ $vehicles->pluck('make')->unique()->count() }}</div>
+                                <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">{{ __('messages.different_makes') }}</div>
                             </div>
                         </div>
                     </div>
@@ -373,5 +389,38 @@
                 reader.readAsDataURL(file);
             }
         }
+
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('mobile-menu-toggle');
+            const menuClose = document.getElementById('mobile-menu-close');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileOverlay = document.getElementById('mobile-overlay');
+
+            function openMenu() {
+                mobileMenu.classList.remove('-translate-x-full');
+                mobileOverlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                mobileMenu.classList.add('-translate-x-full');
+                mobileOverlay.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            menuToggle?.addEventListener('click', openMenu);
+            menuClose?.addEventListener('click', closeMenu);
+            mobileOverlay?.addEventListener('click', closeMenu);
+
+            // Close menu when clicking a link
+            mobileMenu?.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) {
+                        closeMenu();
+                    }
+                });
+            });
+        });
     </script>
 </x-app-layout>

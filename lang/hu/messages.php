@@ -13,6 +13,7 @@ return [
     'nav_logout' => 'Kijelentkezés',
     'nav_profile' => 'Profil',
     'back' => 'Vissza',
+    'menu' => 'Menü',
     
     // Hero Section
     'hero_title' => 'Prémium Autószerviz',

@@ -13,6 +13,7 @@ return [
     'nav_logout' => 'Logout',
     'nav_profile' => 'Profile',
     'back' => 'Back',
+    'menu' => 'Menu',
     
     // Hero Section
     'hero_title' => 'Premium Car Service',
