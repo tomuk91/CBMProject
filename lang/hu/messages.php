@@ -271,6 +271,10 @@ return [
     
     // Vehicle Info
     'vehicle_management' => 'Járműkezelés',
+    'vehicle_manage_description' => 'Kezelje járműveit és tartsa naprakészen az információkat',
+    'total_vehicles' => 'Összes jármű',
+    'primary_vehicle' => 'Elsődleges jármű',
+    'different_makes' => 'Különböző márkák',
     'vehicle_information' => 'Jármű információ',    'registration' => 'Rendszám',    'vehicle_example' => 'pl. 2019 Toyota Camry',
     'vehicle_make' => 'Gyártó',
     'vehicle_model' => 'Modell',

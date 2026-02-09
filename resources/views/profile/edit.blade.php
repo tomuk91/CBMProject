@@ -290,31 +290,43 @@
                         </div>
                         @endif
                     @elseif($section === 'personal-info')
-                        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
-                            <div class="px-6 py-5 bg-gray-50 dark:bg-gray-700/50">
-                                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
-                                    <svg class="w-6 h-6 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
-                                    </svg>
-                                    {{ __('messages.profile_personal_info') }}
-                                </h2>
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('messages.profile_update_info') }}</p>
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-2xl border border-gray-100 dark:border-gray-700">
+                            <div class="bg-gradient-to-r from-red-600 via-red-700 to-red-800 px-8 py-10">
+                                <div class="flex items-center">
+                                    <div class="bg-white/20 backdrop-blur-lg p-4 rounded-2xl mr-5 shadow-xl">
+                                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-3xl font-bold text-white">
+                                            {{ __('messages.profile_personal_info') }}
+                                        </h1>
+                                        <p class="text-red-100 mt-2 text-lg">{{ __('messages.profile_update_info') }}</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="p-6">
                                 @include('profile.partials.update-profile-information-form')
                             </div>
                         </div>
                     @elseif($section === 'vehicle')
-                        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
-                            <div class="px-6 py-5 bg-gray-50 dark:bg-gray-700/50">
-                                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
-                                    <svg class="w-6 h-6 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
-                                        <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
-                                    </svg>
-                                    {{ __('messages.vehicle_information') }}
-                                </h2>
-                                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('messages.vehicle_update_details') }}</p>
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-2xl border border-gray-100 dark:border-gray-700">
+                            <div class="bg-gradient-to-r from-red-600 via-red-700 to-red-800 px-8 py-10">
+                                <div class="flex items-center">
+                                    <div class="bg-white/20 backdrop-blur-lg p-4 rounded-2xl mr-5 shadow-xl">
+                                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                                            <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-3xl font-bold text-white">
+                                            {{ __('messages.vehicle_information') }}
+                                        </h1>
+                                        <p class="text-red-100 mt-2 text-lg">{{ __('messages.vehicle_update_details') }}</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="p-6">
                                 @include('profile.partials.update-vehicle-information-form')
@@ -322,15 +334,21 @@
                         </div>
                     @elseif($section === 'security')
                         <div class="space-y-4">
-                            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
-                                <div class="px-6 py-5 bg-gray-50 dark:bg-gray-700/50">
-                                    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
-                                        <svg class="w-6 h-6 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-                                        </svg>
-                                        {{ __('messages.profile_change_password') }}
-                                    </h2>
-                                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('messages.profile_password_desc') }}</p>
+                            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-2xl border border-gray-100 dark:border-gray-700">
+                                <div class="bg-gradient-to-r from-red-600 via-red-700 to-red-800 px-8 py-10">
+                                    <div class="flex items-center">
+                                        <div class="bg-white/20 backdrop-blur-lg p-4 rounded-2xl mr-5 shadow-xl">
+                                            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h1 class="text-3xl font-bold text-white">
+                                                {{ __('messages.profile_security') }}
+                                            </h1>
+                                            <p class="text-red-100 mt-2 text-lg">{{ __('messages.profile_password_desc') }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="p-6">
                                     @include('profile.partials.update-password-form')

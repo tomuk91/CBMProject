@@ -281,6 +281,10 @@ return [
     
     // Vehicle Info
     'vehicle_management' => 'Vehicle Management',
+    'vehicle_manage_description' => 'Manage your vehicles and keep their information up to date',
+    'total_vehicles' => 'Total Vehicles',
+    'primary_vehicle' => 'Primary Vehicle',
+    'different_makes' => 'Different Makes',
     'vehicle_information' => 'Vehicle Information',
     'registration' => 'Registration',
     'vehicle_example' => 'e.g., 2019 Toyota Camry',
