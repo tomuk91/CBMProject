@@ -220,4 +220,39 @@ class AppointmentController extends Controller
             ->with('info', 'Please login or register to complete your booking for ' . 
                    \Carbon\Carbon::parse($slot->start_time)->format('l, F j \a\t H:i'));
     }
+
+    /**
+     * Request cancellation for an appointment
+     */
+    public function requestCancellation(Request $request, $id)
+    {
+        $appointment = \App\Models\Appointment::findOrFail($id);
+
+        // Verify the user owns this appointment
+        if ($appointment->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Can't request cancellation if already cancelled or already requested
+        if ($appointment->status === 'cancelled') {
+            return redirect()->back()->with('error', __('messages.appointment_already_cancelled'));
+        }
+
+        if ($appointment->cancellation_requested) {
+            return redirect()->back()->with('error', __('messages.cancellation_already_requested'));
+        }
+
+        $request->validate([
+            'cancellation_reason' => 'required|string|max:500',
+        ]);
+
+        $appointment->update([
+            'cancellation_requested' => true,
+            'cancellation_requested_at' => now(),
+            'cancellation_reason' => $request->cancellation_reason,
+        ]);
+
+        return redirect()->back()->with('success', __('messages.cancellation_requested_success'));
+    }
 }
+

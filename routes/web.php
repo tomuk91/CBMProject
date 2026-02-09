@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Admin\AppointmentController as AdminAppointmentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -16,9 +17,27 @@ Route::get('/language/{locale}', function ($locale) {
     return redirect()->back();
 })->name('language.switch');
 
+// Sitemap
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
 Route::get('/', function () {
     return view('home');
 })->name('home');
+
+// About page
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+// Privacy Policy
+Route::get('/privacy', function () {
+    return view('privacy');
+})->name('privacy');
+
+// Terms of Service
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
 
 // Contact form
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
@@ -48,6 +67,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
+    // GDPR: Data export and deletion
+    Route::get('/profile/export-data', [ProfileController::class, 'exportData'])->name('profile.export-data');
+    Route::post('/profile/request-deletion', [ProfileController::class, 'requestDeletion'])->name('profile.request-deletion');
+    
     // Vehicle management routes
     Route::get('/profile/vehicles', [\App\Http\Controllers\VehicleController::class, 'index'])->name('vehicles.index');
     Route::post('/vehicles', [\App\Http\Controllers\VehicleController::class, 'store'])->name('vehicles.store');
@@ -58,7 +81,7 @@ Route::middleware('auth')->group(function () {
         if ($vehicle->user_id !== Auth::id()) {
             abort(403, 'Unauthorized access to vehicle data');
         }
-        return response()->json($vehicle->only(['id', 'make', 'model', 'year', 'color', 'plate', 'mileage']));
+        return response()->json($vehicle->only(['id', 'make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size', 'mileage', 'notes']));
     })->middleware('throttle:60,1');
     
     // Customer appointment routes
@@ -68,6 +91,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('throttle:30,60')
         ->name('appointments.store');
     Route::get('/appointments/confirmation/success', [AppointmentController::class, 'confirmation'])->name('appointments.confirmation');
+    Route::post('/appointments/{appointment}/request-cancellation', [AppointmentController::class, 'requestCancellation'])->name('appointments.requestCancellation');
     
     // Admin appointment routes
     Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
@@ -85,11 +109,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/appointments/pending/{pendingAppointment}/approve', [AdminAppointmentController::class, 'approve'])->name('appointments.approve');
         Route::post('/appointments/pending/{pendingAppointment}/reject', [AdminAppointmentController::class, 'reject'])->name('appointments.reject');
         Route::post('/appointments/bulk-reject', [AdminAppointmentController::class, 'bulkReject'])->name('appointments.bulk-reject');
+        Route::post('/appointments/{appointment}/cancellation/approve', [AdminAppointmentController::class, 'approveCancellation'])->name('appointments.cancellation.approve');
+        Route::post('/appointments/{appointment}/cancellation/deny', [AdminAppointmentController::class, 'denyCancellation'])->name('appointments.cancellation.deny');
         Route::post('/appointments/{appointment}/status', [AdminAppointmentController::class, 'updateStatus'])->name('appointments.status');
         Route::post('/appointments/{appointment}/complete', [AdminAppointmentController::class, 'complete'])->name('appointments.complete');
         Route::post('/appointments/{appointment}/update-time', [AdminAppointmentController::class, 'updateTime'])->name('appointments.updateTime');
         Route::post('/appointments/cleanup-old-slots', [AdminAppointmentController::class, 'cleanupOldSlots'])->name('appointments.cleanupOldSlots');
         Route::delete('/appointments/{appointment}', [AdminAppointmentController::class, 'destroy'])->name('appointments.destroy');
+        
+        // Export and Bulk Operations
+        Route::get('/appointments/export', [AdminAppointmentController::class, 'exportAppointments'])->name('appointments.export');
+        Route::get('/appointments/slots/export', [AdminAppointmentController::class, 'exportSlots'])->name('slots.export');
+        Route::post('/appointments/bulk-email', [AdminAppointmentController::class, 'sendBulkEmail'])->name('appointments.bulk-email');
         
         // API endpoint to get user vehicles
         Route::get('/api/users/{user}/vehicles', function(\App\Models\User $user) {

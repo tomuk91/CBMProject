@@ -65,4 +65,42 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    /**
+     * Export user's personal data (GDPR compliance).
+     */
+    public function exportData(Request $request)
+    {
+        $user = $request->user()->load(['appointments', 'vehicles']);
+
+        return view('profile.export-data', compact('user'));
+    }
+
+    /**
+     * Request account deletion (GDPR compliance).
+     */
+    public function requestDeletion(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('accountDeletion', [
+            'password' => ['required', 'current_password'],
+            'confirmation' => ['required', 'accepted'],
+        ]);
+
+        $user = $request->user();
+
+        // In a production environment, you might want to:
+        // 1. Queue the deletion for X days (e.g., 30 days)
+        // 2. Send confirmation email
+        // 3. Allow cancellation within grace period
+        // 4. Anonymize data instead of deleting
+
+        Auth::logout();
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/')->with('status', 'account-deleted');
+    }
 }
+

@@ -10,6 +10,8 @@ use App\Models\ActivityLog;
 use App\Mail\AppointmentApproved;
 use App\Mail\AppointmentRejected;
 use App\Mail\NewClientAccountCreated;
+use App\Mail\AppointmentCancellationApproved;
+use App\Mail\AppointmentCancellationDenied;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -22,6 +24,19 @@ class AppointmentController extends Controller
     public function dashboard()
     {
         $pendingCount = PendingAppointment::where('status', 'pending')->count();
+        
+        // Add cancellation requests to pending count
+        $cancellationRequestsCount = Appointment::where('cancellation_requested', true)
+            ->where('status', '!=', 'cancelled')
+            ->count();
+        
+        $pendingCount += $cancellationRequestsCount;
+        
+        // Get today's appointments count
+        $todayAppointmentsCount = Appointment::where('status', 'confirmed')
+            ->whereDate('appointment_date', today())
+            ->count();
+        
         $upcomingAppointments = Appointment::where('status', 'confirmed')
             ->where('appointment_date', '>=', now())
             ->orderBy('appointment_date', 'asc')
@@ -34,7 +49,7 @@ class AppointmentController extends Controller
             ->where('appointment_date', '>=', now())
             ->count();
 
-        return view('admin.appointments.dashboard', compact('pendingCount', 'upcomingAppointments', 'availableSlotsCount', 'bookedSlotsCount'));
+        return view('admin.appointments.dashboard', compact('pendingCount', 'todayAppointmentsCount', 'upcomingAppointments', 'availableSlotsCount', 'bookedSlotsCount'));
     }
 
     /**
@@ -109,7 +124,14 @@ class AppointmentController extends Controller
             ->sort()
             ->values();
 
-        return view('admin.appointments.pending', compact('pendingAppointments', 'services'));
+        // Get cancellation requests
+        $cancellationRequests = Appointment::with('user')
+            ->where('cancellation_requested', true)
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('cancellation_requested_at', 'desc')
+            ->get();
+
+        return view('admin.appointments.pending', compact('pendingAppointments', 'services', 'cancellationRequests'));
     }
 
     /**
@@ -1012,4 +1034,225 @@ class AppointmentController extends Controller
         $vehicles = \App\Models\Vehicle::where('user_id', $userId)->get();
         return response()->json($vehicles);
     }
+
+    /**
+     * Export appointments as CSV
+     */
+    public function exportAppointments(Request $request)
+    {
+        $status = $request->get('status', 'all');
+        
+        $query = Appointment::with('user');
+        
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
+        
+        $appointments = $query->orderBy('appointment_date', 'desc')->get();
+        
+        $filename = 'appointments_' . date('Y-m-d') . '.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+        
+        $callback = function() use ($appointments) {
+            $file = fopen('php://output', 'w');
+            
+            // Add CSV headers
+            fputcsv($file, [
+                'ID',
+                'Customer Name',
+                'Email',
+                'Phone',
+                'Vehicle',
+                'Service',
+                'Date',
+                'Status',
+                'Notes',
+                'Created At'
+            ]);
+            
+            // Add data rows
+            foreach ($appointments as $appointment) {
+                fputcsv($file, [
+                    $appointment->id,
+                    $appointment->name,
+                    $appointment->email,
+                    $appointment->phone,
+                    $appointment->vehicle,
+                    $appointment->service,
+                    $appointment->appointment_date->format('Y-m-d H:i'),
+                    $appointment->status,
+                    $appointment->notes,
+                    $appointment->created_at->format('Y-m-d H:i'),
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Export available slots as CSV
+     */
+    public function exportSlots(Request $request)
+    {
+        $status = $request->get('status', 'all');
+        
+        $query = AvailableSlot::query();
+        
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
+        
+        $slots = $query->orderBy('start_time', 'desc')->get();
+        
+        $filename = 'slots_' . date('Y-m-d') . '.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+        
+        $callback = function() use ($slots) {
+            $file = fopen('php://output', 'w');
+            
+            // Add CSV headers
+            fputcsv($file, [
+                'ID',
+                'Start Time',
+                'End Time',
+                'Duration (min)',
+                'Status',
+                'Created At'
+            ]);
+            
+            // Add data rows
+            foreach ($slots as $slot) {
+                fputcsv($file, [
+                    $slot->id,
+                    $slot->start_time->format('Y-m-d H:i'),
+                    $slot->end_time->format('Y-m-d H:i'),
+                    $slot->start_time->diffInMinutes($slot->end_time),
+                    $slot->status,
+                    $slot->created_at->format('Y-m-d H:i'),
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Send bulk emails to customers
+     */
+    public function sendBulkEmail(Request $request)
+    {
+        $request->validate([
+            'recipient_type' => 'required|in:all,upcoming,past',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        $query = Appointment::with('user');
+        
+        if ($request->recipient_type === 'upcoming') {
+            $query->where('status', 'confirmed')
+                  ->where('appointment_date', '>=', now());
+        } elseif ($request->recipient_type === 'past') {
+            $query->where('status', 'completed')
+                  ->where('appointment_date', '<', now());
+        }
+        
+        $appointments = $query->get();
+        $sentCount = 0;
+        
+        foreach ($appointments as $appointment) {
+            try {
+                Mail::raw($request->message, function($message) use ($appointment, $request) {
+                    $message->to($appointment->email)
+                           ->subject($request->subject);
+                });
+                $sentCount++;
+            } catch (\Exception $e) {
+                // Log error but continue
+                \Log::error('Failed to send bulk email to ' . $appointment->email . ': ' . $e->getMessage());
+            }
+        }
+        
+        return redirect()->back()->with('success', "Successfully sent {$sentCount} emails.");
+    }
+
+    /**
+     * Approve a cancellation request
+     */
+    public function approveCancellation(Request $request, Appointment $appointment)
+    {
+        if (!$appointment->cancellation_requested) {
+            return redirect()->back()->with('error', __('messages.no_cancellation_request'));
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Cancel the appointment
+            $appointment->update([
+                'status' => 'cancelled',
+                'cancellation_requested' => false,
+            ]);
+
+            // If there's an associated slot, make it available again
+            $slot = AvailableSlot::where('start_time', $appointment->appointment_date)
+                ->where('end_time', $appointment->appointment_end)
+                ->first();
+            
+            if ($slot) {
+                $slot->update(['status' => 'available']);
+            }
+
+            DB::commit();
+
+            // Send email notification to user about approved cancellation
+            try {
+                Mail::to($appointment->email)->send(new AppointmentCancellationApproved($appointment));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send cancellation approval email: ' . $e->getMessage());
+            }
+
+            return redirect()->back()->with('success', __('messages.cancellation_approved'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error approving cancellation: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Deny a cancellation request
+     */
+    public function denyCancellation(Request $request, Appointment $appointment)
+    {
+        if (!$appointment->cancellation_requested) {
+            return redirect()->back()->with('error', __('messages.no_cancellation_request'));
+        }
+
+        $appointment->update([
+            'cancellation_requested' => false,
+            'cancellation_requested_at' => null,
+            'cancellation_reason' => null,
+        ]);
+
+        // Send email notification to user about denied cancellation
+        try {
+            Mail::to($appointment->email)->send(new AppointmentCancellationDenied($appointment));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send cancellation denial email: ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', __('messages.cancellation_denied'));
+    }
 }
+

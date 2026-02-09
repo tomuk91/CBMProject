@@ -52,6 +52,13 @@
                                 </svg>
                                 {{ __('messages.profile_security') }}
                             </a>
+
+                            <a href="#" onclick="event.preventDefault(); document.getElementById('gdpr-section').scrollIntoView({behavior: 'smooth'});" class="text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 group flex items-center px-3 py-2.5 text-sm font-medium rounded-r-md transition">
+                                <svg class="mr-3 h-5 w-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                {{ __('messages.gdpr_title') }}
+                            </a>
                         </nav>
 
                         <div class="border-t border-gray-200 dark:border-gray-700 p-3">
@@ -339,7 +346,134 @@
                             </div>
                         </div>
                     @endif
+
+                    <!-- GDPR Data Management Section -->
+                    <div id="gdpr-section" class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div class="p-6 sm:p-8">
+                            <div class="flex items-center mb-6">
+                                <svg class="w-6 h-6 text-red-600 dark:text-red-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('messages.gdpr_title') }}</h2>
+                            </div>
+
+                            <p class="text-gray-600 dark:text-gray-400 mb-8">
+                                {{ __('messages.gdpr_description') }}
+                            </p>
+
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <!-- Export Data -->
+                                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+                                    <div class="flex items-start">
+                                        <svg class="w-8 h-8 text-blue-600 dark:text-blue-400 mr-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <div>
+                                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">{{ __('messages.gdpr_export_title') }}</h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                                {{ __('messages.gdpr_export_description') }}
+                                            </p>
+                                            <a href="{{ route('profile.export-data') }}" 
+                                               class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition shadow-sm">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                                </svg>
+                                                {{ __('messages.gdpr_export_button') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Delete Account -->
+                                <div class="bg-red-50 dark:bg-red-900/20 rounded-xl p-6 border border-red-200 dark:border-red-800">
+                                    <div class="flex items-start">
+                                        <svg class="w-8 h-8 text-red-600 dark:text-red-400 mr-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <div>
+                                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">{{ __('messages.gdpr_delete_title') }}</h3>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                                {{ __('messages.gdpr_delete_description') }}
+                                            </p>
+                                            <button onclick="document.getElementById('deletionModal').classList.remove('hidden')" 
+                                                    class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition shadow-sm">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                </svg>
+                                                {{ __('messages.gdpr_delete_button') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                                <div class="flex">
+                                    <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                        {{ __('messages.gdpr_warning') }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Deletion Confirmation Modal -->
+    <div id="deletionModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+        <div class="relative mx-auto w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ __('messages.gdpr_delete_confirm_title') }}</h3>
+                    <button onclick="document.getElementById('deletionModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                    <p class="text-sm text-red-800 dark:text-red-200">
+                        {{ __('messages.gdpr_delete_warning') }}
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ route('profile.request-deletion') }}">
+                    @csrf
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {{ __('messages.profile_password') }}
+                        </label>
+                        <input type="password" id="password" name="password" required
+                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="flex items-start">
+                            <input type="checkbox" name="confirmation" value="1" required
+                                   class="mt-1 w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                                {{ __('messages.gdpr_delete_checkbox') }}
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button type="button" onclick="document.getElementById('deletionModal').classList.add('hidden')"
+                                class="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-semibold transition">
+                            {{ __('messages.cancel') }}
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition">
+                            {{ __('messages.gdpr_delete_confirm') }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

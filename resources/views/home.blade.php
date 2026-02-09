@@ -8,6 +8,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#dc2626">
     <title>{{ __('messages.hero_title') }} - {{ config('app.name') }}</title>
+    <x-seo-meta 
+        :title="__('messages.hero_title')" 
+        :description="__('messages.meta_description')" 
+        :canonical="route('home')" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Skip Link for Accessibility */
@@ -209,7 +213,7 @@
         <section class="hero-section relative h-[400px] sm:h-[500px] md:h-[600px] mt-20 overflow-hidden" aria-label="{{ __('messages.hero_section') }}">
             <!-- Background Image -->
             <div class="absolute inset-0" aria-hidden="true">
-                <img src="{{ asset('images/hero-mechanic.jpg') }}" alt="" class="w-full h-full object-cover">
+                <img src="{{ asset('images/hero-mechanic.jpg') }}" alt="" class="w-full h-full object-cover" loading="eager">
                 <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30"></div>
             </div>
         
@@ -242,7 +246,8 @@
                 <div class="relative scroll-animate-left">
                     <img src="{{ asset('images/hero-mechanic.jpg') }}" 
                          alt="{{ __('messages.about_image_alt') }}" 
-                         class="rounded-2xl shadow-2xl w-full h-[500px] object-cover">
+                         class="rounded-2xl shadow-2xl w-full h-[500px] object-cover"
+                         loading="lazy">
                 </div>
                 
                 <!-- Content -->
@@ -255,7 +260,7 @@
                     <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8">
                         {{ __('messages.about_description') }}
                     </p>
-                    <a href="{{ route('contact.show') }}" class="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg">
+                    <a href="{{ route('about') }}" class="inline-flex items-center px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg">
                         {{ __('messages.about_cta') }}
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -641,11 +646,19 @@
                 </div>
             </div>
 
-            <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
-                <p>&copy; {{ date('Y') }} CBM Auto. {{ __('messages.footer_copyright') }}</p>
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                    <p class="mb-4 md:mb-0">&copy; {{ date('Y') }} CBM Auto. {{ __('messages.footer_copyright') }}</p>
+                    <div class="flex gap-6">
+                        <a href="{{ route('privacy') }}" class="hover:text-red-500 transition">{{ __('messages.privacy_policy') }}</a>
+                        <a href="{{ route('terms') }}" class="hover:text-red-500 transition">{{ __('messages.terms_of_service') }}</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
+
+    <x-cookie-consent />
 
     <script>
         // Mobile menu toggle with accessibility support

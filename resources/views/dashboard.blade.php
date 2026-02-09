@@ -128,6 +128,20 @@
                                                     {{ $appointment->notes }}
                                                 </div>
                                             @endif
+                                            @if($appointment->cancellation_requested)
+                                                <div class="mt-3 flex items-center text-xs text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20 p-2 rounded">
+                                                    <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    {{ __('messages.cancellation_requested_on') }} {{ $appointment->cancellation_requested_at->format('M j, Y') }}
+                                                </div>
+                                            @elseif($appointment->status === 'confirmed' && $appointment->appointment_date > now()->addHours(24))
+                                                <div class="mt-3">
+                                                    <button onclick="showCancellationModal({{ $appointment->id }})" class="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
+                                                        {{ __('messages.request_cancellation') }}
+                                                    </button>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -323,4 +337,72 @@
             </div>
         </div>
     </div>
+
+    <!-- Cancellation Request Modal -->
+    <div id="cancellationModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-lg bg-white dark:bg-gray-800">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('messages.request_cancellation') }}</h3>
+                    <button onclick="closeCancellationModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <form id="cancellationForm" method="POST" action="">
+                    @csrf
+                    <div class="mb-4">
+                        <label for="cancellation_reason" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {{ __('messages.cancellation_reason') }}
+                        </label>
+                        <textarea 
+                            id="cancellation_reason" 
+                            name="cancellation_reason" 
+                            rows="4" 
+                            required
+                            maxlength="500"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100"
+                            placeholder="{{ __('messages.cancellation_reason_placeholder') }}"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button 
+                            type="button" 
+                            onclick="closeCancellationModal()"
+                            class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+                            {{ __('messages.cancel') }}
+                        </button>
+                        <button 
+                            type="submit"
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                            {{ __('messages.request_cancellation') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showCancellationModal(appointmentId) {
+            const modal = document.getElementById('cancellationModal');
+            const form = document.getElementById('cancellationForm');
+            form.action = `/appointments/${appointmentId}/request-cancellation`;
+            modal.classList.remove('hidden');
+        }
+
+        function closeCancellationModal() {
+            const modal = document.getElementById('cancellationModal');
+            const form = document.getElementById('cancellationForm');
+            form.reset();
+            modal.classList.add('hidden');
+        }
+
+        // Close modal on outside click
+        document.getElementById('cancellationModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCancellationModal();
+            }
+        });
+    </script>
 </x-app-layout>

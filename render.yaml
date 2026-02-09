@@ -5,3 +5,15 @@ services:
     plan: free
     autoDeploy: true
     healthCheckPath: /
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: cbmproject-redis
+          property: connectionString
+
+  - type: redis
+    name: cbmproject-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []

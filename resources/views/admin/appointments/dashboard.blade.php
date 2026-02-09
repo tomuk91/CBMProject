@@ -41,16 +41,10 @@
                     <div class="h-2 bg-gradient-to-r from-red-500 to-red-600"></div>
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-xl group-hover:scale-110 transition-transform duration-300 relative">
+                            <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-xl group-hover:scale-110 transition-transform duration-300">
                                 <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
                                 </svg>
-                                @if($pendingCount > 0)
-                                <span class="absolute -top-1 -right-1 flex h-5 w-5">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-5 w-5 bg-red-500 items-center justify-center text-white text-[10px] font-bold">{{ $pendingCount }}</span>
-                                </span>
-                                @endif
                             </div>
                         </div>
                         <p class="text-5xl font-bold text-red-600 dark:text-red-400 mb-2">{{ $pendingCount }}</p>
@@ -105,7 +99,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <p class="text-5xl font-bold text-gray-700 dark:text-gray-300 mb-2">{{ $upcomingAppointments->count() }}</p>
+                        <p class="text-5xl font-bold text-gray-700 dark:text-gray-300 mb-2">{{ $todayAppointmentsCount }}</p>
                         <p class="text-gray-600 dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">{{ __('messages.admin_todays_appointments') }}</p>
                         <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">{{ __('messages.admin_recent_activity') }}</p>
                     </div>
@@ -146,9 +140,6 @@
                                 <div class="bg-red-600 dark:bg-red-700 rounded-xl p-3 mr-4 relative group-hover:scale-110 transition-transform duration-300">
                                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
-                                    </svg>
-                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                                     </svg>
                                     @if($pendingCount > 0)
                                     <span class="absolute -top-1 -right-1 flex h-5 w-5">

@@ -117,6 +117,62 @@
                 </form>
             </div>
 
+            <!-- Cancellation Requests Section -->
+            @if($cancellationRequests->isNotEmpty())
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-yellow-300 dark:border-yellow-700">
+                <div class="flex items-center mb-4">
+                    <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('messages.cancellation_requests') }}</h3>
+                    <span class="ml-auto bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-sm font-semibold px-3 py-1 rounded-full">
+                        {{ $cancellationRequests->count() }}
+                    </span>
+                </div>
+                <div class="space-y-4">
+                    @foreach($cancellationRequests as $request)
+                    <div class="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <h4 class="font-bold text-gray-900 dark:text-gray-100">{{ $request->name }}</h4>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">{{ $request->email }}</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                            <span class="font-semibold">{{ $request->service }}</span> - 
+                            {{ $request->appointment_date->format('F j, Y \a\t g:i A') }}
+                        </p>
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-3 mb-3">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-1">{{ __('messages.cancellation_reason') }}:</p>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">{{ $request->cancellation_reason }}</p>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                {{ __('messages.cancellation_requested_on') }} {{ $request->cancellation_requested_at->format('F j, Y \a\t g:i A') }}
+                            </p>
+                            <div class="flex items-center space-x-2">
+                                <form method="POST" action="{{ route('admin.appointments.cancellation.approve', $request->id) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            onclick="return confirm('{{ __('messages.confirm_approve_cancellation') }}')"
+                                            class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg font-semibold transition shadow-sm hover:shadow-md whitespace-nowrap">
+                                        {{ __('messages.approve_cancellation') }}
+                                    </button>
+                                </form>
+                                <form method="POST" action="{{ route('admin.appointments.cancellation.deny', $request->id) }}" class="inline">
+                                    @csrf
+                                    <button type="submit"
+                                            onclick="return confirm('{{ __('messages.confirm_deny_cancellation') }}')"
+                                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg font-semibold transition shadow-sm hover:shadow-md whitespace-nowrap">
+                                        {{ __('messages.deny_cancellation') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
                 <div class="p-6">
                     @if ($pendingAppointments->isEmpty())

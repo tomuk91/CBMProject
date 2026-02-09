@@ -20,11 +20,16 @@ class Appointment extends Model
         'appointment_date',
         'appointment_end',
         'status',
+        'cancellation_requested',
+        'cancellation_requested_at',
+        'cancellation_reason',
     ];
 
     protected $casts = [
         'appointment_date' => 'datetime',
         'appointment_end' => 'datetime',
+        'cancellation_requested' => 'boolean',
+        'cancellation_requested_at' => 'datetime',
     ];
     
     /**

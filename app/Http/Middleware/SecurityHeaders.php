@@ -39,6 +39,7 @@ class SecurityHeaders
             "font-src 'self' https://fonts.bunny.net data:",
             "img-src 'self' data: https: http:",
             "connect-src 'self'",
+            "frame-src 'self' https://www.google.com",
             "frame-ancestors 'self'",
         ]);
         $response->headers->set('Content-Security-Policy', $csp);

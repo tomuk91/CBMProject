@@ -5,6 +5,25 @@
                 {{ __('messages.calendar_title') }}
             </h2>
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+                <!-- Export and Bulk Actions -->
+                <div class="flex gap-2">
+                    <button onclick="document.getElementById('bulkEmailModal').classList.remove('hidden')" 
+                            class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-700 dark:hover:bg-blue-800 text-white text-sm px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center sm:justify-start min-h-[44px]">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                        </svg>
+                        <span class="hidden sm:inline">{{ __('messages.bulk_email') }}</span>
+                    </button>
+                    <a href="{{ route('admin.appointments.export') }}" 
+                       class="bg-green-600 hover:bg-green-700 active:bg-green-800 dark:bg-green-700 dark:hover:bg-green-800 text-white text-sm px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center sm:justify-start min-h-[44px]">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        <span class="hidden sm:inline">{{ __('messages.export_appointments') }}</span>
+                    </a>
+                </div>
+                
                 <a href="{{ route('admin.appointments.slots') }}" class="bg-red-600 hover:bg-red-700 active:bg-red-800 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center sm:justify-start min-h-[44px]">
                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
@@ -728,5 +747,108 @@
                 cancelReschedule();
             }
         });
+
+        document.getElementById('bulkEmailModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.getElementById('bulkEmailModal').classList.add('hidden');
+            }
+        });
     </script>
+
+    <!-- Bulk Email Modal -->
+    <div id="bulkEmailModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+        <div class="relative mx-auto w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 rounded-t-xl">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-white flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                        </svg>
+                        {{ __('messages.bulk_email_title') }}
+                    </h3>
+                    <button onclick="document.getElementById('bulkEmailModal').classList.add('hidden')" class="text-white hover:text-red-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6">
+
+                <form method="POST" action="{{ route('admin.appointments.bulk-email') }}">
+                    @csrf
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                            {{ __('messages.bulk_email_recipients') }}
+                        </label>
+                        <div class="space-y-2">
+                            <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                                <input type="radio" name="recipient_type" value="all" checked class="text-red-600 focus:ring-red-500">
+                                <span class="ml-3 text-gray-900 dark:text-gray-100">{{ __('messages.bulk_email_all_customers') }}</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                                <input type="radio" name="recipient_type" value="completed" class="text-red-600 focus:ring-red-500">
+                                <span class="ml-3 text-gray-900 dark:text-gray-100">{{ __('messages.bulk_email_completed_only') }}</span>
+                            </label>
+                            <label class="flex items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                                <input type="radio" name="recipient_type" value="confirmed" class="text-red-600 focus:ring-red-500">
+                                <span class="ml-3 text-gray-900 dark:text-gray-100">{{ __('messages.bulk_email_confirmed_only') }}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="email_subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {{ __('messages.email_subject') }}
+                        </label>
+                        <input type="text" id="email_subject" name="subject" required
+                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100"
+                               placeholder="{{ __('messages.email_subject_placeholder') }}">
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="email_message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {{ __('messages.email_message') }}
+                        </label>
+                        <textarea id="email_message" name="message" rows="8" required
+                                  class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100"
+                                  placeholder="{{ __('messages.email_message_placeholder') }}"></textarea>
+                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            {{ __('messages.bulk_email_note') }}
+                        </p>
+                    </div>
+
+                    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
+                        <div class="flex">
+                            <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                            <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                                {{ __('messages.bulk_email_warning') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button type="button" onclick="document.getElementById('bulkEmailModal').classList.add('hidden')"
+                                class="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-semibold transition">
+                            {{ __('messages.cancel') }}
+                        </button>
+                        <button type="submit"
+                                class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition flex items-center justify-center shadow-sm hover:shadow-md">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+                            </svg>
+                            {{ __('messages.send_email') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
