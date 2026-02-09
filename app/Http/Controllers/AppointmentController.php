@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\PendingAppointment;
 use App\Models\AvailableSlot;
-use App\Mail\AppointmentBooked;
+use App\Models\ActivityLog;
+use App\Models\User;
+use App\Mail\AppointmentConfirmation;
+use App\Mail\NewAppointmentAdmin;
+use App\Mail\CancellationRequested;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,28 +32,12 @@ class AppointmentController extends Controller
 
         // Filter by day of week (SQLite compatible) - supports multiple days
         if ($request->filled('days') && is_array($request->days)) {
-            $query->where(function($q) use ($request) {
-                foreach ($request->days as $day) {
-                    // Convert MySQL DAYOFWEEK (1=Sunday, 2=Monday) to SQLite strftime %w (0=Sunday, 1=Monday)
-                    $sqliteDay = ((int) $day - 1) % 7;
-                    $q->orWhereRaw("CAST(strftime('%w', start_time) AS INTEGER) = ?", [$sqliteDay]);
-                }
-            });
+            $query->dayOfWeek($request->days);
         }
 
         // Filter by time of day (SQLite compatible)
         if ($request->filled('time_period')) {
-            switch ($request->time_period) {
-                case 'morning':
-                    $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 6 AND CAST(strftime('%H', start_time) AS INTEGER) < 12");
-                    break;
-                case 'afternoon':
-                    $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 12 AND CAST(strftime('%H', start_time) AS INTEGER) < 17");
-                    break;
-                case 'evening':
-                    $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 17 AND CAST(strftime('%H', start_time) AS INTEGER) < 21");
-                    break;
-            }
+            $query->timeOfDay($request->time_period);
         }
 
         $availableSlots = $query->orderBy('start_time', 'asc')->get();
@@ -137,8 +125,40 @@ class AppointmentController extends Controller
                     'status' => 'pending',
                 ]);
 
-                // Send confirmation email
-                Mail::to($pendingAppointment->email)->send(new AppointmentBooked($pendingAppointment));
+                // Log appointment booking
+                ActivityLog::log(
+                    action: 'appointment_requested',
+                    description: "User requested appointment for {$request->service}",
+                    model: $pendingAppointment,
+                    changes: [
+                        'slot_start' => $lockedSlot->start_time,
+                        'service' => $request->service,
+                    ]
+                );
+
+                // Create a temporary appointment object for email
+                $tempAppointment = (object) [
+                    'id' => $pendingAppointment->id,
+                    'name' => $pendingAppointment->name,
+                    'email' => $pendingAppointment->email,
+                    'phone' => $pendingAppointment->phone,
+                    'service' => $pendingAppointment->service,
+                    'notes' => $pendingAppointment->notes,
+                    'appointment_date' => $lockedSlot->start_time,
+                    'appointment_end' => $lockedSlot->end_time,
+                    'vehicle_id' => $pendingAppointment->vehicle_id,
+                    'vehicle' => $pendingAppointment->vehicleDetails ?? null,
+                    'status' => 'pending',
+                ];
+
+                // Send confirmation email to customer
+                Mail::to($pendingAppointment->email)->queue(new AppointmentConfirmation($tempAppointment));
+                
+                // Send notification to all admins
+                $admins = User::where('is_admin', true)->get();
+                foreach ($admins as $admin) {
+                    Mail::to($admin->email)->queue(new NewAppointmentAdmin($tempAppointment));
+                }
 
                 return redirect()->route('appointments.confirmation')
                     ->with('success', 'Your appointment request has been submitted and is pending approval!');
@@ -179,19 +199,9 @@ class AppointmentController extends Controller
         
         $query->whereBetween('start_time', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59']);
 
-        // Filter by time of day
+        // Filter by time of day (using scope)
         if ($request->filled('time_period')) {
-            switch ($request->time_period) {
-                case 'morning':
-                    $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 6 AND CAST(strftime('%H', start_time) AS INTEGER) < 12");
-                    break;
-                case 'afternoon':
-                    $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 12 AND CAST(strftime('%H', start_time) AS INTEGER) < 17");
-                    break;
-                case 'evening':
-                    $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 17 AND CAST(strftime('%H', start_time) AS INTEGER) < 21");
-                    break;
-            }
+            $query->timeOfDay($request->time_period);
         }
 
         $availableSlots = $query->orderBy('start_time', 'asc')->get();
@@ -251,6 +261,23 @@ class AppointmentController extends Controller
             'cancellation_requested_at' => now(),
             'cancellation_reason' => $request->cancellation_reason,
         ]);
+
+        // Log cancellation request
+        ActivityLog::log(
+            action: 'cancellation_requested',
+            description: 'User requested appointment cancellation',
+            model: $appointment,
+            changes: [
+                'reason' => $request->cancellation_reason,
+                'appointment_date' => $appointment->appointment_date,
+            ]
+        );
+
+        // Notify all admins about the cancellation request
+        $admins = User::where('is_admin', true)->get();
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->queue(new CancellationRequested($appointment));
+        }
 
         return redirect()->back()->with('success', __('messages.cancellation_requested_success'));
     }

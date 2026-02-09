@@ -22,9 +22,30 @@
         </div>
 
         <!-- Modal Body -->
-        <form id="vehicleForm" method="POST" class="p-6 space-y-6">
+        <form id="vehicleForm" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
             @csrf
             <input type="hidden" id="vehicleMethod" name="_method" value="POST">
+
+            <!-- Validation Errors -->
+            @if ($errors->any())
+                <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800 dark:text-red-200">{{ __('There were errors with your submission') }}</h3>
+                            <ul class="mt-2 text-sm text-red-700 dark:text-red-300 list-disc list-inside">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
             <!-- Basic Information -->
             <div>
@@ -120,6 +141,26 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Vehicle Image Upload -->
+            <div>
+                <h4 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-4">{{ __('messages.vehicle_image') }}</h4>
+                <div class="flex items-center space-x-4">
+                    <div id="imagePreviewContainer" class="hidden">
+                        <img id="imagePreview" class="h-32 w-32 object-cover rounded-lg border-2 border-gray-300 dark:border-gray-600" src="" alt="Preview">
+                    </div>
+                    <div class="flex-1">
+                        <label for="image" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            {{ __('messages.vehicle_upload_image') }}
+                        </label>
+                        <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg,image/gif"
+                               onchange="previewImage(event)"
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_image_format_hint') }}</p>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- Notes -->
             <div>

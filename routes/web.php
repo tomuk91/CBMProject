@@ -5,6 +5,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Admin\AppointmentController as AdminAppointmentController;
+use App\Http\Controllers\Admin\AnalyticsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Models\Appointment;
@@ -51,11 +52,20 @@ Route::post('/slots/{slot}/select', [AppointmentController::class, 'selectGuestS
 
 Route::get('/dashboard', function () {
     $appointments = Appointment::where('user_id', Auth::id())
+        ->where('status', '!=', 'completed')
         ->orderBy('appointment_date', 'desc')
         ->get();
     
+    $serviceHistory = Appointment::with('vehicle')
+        ->where('user_id', Auth::id())
+        ->where('status', 'completed')
+        ->orderBy('appointment_date', 'desc')
+        ->take(10)
+        ->get();
+    
     return view('dashboard', [
-        'appointments' => $appointments
+        'appointments' => $appointments,
+        'serviceHistory' => $serviceHistory
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -64,6 +74,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/personal-info', [ProfileController::class, 'edit'])->name('profile.personal-info');
     Route::get('/profile/vehicle', [ProfileController::class, 'edit'])->name('profile.vehicle');
     Route::get('/profile/security', [ProfileController::class, 'edit'])->name('profile.security');
+    Route::get('/profile/service-history', function () {
+        $serviceHistory = \App\Models\Appointment::with('vehicle')
+            ->where('user_id', Auth::id())
+            ->where('status', 'completed')
+            ->orderBy('appointment_date', 'desc')
+            ->get();
+        
+        return view('profile.service-history', ['serviceHistory' => $serviceHistory]);
+    })->name('profile.service-history');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
@@ -81,7 +100,7 @@ Route::middleware('auth')->group(function () {
         if ($vehicle->user_id !== Auth::id()) {
             abort(403, 'Unauthorized access to vehicle data');
         }
-        return response()->json($vehicle->only(['id', 'make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size', 'mileage', 'notes']));
+        return response()->json($vehicle->only(['id', 'make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size', 'mileage', 'notes', 'is_primary', 'image']));
     })->middleware('throttle:60,1');
     
     // Customer appointment routes
@@ -96,6 +115,11 @@ Route::middleware('auth')->group(function () {
     // Admin appointment routes
     Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/dashboard', [AdminAppointmentController::class, 'dashboard'])->name('dashboard');
+        
+        // Analytics
+        Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
+        Route::get('/analytics/export', [AnalyticsController::class, 'export'])->name('analytics.export');
+        
         Route::get('/appointments/calendar', [AdminAppointmentController::class, 'index'])->name('appointments.calendar');
         Route::get('/appointments/pending', [AdminAppointmentController::class, 'pending'])->name('appointments.pending');
         Route::get('/appointments/slots', [AdminAppointmentController::class, 'slots'])->name('appointments.slots');

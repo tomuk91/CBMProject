@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class VehicleController extends Controller
 {
@@ -27,7 +28,12 @@ class VehicleController extends Controller
             'engine_size' => 'nullable|string|max:255',
             'mileage' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
-            'is_primary' => 'boolean',
+            'is_primary' => 'sometimes|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'image.image' => 'The file must be an image (JPEG, PNG, JPG, or GIF).',
+            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
+            'image.max' => 'The image size must not exceed 2MB.',
         ]);
 
         // If this is set as primary, unset all other primary vehicles
@@ -40,6 +46,31 @@ class VehicleController extends Controller
         // If this is the first vehicle, make it primary
         if (Auth::user()->vehicles()->count() === 0) {
             $validated['is_primary'] = true;
+        }
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            try {
+                $file = $request->file('image');
+                \Log::info('Image upload attempt', [
+                    'size' => $file->getSize(),
+                    'mime' => $file->getMimeType(),
+                    'original_name' => $file->getClientOriginalName(),
+                ]);
+                
+                $path = $file->store('vehicles', 'public');
+                $validated['image'] = $path;
+                
+                \Log::info('Image upload successful', ['path' => $path]);
+            } catch (\Exception $e) {
+                \Log::error('Image upload error', [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Failed to upload image: ' . $e->getMessage());
+            }
         }
 
         Vehicle::create($validated);
@@ -65,12 +96,29 @@ class VehicleController extends Controller
             'engine_size' => 'nullable|string|max:255',
             'mileage' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
-            'is_primary' => 'boolean',
+            'is_primary' => 'sometimes|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // If this is set as primary, unset all other primary vehicles
         if ($request->boolean('is_primary')) {
             Auth::user()->vehicles()->where('id', '!=', $vehicle->id)->update(['is_primary' => false]);
+        }
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            try {
+                // Delete old image if exists
+                if ($vehicle->image) {
+                    Storage::disk('public')->delete($vehicle->image);
+                }
+                $path = $request->file('image')->store('vehicles', 'public');
+                $validated['image'] = $path;
+            } catch (\Exception $e) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Failed to upload image: ' . $e->getMessage());
+            }
         }
 
         $vehicle->update($validated);
@@ -91,6 +139,12 @@ class VehicleController extends Controller
         }
 
         $wasPrimary = $vehicle->is_primary;
+        
+        // Delete image file if exists
+        if ($vehicle->image) {
+            Storage::disk('public')->delete($vehicle->image);
+        }
+        
         $vehicle->delete();
 
         // If this was the primary vehicle, make the first remaining vehicle primary

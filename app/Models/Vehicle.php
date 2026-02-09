@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vehicle extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'user_id',
         'make',
@@ -21,6 +23,7 @@ class Vehicle extends Model
         'mileage',
         'notes',
         'is_primary',
+        'image',
     ];
 
     protected function casts(): array

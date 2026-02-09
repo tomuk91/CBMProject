@@ -31,7 +31,7 @@ class ContactController extends Controller
         ]);
 
         // Send email notification to admin
-        Mail::to(config('mail.from.address'))->send(new ContactFormSubmitted($validated));
+        Mail::to(config('mail.from.address'))->queue(new ContactFormSubmitted($validated));
 
         // Send confirmation email to user
         // Mail::to($validated['email'])->send(new ContactFormConfirmation($validated));

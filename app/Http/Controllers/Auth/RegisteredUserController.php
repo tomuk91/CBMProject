@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\ActivityLog;
 use App\Mail\WelcomeMail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -54,10 +55,17 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        // Send welcome email
-        Mail::to($user->email)->send(new WelcomeMail($user));
+        // Send welcome email (queued for better performance)
+        Mail::to($user->email)->queue(new WelcomeMail($user));
 
         Auth::login($user);
+
+        // Log user registration (after login so auth()->id() is set)
+        ActivityLog::log(
+            action: 'user_registered',
+            description: 'New user account created',
+            model: $user
+        );
 
         // Check if user was trying to book an appointment
         if (session('intended_booking') && session('selected_slot_id')) {

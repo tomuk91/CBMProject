@@ -78,6 +78,87 @@
                 </div>
             @endif
 
+            <!-- Search and Filters -->
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-100 dark:border-gray-700 p-4">
+                <form method="GET" action="{{ route('admin.appointments.calendar') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Search -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Search') }}</label>
+                            <input type="text" name="search" value="{{ request('search') }}" 
+                                   placeholder="{{ __('Name, email, phone, service...') }}"
+                                   class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Status Filter -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Status') }}</label>
+                            <select name="status" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="all">{{ __('All Statuses') }}</option>
+                                @foreach($statuses as $status)
+                                    <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
+                                        {{ ucfirst($status) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Service Filter -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Service') }}</label>
+                            <select name="service" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="all">{{ __('All Services') }}</option>
+                                @foreach($services as $service)
+                                    <option value="{{ $service }}" {{ request('service') == $service ? 'selected' : '' }}>
+                                        {{ $service }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Sort -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Sort By') }}</label>
+                            <select name="sort" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="appointment_date" {{ request('sort') == 'appointment_date' ? 'selected' : '' }}>{{ __('Date') }}</option>
+                                <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>{{ __('Created') }}</option>
+                                <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>{{ __('Name') }}</option>
+                                <option value="status" {{ request('sort') == 'status' ? 'selected' : '' }}>{{ __('Status') }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Date From -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Date From') }}</label>
+                            <input type="date" name="date_from" value="{{ request('date_from') }}" 
+                                   class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Date To -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Date To') }}</label>
+                            <input type="date" name="date_to" value="{{ request('date_to') }}" 
+                                   class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex items-end gap-2">
+                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors">
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                {{ __('Filter') }}
+                            </button>
+                            <a href="{{ route('admin.appointments.calendar') }}" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors text-center">
+                                {{ __('Clear') }}
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-100 dark:border-gray-700">
                 <div class="p-2 sm:p-4 md:p-6">
                     <!-- Calendar will be rendered here -->
@@ -388,7 +469,14 @@
                     list: '{{ __('messages.calendar_list') }}'
                 },
                 events: function(info, successCallback, failureCallback) {
-                    fetch(`/admin/appointments/api?start=${info.startStr}&end=${info.endStr}`)
+                    const params = new URLSearchParams({
+                        start: info.startStr,
+                        end: info.endStr,
+                        search: '{{ request("search") ?? "" }}',
+                        status: '{{ request("status") ?? "all" }}',
+                        service: '{{ request("service") ?? "all" }}'
+                    });
+                    fetch(`/admin/appointments/api?${params}`)
                         .then(response => response.json())
                         .then(data => successCallback(data))
                         .catch(error => failureCallback(error));

@@ -81,8 +81,11 @@
                             {{ __('messages.nav_book') }}
                         </x-nav-link>
                     @elseif(Auth::check() && Auth::user()->is_admin)
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard') || request()->routeIs('admin.appointments.*')">
                             {{ __('messages.dashboard_admin') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.analytics')" :active="request()->routeIs('admin.analytics*')">
+                            {{ __('messages.Analytics Dashboard') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -189,8 +192,11 @@
                     {{ __('messages.nav_book') }}
                 </x-responsive-nav-link>
             @else
-                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard') || request()->routeIs('admin.appointments.*')">
                     {{ __('messages.dashboard_admin') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.analytics')" :active="request()->routeIs('admin.analytics*')">
+                    {{ __('messages.Analytics Dashboard') }}
                 </x-responsive-nav-link>
             @endif
         </div>

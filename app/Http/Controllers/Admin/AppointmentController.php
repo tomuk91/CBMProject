@@ -7,11 +7,11 @@ use App\Models\Appointment;
 use App\Models\PendingAppointment;
 use App\Models\AvailableSlot;
 use App\Models\ActivityLog;
-use App\Mail\AppointmentApproved;
-use App\Mail\AppointmentRejected;
+use App\Models\User;
+use App\Mail\AppointmentStatusChanged;
+use App\Mail\CancellationRequested;
+use App\Mail\NewAppointmentAdmin;
 use App\Mail\NewClientAccountCreated;
-use App\Mail\AppointmentCancellationApproved;
-use App\Mail\AppointmentCancellationDenied;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -37,7 +37,8 @@ class AppointmentController extends Controller
             ->whereDate('appointment_date', today())
             ->count();
         
-        $upcomingAppointments = Appointment::where('status', 'confirmed')
+        $upcomingAppointments = Appointment::with(['user', 'vehicle'])
+            ->where('status', 'confirmed')
             ->where('appointment_date', '>=', now())
             ->orderBy('appointment_date', 'asc')
             ->take(5)
@@ -55,13 +56,54 @@ class AppointmentController extends Controller
     /**
      * Display admin calendar
      */
-    public function index()
+    public function index(Request $request)
     {
-        $appointments = Appointment::with('user')
-            ->orderBy('appointment_date', 'asc')
-            ->get();
+        $query = Appointment::with(['user', 'vehicle']);
 
-        return view('admin.appointments.calendar', compact('appointments'));
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('service', 'like', "%{$search}%")
+                  ->orWhereHas('user', function($userQuery) use ($search) {
+                      $userQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // Service filter
+        if ($request->filled('service') && $request->service !== 'all') {
+            $query->where('service', $request->service);
+        }
+
+        // Date range filter
+        if ($request->filled('date_from')) {
+            $query->where('appointment_date', '>=', $request->date_from . ' 00:00:00');
+        }
+        if ($request->filled('date_to')) {
+            $query->where('appointment_date', '<=', $request->date_to . ' 23:59:59');
+        }
+
+        // Sorting
+        $sort = $request->get('sort', 'appointment_date');
+        $direction = $request->get('direction', 'asc');
+        $query->orderBy($sort, $direction);
+
+        $appointments = $query->get();
+
+        // Get unique services and statuses for filter dropdowns
+        $services = Appointment::distinct()->pluck('service')->filter()->sort()->values();
+        $statuses = ['pending', 'approved', 'confirmed', 'completed', 'cancelled', 'no-show'];
+
+        return view('admin.appointments.calendar', compact('appointments', 'services', 'statuses'));
     }
 
     /**
@@ -124,8 +166,8 @@ class AppointmentController extends Controller
             ->sort()
             ->values();
 
-        // Get cancellation requests
-        $cancellationRequests = Appointment::with('user')
+        // Get cancellation requests with eager loading to prevent N+1 queries
+        $cancellationRequests = Appointment::with(['user', 'vehicle'])
             ->where('cancellation_requested', true)
             ->where('status', '!=', 'cancelled')
             ->orderBy('cancellation_requested_at', 'desc')
@@ -182,8 +224,8 @@ class AppointmentController extends Controller
                 $appointment
             );
 
-            // Send approval email
-            Mail::to($appointment->email)->send(new AppointmentApproved($appointment));
+            // Send approval email (queued for better performance)
+            Mail::to($appointment->email)->queue(new AppointmentStatusChanged($appointment, 'pending'));
 
             DB::commit();
 
@@ -220,7 +262,16 @@ class AppointmentController extends Controller
         );
 
         // Send rejection email
-        Mail::to($pendingAppointment->email)->send(new AppointmentRejected($pendingAppointment, $request->admin_notes ?? ''));
+        $tempAppointment = (object) [
+            'name' => $pendingAppointment->name,
+            'email' => $pendingAppointment->email,
+            'phone' => $pendingAppointment->phone,
+            'service' => $pendingAppointment->service,
+            'notes' => $pendingAppointment->notes,
+            'appointment_date' => $pendingAppointment->availableSlot->start_time ?? now(),
+            'status' => 'rejected',
+        ];
+        Mail::to($pendingAppointment->email)->queue(new AppointmentStatusChanged($tempAppointment, 'pending'));
 
         return redirect()->back()
             ->with('success', 'Appointment rejected and slot made available again.');
@@ -263,7 +314,16 @@ class AppointmentController extends Controller
                     );
 
                     // Send rejection email
-                    Mail::to($pendingAppointment->email)->send(new AppointmentRejected($pendingAppointment, 'Your appointment request was not approved at this time.'));
+                    $tempAppointment = (object) [
+                        'name' => $pendingAppointment->name,
+                        'email' => $pendingAppointment->email,
+                        'phone' => $pendingAppointment->phone,
+                        'service' => $pendingAppointment->service,
+                        'notes' => $pendingAppointment->notes,
+                        'appointment_date' => $pendingAppointment->availableSlot->start_time ?? now(),
+                        'status' => 'rejected',
+                    ];
+                    Mail::to($pendingAppointment->email)->queue(new AppointmentStatusChanged($tempAppointment, 'pending'));
                     
                     $rejectedCount++;
                 }
@@ -288,9 +348,34 @@ class AppointmentController extends Controller
         $start = $request->query('start');
         $end = $request->query('end');
 
-        $appointments = Appointment::with('user')
-            ->whereBetween('appointment_date', [$start, $end])
-            ->get()
+        $query = Appointment::with('user')
+            ->whereBetween('appointment_date', [$start, $end]);
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('service', 'like', "%{$search}%")
+                  ->orWhereHas('user', function($userQuery) use ($search) {
+                      $userQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Apply status filter
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // Apply service filter
+        if ($request->filled('service') && $request->service !== 'all') {
+            $query->where('service', $request->service);
+        }
+
+        $appointments = $query->get()
             ->map(function ($appointment) {
                 return [
                     'id' => $appointment->id,
@@ -394,9 +479,9 @@ class AppointmentController extends Controller
                 ['reason' => request()->input('reason', 'No reason provided')]
             );
 
-            // Send cancellation email to customer
+            // Send cancellation email to customer (queued)
             \Illuminate\Support\Facades\Mail::to($appointment->email)
-                ->send(new \App\Mail\AppointmentCancelled($appointment, request()->input('reason', '')));
+                ->queue(new \App\Mail\AppointmentCancelled($appointment, request()->input('reason', '')));
             
             // Delete the appointment
             $appointment->delete();
@@ -967,8 +1052,8 @@ class AppointmentController extends Controller
                 'status' => 'pending',
             ]);
 
-            // Send welcome email with temporary password
-            Mail::to($user->email)->send(new NewClientAccountCreated($user, $temporaryPassword));
+            // Send welcome email with temporary password (queued)
+            Mail::to($user->email)->queue(new NewClientAccountCreated($user, $temporaryPassword));
         } else {
             // Existing client
             $request->validate([
@@ -1216,9 +1301,21 @@ class AppointmentController extends Controller
 
             DB::commit();
 
+            // Log the cancellation approval action
+            ActivityLog::log(
+                'cancellation_approved',
+                "Approved cancellation request for {$appointment->name} - {$appointment->service}",
+                $appointment,
+                [
+                    'appointment_date' => $appointment->appointment_date->toDateTimeString(),
+                    'cancellation_reason' => $appointment->cancellation_reason,
+                    'admin_user' => auth()->user()->name,
+                ]
+            );
+
             // Send email notification to user about approved cancellation
             try {
-                Mail::to($appointment->email)->send(new AppointmentCancellationApproved($appointment));
+                Mail::to($appointment->email)->queue(new AppointmentStatusChanged($appointment, 'confirmed'));
             } catch (\Exception $e) {
                 \Log::error('Failed to send cancellation approval email: ' . $e->getMessage());
             }
@@ -1245,9 +1342,21 @@ class AppointmentController extends Controller
             'cancellation_reason' => null,
         ]);
 
-        // Send email notification to user about denied cancellation
+        // Log the cancellation denial action
+        ActivityLog::log(
+            'cancellation_denied',
+            "Denied cancellation request for {$appointment->name} - {$appointment->service}",
+            $appointment,
+            [
+                'appointment_date' => $appointment->appointment_date->toDateTimeString(),
+                'original_reason' => $appointment->cancellation_reason,
+                'admin_user' => auth()->user()->name,
+            ]
+        );
+
+        // Send email notification to user - status stays confirmed since request was denied
         try {
-            Mail::to($appointment->email)->send(new AppointmentCancellationDenied($appointment));
+            Mail::to($appointment->email)->queue(new AppointmentStatusChanged($appointment, $appointment->status));
         } catch (\Exception $e) {
             \Log::error('Failed to send cancellation denial email: ' . $e->getMessage());
         }

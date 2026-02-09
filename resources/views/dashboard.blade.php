@@ -184,7 +184,11 @@
                     <div class="p-6">
                         <!-- Car Image -->
                         <div class="mb-6 relative rounded-xl overflow-hidden shadow-lg">
-                            <img src="{{ $carImage }}" alt="{{ $primaryVehicle->make }} {{ $primaryVehicle->model }}" class="w-full h-48 object-cover">
+                            @if($primaryVehicle->image)
+                                <img src="{{ asset('storage/' . $primaryVehicle->image) }}" alt="{{ $primaryVehicle->make }} {{ $primaryVehicle->model }}" class="w-full h-48 object-cover">
+                            @else
+                                <img src="{{ $carImage }}" alt="{{ $primaryVehicle->make }} {{ $primaryVehicle->model }}" class="w-full h-48 object-cover">
+                            @endif
                             @if($manufacturerLogo)
                             <div class="absolute top-4 right-4 bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg">
                                 <img src="{{ $manufacturerLogo }}" alt="{{ $primaryVehicle->make }}" class="h-8">
@@ -283,6 +287,95 @@
                 </div>
                 @endif
 
+                <!-- Service History -->
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl rounded-2xl lg:col-span-2 border border-gray-100 dark:border-gray-700">
+                    <div class="px-6 py-6 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 border-b border-gray-200 dark:border-gray-600">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="bg-red-100 dark:bg-red-900/30 p-3 rounded-xl mr-3">
+                                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                        {{ __('messages.service_history') }}
+                                    </h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5">{{ __('messages.no_service_history_description') }}</p>
+                                </div>
+                            </div>
+                            @if($serviceHistory->count() > 0)
+                                <a href="{{ route('profile.service-history') }}" class="text-sm font-semibold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 flex items-center transition">
+                                    {{ __('messages.view_all') }}
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        @if($serviceHistory->count() > 0)
+                            <div class="space-y-3">
+                                @foreach($serviceHistory as $service)
+                                    <div class="group relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-700 dark:to-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:border-red-300 dark:hover:border-red-700 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                                        <!-- Top accent line -->
+                                        <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 to-emerald-500"></div>
+                                        
+                                        <div class="flex items-center p-4">
+                                            <div class="flex-shrink-0">
+                                                <div class="flex items-center justify-center h-10 w-10 rounded-lg bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 text-green-600 dark:text-green-400 shadow-md group-hover:scale-105 transition-transform duration-300">
+                                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div class="ml-3 flex-1">
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex-1">
+                                                        <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">{{ $service->service }}</h4>
+                                                        <div class="flex items-center gap-3 mt-1">
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 flex items-center">
+                                                                <svg class="inline w-3.5 h-3.5 mr-1 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                                <span class="font-medium">{{ $service->appointment_date->format('M d, Y') }}</span>
+                                                            </p>
+                                                            @if($service->vehicle_id && $service->vehicle)
+                                                                <p class="text-xs text-gray-600 dark:text-gray-400 flex items-center">
+                                                                    <svg class="inline w-3.5 h-3.5 mr-1 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                                                        <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                                                                        <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
+                                                                    </svg>
+                                                                    <span class="font-medium">{{ $service->vehicle->full_name }}</span>
+                                                                </p>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-400 shadow-sm border border-green-200 dark:border-green-700">
+                                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        {{ __('messages.status_completed') }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center py-12">
+                                <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                <h3 class="mt-4 text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('messages.no_service_history') }}</h3>
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ __('messages.no_service_history_description') }}</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
                 <!-- Quick Actions -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-xl lg:col-span-2">
                     <div class="px-6 py-5 bg-gray-50 dark:bg-gray-700/50">
@@ -350,6 +443,20 @@
                         </svg>
                     </button>
                 </div>
+                
+                <!-- 24-Hour Policy Notice -->
+                <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                            <p class="text-sm font-semibold text-blue-800 dark:text-blue-300">{{ __('messages.cancellation_policy_title') }}</p>
+                            <p class="text-xs text-blue-700 dark:text-blue-400 mt-1">{{ __('messages.cancellation_policy_24_hours') }}</p>
+                        </div>
+                    </div>
+                </div>
+                
                 <form id="cancellationForm" method="POST" action="">
                     @csrf
                     <div class="mb-4">

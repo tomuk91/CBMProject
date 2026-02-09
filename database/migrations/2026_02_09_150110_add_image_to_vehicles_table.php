@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('pending_appointments', function (Blueprint $table) {
-            $table->foreignId('vehicle_id')->nullable()->after('user_id')->constrained()->onDelete('set null');
+        Schema::table('vehicles', function (Blueprint $table) {
+            $table->string('image')->nullable()->after('is_primary');
         });
     }
 
@@ -21,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pending_appointments', function (Blueprint $table) {
-            $table->dropForeign(['vehicle_id']);
-            $table->dropColumn('vehicle_id');
+        Schema::table('vehicles', function (Blueprint $table) {
+            $table->dropColumn('image');
         });
     }
 };

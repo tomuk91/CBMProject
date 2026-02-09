@@ -23,4 +23,39 @@ class AvailableSlot extends Model
                      ->where('start_time', '>', now())
                      ->orderBy('start_time', 'asc');
     }
+
+    /**
+     * Scope to filter by time of day (morning, afternoon, evening)
+     */
+    public function scopeTimeOfDay($query, $period)
+    {
+        switch ($period) {
+            case 'morning':
+                return $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 6 AND CAST(strftime('%H', start_time) AS INTEGER) < 12");
+            case 'afternoon':
+                return $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 12 AND CAST(strftime('%H', start_time) AS INTEGER) < 17");
+            case 'evening':
+                return $query->whereRaw("CAST(strftime('%H', start_time) AS INTEGER) >= 17 AND CAST(strftime('%H', start_time) AS INTEGER) < 21");
+            default:
+                return $query;
+        }
+    }
+
+    /**
+     * Scope to filter by day of week (SQLite compatible, Hungarian calendar: Monday=1)
+     * 
+     * @param array $days Array of day numbers (1=Monday, 2=Tuesday, ..., 7=Sunday)
+     */
+    public function scopeDayOfWeek($query, array $days)
+    {
+        return $query->where(function($q) use ($days) {
+            foreach ($days as $day) {
+                // Hungarian calendar: 1=Monday, 2=Tuesday, ..., 7=Sunday
+                // SQLite strftime %w: 0=Sunday, 1=Monday, 2=Tuesday, ..., 6=Saturday
+                // Conversion: If day is 7 (Sunday), use 0; otherwise use day value directly
+                $sqliteDay = ($day == 7) ? 0 : $day;
+                $q->orWhereRaw("CAST(strftime('%w', start_time) AS INTEGER) = ?", [$sqliteDay]);
+            }
+        });
+    }
 }

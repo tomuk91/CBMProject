@@ -62,7 +62,11 @@
                         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                             <!-- Car Image -->
                             <div class="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
-                                <img src="{{ $carImage }}" alt="{{ $vehicle->full_name }}" class="w-full h-full object-cover">
+                                @if($vehicle->image)
+                                    <img src="{{ asset('storage/' . $vehicle->image) }}" alt="{{ $vehicle->full_name }}" class="w-full h-full object-cover">
+                                @else
+                                    <img src="{{ $carImage }}" alt="{{ $vehicle->full_name }}" class="w-full h-full object-cover">
+                                @endif
                                 
                                 <!-- Manufacturer Logo Overlay -->
                                 @if($manufacturerLogo)
@@ -194,11 +198,19 @@
     @include('profile.partials.vehicle-modal')
     
     <script>
+        // Auto-open modal if there are validation errors
+        @if ($errors->any())
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('vehicleModal').classList.remove('hidden');
+            });
+        @endif
+
         function openAddVehicleModal() {
             document.getElementById('vehicleModalTitle').textContent = '{{ __("messages.add_vehicle") }}';
             document.getElementById('vehicleForm').action = '{{ route("vehicles.store") }}';
             document.getElementById('vehicleMethod').value = 'POST';
             document.getElementById('vehicleForm').reset();
+            document.getElementById('imagePreviewContainer').classList.add('hidden');
             document.getElementById('vehicleModal').classList.remove('hidden');
         }
 
@@ -224,6 +236,14 @@
                     document.getElementById('notes').value = vehicle.notes || '';
                     document.getElementById('is_primary').checked = vehicle.is_primary;
                     
+                    // Show current image if exists
+                    if (vehicle.image) {
+                        document.getElementById('imagePreview').src = `/storage/${vehicle.image}`;
+                        document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                    } else {
+                        document.getElementById('imagePreviewContainer').classList.add('hidden');
+                    }
+                    
                     document.getElementById('vehicleModal').classList.remove('hidden');
                 });
         }
@@ -231,6 +251,19 @@
         function closeVehicleModal() {
             document.getElementById('vehicleModal').classList.add('hidden');
             document.getElementById('vehicleForm').reset();
+            document.getElementById('imagePreviewContainer').classList.add('hidden');
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
         }
     </script>
 </x-app-layout>

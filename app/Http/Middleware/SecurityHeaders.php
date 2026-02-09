@@ -38,7 +38,7 @@ class SecurityHeaders
             "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.bunny.net",
             "font-src 'self' https://fonts.bunny.net data:",
             "img-src 'self' data: https: http:",
-            "connect-src 'self'",
+            "connect-src 'self' https://cdn.jsdelivr.net",
             "frame-src 'self' https://www.google.com",
             "frame-ancestors 'self'",
         ]);
