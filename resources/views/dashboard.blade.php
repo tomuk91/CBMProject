@@ -151,7 +151,7 @@
                                 <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
-                                <h3 class="mt-4 text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('messages.appointments_no_slots') }}</h3>
+                                <h3 class="mt-4 text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('messages.no_appointments_yet') }}</h3>
                                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ __('messages.appointments_book_first') }}</p>
                                 <div class="mt-6">
                                     <a href="{{ route('appointments.index') }}" class="inline-flex items-center justify-center px-8 py-3 bg-red-600 border border-transparent rounded-lg font-semibold text-sm text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition ease-in-out duration-150 shadow-lg">

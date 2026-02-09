@@ -140,6 +140,8 @@ return [
     'appointments_available' => 'Elérhető időpontok',
     'appointments_select_slot' => 'Válasszon időpontot',
     'appointments_no_slots' => 'Jelenleg nincsenek elérhető időpontok',
+    'appointments_book_first' => 'Foglaljon le első időpontját a kezdéshez',
+    'no_appointments_yet' => 'Még nincsenek időpontjai',
     'appointments_select_date' => 'Válasszon dátumot',
     'appointments_select_time' => 'Válasszon időt',
     'appointments_duration' => 'Időtartam',

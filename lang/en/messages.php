@@ -150,6 +150,8 @@ return [
     'appointments_available' => 'Available Slots',
     'appointments_select_slot' => 'Select a slot',
     'appointments_no_slots' => 'No available slots currently',
+    'appointments_book_first' => 'Book your first appointment to get started',
+    'no_appointments_yet' => 'No appointments yet',
     'appointments_select_date' => 'Select Date',
     'appointments_select_time' => 'Select Time',
     'appointments_duration' => 'Duration',
