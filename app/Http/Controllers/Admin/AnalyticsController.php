@@ -76,8 +76,8 @@ class AnalyticsController extends Controller
         // Busiest Days of Week
         $busiestDays = Appointment::select(
                 DB::raw('CASE 
-                    WHEN CAST(strftime("%w", appointment_date) AS INTEGER) = 0 THEN 7
-                    ELSE CAST(strftime("%w", appointment_date) AS INTEGER)
+                    WHEN DAYOFWEEK(appointment_date) = 1 THEN 7
+                    ELSE DAYOFWEEK(appointment_date) - 1
                 END as day_of_week'),
                 DB::raw('count(*) as count')
             )
@@ -93,7 +93,7 @@ class AnalyticsController extends Controller
 
         // Busiest Times of Day
         $busiestTimes = Appointment::select(
-                DB::raw('strftime("%H", appointment_date) as hour'),
+                DB::raw('HOUR(appointment_date) as hour'),
                 DB::raw('count(*) as count')
             )
             ->where('created_at', '>=', $startDate)
@@ -101,7 +101,7 @@ class AnalyticsController extends Controller
             ->orderBy('hour')
             ->get()
             ->map(function($item) {
-                $item->time_label = Carbon::createFromFormat('H', $item->hour)->format('H:00');
+                $item->time_label = str_pad($item->hour, 2, '0', STR_PAD_LEFT) . ':00';
                 return $item;
             });
 

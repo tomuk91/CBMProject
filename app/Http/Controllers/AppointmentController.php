@@ -151,13 +151,16 @@ class AppointmentController extends Controller
                     'status' => 'pending',
                 ];
 
+                // Create a temporary appointment object for emails (cast array to object)
+                $appointmentForEmail = (object) $tempAppointment;
+                
                 // Send confirmation email to customer
-                Mail::to($pendingAppointment->email)->queue(new AppointmentConfirmation($tempAppointment));
+                Mail::to($pendingAppointment->email)->queue(new AppointmentConfirmation($appointmentForEmail));
                 
                 // Send notification to all admins
                 $admins = User::where('is_admin', true)->get();
                 foreach ($admins as $admin) {
-                    Mail::to($admin->email)->queue(new NewAppointmentAdmin($tempAppointment));
+                    Mail::to($admin->email)->queue(new NewAppointmentAdmin($appointmentForEmail));
                 }
 
                 return redirect()->route('appointments.confirmation')

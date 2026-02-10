@@ -18,7 +18,7 @@ class AppointmentConfirmation extends Mailable implements ShouldQueue
      * Create a new message instance.
      */
     public function __construct(
-        public Appointment $appointment
+        public object $appointment
     )
     {
         // Force Hungarian locale for customer emails
