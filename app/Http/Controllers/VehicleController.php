@@ -66,8 +66,8 @@ class VehicleController extends Controller
                     ]
                 ]);
                 
-                // Store file
-                $path = $file->store('vehicles', $disk);
+                // Store file with public visibility
+                $path = $file->store('vehicles', ['disk' => $disk, 'visibility' => 'public']);
                 
                 if (!$path) {
                     throw new \Exception('Failed to store file');
@@ -148,8 +148,8 @@ class VehicleController extends Controller
                     Storage::disk($disk)->delete($vehicle->image);
                 }
                 
-                // Store file
-                $path = $file->store('vehicles', $disk);
+                // Store file with public visibility
+                $path = $file->store('vehicles', ['disk' => $disk, 'visibility' => 'public']);
                 
                 if (!$path) {
                     throw new \Exception('Failed to store file');
