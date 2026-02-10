@@ -185,7 +185,7 @@
                         <!-- Car Image -->
                         <div class="mb-6 relative rounded-xl overflow-hidden shadow-lg">
                             @if($primaryVehicle->image)
-                                <img src="{{ Storage::url($primaryVehicle->image) }}" alt="{{ $primaryVehicle->make }} {{ $primaryVehicle->model }}" class="w-full h-48 object-cover">
+                                <img src="{{ Storage::disk(config('filesystems.default'))->temporaryUrl($primaryVehicle->image, now()->addHours(1)) }}" alt="{{ $primaryVehicle->make }} {{ $primaryVehicle->model }}" class="w-full h-48 object-cover">
                             @else
                                 <img src="{{ $carImage }}" alt="{{ $primaryVehicle->make }} {{ $primaryVehicle->model }}" class="w-full h-48 object-cover">
                             @endif

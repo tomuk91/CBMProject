@@ -185,7 +185,7 @@
                             <!-- Car Image -->
                             <div class="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
                                 @if($vehicle->image)
-                                    <img src="{{ Storage::url($vehicle->image) }}" alt="{{ $vehicle->full_name }}" class="w-full h-full object-cover">
+                                    <img src="{{ Storage::disk(config('filesystems.default'))->temporaryUrl($vehicle->image, now()->addHours(1)) }}" alt="{{ $vehicle->full_name }}" class="w-full h-full object-cover">
                                 @else
                                     <img src="{{ $carImage }}" alt="{{ $vehicle->full_name }}" class="w-full h-full object-cover">
                                 @endif
