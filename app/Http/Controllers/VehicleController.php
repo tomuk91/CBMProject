@@ -112,12 +112,6 @@ class VehicleController extends Controller
                 $file = $request->file('image');
                 $disk = config('filesystems.default');
                 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            try {
-                $file = $request->file('image');
-                $disk = config('filesystems.default');
-                
                 // Delete old image if exists
                 if ($vehicle->image) {
                     Storage::disk($disk)->delete($vehicle->image);
