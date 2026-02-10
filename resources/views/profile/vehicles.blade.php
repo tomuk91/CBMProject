@@ -185,7 +185,7 @@
                             <!-- Car Image -->
                             <div class="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
                                 @if($vehicle->image)
-                                    <img src="{{ asset('storage/' . $vehicle->image) }}" alt="{{ $vehicle->full_name }}" class="w-full h-full object-cover">
+                                    <img src="{{ Storage::url($vehicle->image) }}" alt="{{ $vehicle->full_name }}" class="w-full h-full object-cover">
                                 @else
                                     <img src="{{ $carImage }}" alt="{{ $vehicle->full_name }}" class="w-full h-full object-cover">
                                 @endif
@@ -362,7 +362,7 @@
                     
                     // Show current image if exists
                     if (vehicle.image) {
-                        document.getElementById('imagePreview').src = `/storage/${vehicle.image}`;
+                        document.getElementById('imagePreview').src = `{{ config('filesystems.disks.r2.url') ?: '/storage' }}/${vehicle.image}`;
                         document.getElementById('imagePreviewContainer').classList.remove('hidden');
                     } else {
                         document.getElementById('imagePreviewContainer').classList.add('hidden');
