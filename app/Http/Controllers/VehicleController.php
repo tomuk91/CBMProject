@@ -80,14 +80,20 @@ class VehicleController extends Controller
                     'url' => Storage::disk($disk)->url($path)
                 ]);
             } catch (\Exception $e) {
+                $errorDetails = 'Failed to upload image: ' . $e->getMessage() . 
+                    ' | Disk: ' . ($disk ?? 'unknown') . 
+                    ' | Bucket: ' . config('filesystems.disks.r2.bucket') .
+                    ' | Endpoint: ' . config('filesystems.disks.r2.endpoint');
+                
                 \Log::error('Image upload error', [
                     'message' => $e->getMessage(),
                     'trace' => $e->getTraceAsString(),
                     'disk' => $disk ?? 'unknown',
                 ]);
+                
                 return redirect()->back()
                     ->withInput()
-                    ->with('error', 'Failed to upload image: ' . $e->getMessage());
+                    ->with('error', $errorDetails);
             }
         }
 
