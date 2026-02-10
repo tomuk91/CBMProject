@@ -13,9 +13,13 @@ if [ "${DB_CONNECTION}" = "sqlite" ]; then
   chmod -R ug+rw "$(dirname "${DB_DATABASE}")"
 fi
 
-if [ "${RUN_MIGRATIONS}" = "true" ]; then
-  php artisan migrate --force
-fi
+# Always run migrations on Railway
+php artisan migrate --force
+
+# Cache config for performance
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 
 if [ -n "${ADMIN_EMAIL}" ] && [ -n "${ADMIN_PASSWORD}" ]; then
   php artisan user:create-admin "${ADMIN_EMAIL}" --name="${ADMIN_NAME:-Admin}" --password="${ADMIN_PASSWORD}"
