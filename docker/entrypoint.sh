@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
 set -e
 
+# Fix Apache MPM conflict
+a2dismod mpm_event mpm_worker 2>/dev/null || true
+a2enmod mpm_prefork 2>/dev/null || true
+
 # Configure Apache to use Railway's PORT variable
 if [ -n "${PORT}" ]; then
   echo "Configuring Apache to listen on port ${PORT}"
