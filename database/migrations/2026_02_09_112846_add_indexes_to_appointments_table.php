@@ -12,13 +12,28 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('appointments', function (Blueprint $table) {
-            // Add indexes for commonly queried columns
-            $table->index('user_id');
-            $table->index('slot_id');
-            $table->index('status');
-            $table->index('appointment_date');
-            $table->index(['user_id', 'status']); // Composite index for user appointments by status
-            $table->index(['appointment_date', 'status']); // Composite index for date filtering with status
+            // Add indexes for commonly queried columns only if they don't exist
+            $sm = Schema::getConnection()->getDoctrineSchemaManager();
+            $indexesFound = $sm->listTableIndexes('appointments');
+            
+            if (!isset($indexesFound['appointments_user_id_index'])) {
+                $table->index('user_id');
+            }
+            if (!isset($indexesFound['appointments_slot_id_index'])) {
+                $table->index('slot_id');
+            }
+            if (!isset($indexesFound['appointments_status_index'])) {
+                $table->index('status');
+            }
+            if (!isset($indexesFound['appointments_appointment_date_index'])) {
+                $table->index('appointment_date');
+            }
+            if (!isset($indexesFound['appointments_user_id_status_index'])) {
+                $table->index(['user_id', 'status']);
+            }
+            if (!isset($indexesFound['appointments_appointment_date_status_index'])) {
+                $table->index(['appointment_date', 'status']);
+            }
         });
     }
 
