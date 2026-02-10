@@ -6,6 +6,10 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Aws\S3\S3Client;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use League\Flysystem\Filesystem;
 use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +27,29 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Configure R2 storage without ACL headers
+        Storage::extend('r2-no-acl', function ($app, $config) {
+            $client = new S3Client([
+                'credentials' => [
+                    'key' => $config['key'],
+                    'secret' => $config['secret'],
+                ],
+                'region' => $config['region'],
+                'version' => 'latest',
+                'endpoint' => $config['endpoint'],
+                'use_path_style_endpoint' => $config['use_path_style_endpoint'] ?? false,
+            ]);
+
+            $adapter = new AwsS3V3Adapter(
+                $client,
+                $config['bucket'],
+                '',
+                new \League\Flysystem\AwsS3V3\PortableVisibilityConverter()
+            );
+
+            return new Filesystem($adapter, $config);
+        });
+        
         // Set Carbon locale to match application locale
         Carbon::setLocale(App::getLocale());
         

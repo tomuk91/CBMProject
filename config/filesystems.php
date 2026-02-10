@@ -61,7 +61,7 @@ return [
         ],
 
         'r2' => [
-            'driver' => 's3',
+            'driver' => 'r2-no-acl',
             'key' => env('R2_ACCESS_KEY_ID'),
             'secret' => env('R2_SECRET_ACCESS_KEY'),
             'region' => 'auto',
@@ -70,8 +70,6 @@ return [
             'url' => env('R2_PUBLIC_URL'),
             'use_path_style_endpoint' => true,
             'throw' => true,
-            '@disable_request_compression' => false,
-            '@disable_validate_path' => true,
         ],
 
     ],
