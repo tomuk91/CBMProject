@@ -7,6 +7,8 @@ RUN apt-get update \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip gd \
     && pecl install redis \
     && docker-php-ext-enable redis \
+    && a2dismod mpm_event \
+    && a2enmod mpm_prefork \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
