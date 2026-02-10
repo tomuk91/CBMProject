@@ -67,10 +67,12 @@ class VehicleController extends Controller
                 ]);
                 
                 // Store without ACL for R2 compatibility
-                $path = $file->storeAs('vehicles', $file->hashName(), [
-                    'disk' => $disk,
-                    'ACL' => '',
-                ]);
+                $path = Storage::disk($disk)->putFileAs(
+                    'vehicles',
+                    $file,
+                    $file->hashName(),
+                    []
+                );
                 
                 if (!$path) {
                     throw new \Exception('Failed to store file. Path returned: ' . var_export($path, true));
@@ -152,10 +154,12 @@ class VehicleController extends Controller
                 }
                 
                 // Store without ACL for R2 compatibility
-                $path = $file->storeAs('vehicles', $file->hashName(), [
-                    'disk' => $disk,
-                    'ACL' => '',
-                ]);
+                $path = Storage::disk($disk)->putFileAs(
+                    'vehicles',
+                    $file,
+                    $file->hashName(),
+                    []
+                );
                 
                 if (!$path) {
                     throw new \Exception('Failed to store file. Path returned: ' . var_export($path, true));
