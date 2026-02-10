@@ -101,7 +101,15 @@ Route::middleware('auth')->group(function () {
         if ($vehicle->user_id !== Auth::id()) {
             abort(403, 'Unauthorized access to vehicle data');
         }
-        return response()->json($vehicle->only(['id', 'make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size', 'mileage', 'notes', 'is_primary', 'image']));
+        
+        $data = $vehicle->only(['id', 'make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size', 'mileage', 'notes', 'is_primary', 'image']);
+        
+        // Add temporary URL for image if exists
+        if ($vehicle->image) {
+            $data['image_url'] = Storage::disk(config('filesystems.default'))->temporaryUrl($vehicle->image, now()->addHours(1));
+        }
+        
+        return response()->json($data);
     })->middleware('throttle:60,1');
     
     // Customer appointment routes

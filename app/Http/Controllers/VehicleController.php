@@ -54,47 +54,23 @@ class VehicleController extends Controller
                 $file = $request->file('image');
                 $disk = config('filesystems.default');
                 
-                \Log::error('Image upload attempt', [
-                    'size' => $file->getSize(),
-                    'mime' => $file->getMimeType(),
-                    'original_name' => $file->getClientOriginalName(),
-                    'disk' => $disk,
-                    'r2_config' => [
-                        'bucket' => config('filesystems.disks.r2.bucket'),
-                        'endpoint' => config('filesystems.disks.r2.endpoint'),
-                        'region' => config('filesystems.disks.r2.region'),
-                    ]
-                ]);
-                
                 // Store file with public visibility
                 $path = $file->store('vehicles', ['disk' => $disk, 'visibility' => 'public']);
                 
                 if (!$path) {
-                    throw new \Exception('Failed to store file');
+                    throw new \Exception(__('messages.image_upload_failed'));
                 }
                 
                 $validated['image'] = $path;
-                
-                \Log::error('Image upload successful', [
-                    'path' => $path,
-                    'disk' => $disk,
-                    'url' => Storage::disk($disk)->url($path)
-                ]);
             } catch (\Exception $e) {
-                $errorDetails = 'Failed to upload image: ' . $e->getMessage() . 
-                    ' | Disk: ' . ($disk ?? 'unknown') . 
-                    ' | Bucket: ' . config('filesystems.disks.r2.bucket') .
-                    ' | Endpoint: ' . config('filesystems.disks.r2.endpoint');
-                
-                \Log::error('Image upload error', [
-                    'message' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString(),
-                    'disk' => $disk ?? 'unknown',
+                \Log::error('Vehicle image upload failed', [
+                    'error' => $e->getMessage(),
+                    'user_id' => Auth::id(),
                 ]);
                 
                 return redirect()->back()
                     ->withInput()
-                    ->with('error', $errorDetails);
+                    ->with('error', __('messages.image_upload_failed'));
             }
         }
 
@@ -136,12 +112,11 @@ class VehicleController extends Controller
                 $file = $request->file('image');
                 $disk = config('filesystems.default');
                 
-                \Log::error('Image upload attempt (update)', [
-                    'vehicle_id' => $vehicle->id,
-                    'size' => $file->getSize(),
-                    'mime' => $file->getMimeType(),
-                    'disk' => $disk,
-                ]);
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            try {
+                $file = $request->file('image');
+                $disk = config('filesystems.default');
                 
                 // Delete old image if exists
                 if ($vehicle->image) {
@@ -152,24 +127,20 @@ class VehicleController extends Controller
                 $path = $file->store('vehicles', ['disk' => $disk, 'visibility' => 'public']);
                 
                 if (!$path) {
-                    throw new \Exception('Failed to store file');
+                    throw new \Exception(__('messages.image_upload_failed'));
                 }
                 
                 $validated['image'] = $path;
-                
-                \Log::error('Image upload successful (update)', [
-                    'path' => $path,
-                    'url' => Storage::disk($disk)->url($path)
-                ]);
             } catch (\Exception $e) {
-                \Log::error('Image upload error (update)', [
-                    'message' => $e->getMessage(),
+                \Log::error('Vehicle image upload failed', [
+                    'error' => $e->getMessage(),
                     'vehicle_id' => $vehicle->id,
+                    'user_id' => Auth::id(),
                 ]);
                 
                 return redirect()->back()
                     ->withInput()
-                    ->with('error', 'Failed to upload image: ' . $e->getMessage());
+                    ->with('error', __('messages.image_upload_failed'));
             }
         }
 

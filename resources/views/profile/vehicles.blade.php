@@ -361,8 +361,8 @@
                     document.getElementById('is_primary').checked = vehicle.is_primary;
                     
                     // Show current image if exists
-                    if (vehicle.image) {
-                        document.getElementById('imagePreview').src = `{{ config('filesystems.disks.r2.url') ?: '/storage' }}/${vehicle.image}`;
+                    if (vehicle.image_url) {
+                        document.getElementById('imagePreview').src = vehicle.image_url;
                         document.getElementById('imagePreviewContainer').classList.remove('hidden');
                     } else {
                         document.getElementById('imagePreviewContainer').classList.add('hidden');

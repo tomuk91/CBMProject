@@ -310,6 +310,7 @@ return [
     'vehicle_set_as_primary' => 'Vehicle set as primary',
     'vehicle_has_appointments' => 'Cannot delete vehicle with existing appointments',
     'vehicle_has_outstanding_appointment' => 'This vehicle already has a pending or confirmed appointment. Please wait until it is completed before booking another service.',
+    'image_upload_failed' => 'Failed to upload image. Please try again.',
     'select_vehicle' => 'Select Vehicle',
     'select_vehicle_for_appointment' => 'Select the vehicle for this appointment',
     'vehicle_color' => 'Color',
