@@ -196,6 +196,7 @@ class AppointmentController extends Controller
             // Create the confirmed appointment
             $appointment = Appointment::create([
                 'user_id' => $pendingAppointment->user_id,
+                'vehicle_id' => $pendingAppointment->vehicle_id,
                 'name' => $pendingAppointment->name,
                 'email' => $pendingAppointment->email,
                 'phone' => $pendingAppointment->phone,
@@ -348,7 +349,8 @@ class AppointmentController extends Controller
         $start = $request->query('start');
         $end = $request->query('end');
 
-        $query = Appointment::with('user')
+        $query = Appointment::with(['user:id,name,email', 'vehicle:id,make,model,year,plate'])
+            ->select('id', 'user_id', 'vehicle_id', 'name', 'email', 'phone', 'vehicle', 'service', 'notes', 'appointment_date', 'appointment_end', 'status', 'cancellation_requested')
             ->whereBetween('appointment_date', [$start, $end]);
 
         // Apply search filter

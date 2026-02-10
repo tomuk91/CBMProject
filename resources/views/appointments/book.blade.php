@@ -215,17 +215,24 @@
                                 <select id="vehicle_id" 
                                         name="vehicle_id" 
                                         required
+                                        onchange="checkVehicleAvailability(this.value)"
                                         class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
                                     <option value="">{{ __('messages.select_vehicle_for_appointment') }}</option>
                                     @foreach(Auth::user()->vehicles as $vehicle)
                                         <option value="{{ $vehicle->id }}" 
-                                                {{ old('vehicle_id', Auth::user()->primaryVehicle?->id) == $vehicle->id ? 'selected' : '' }}>
+                                                {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }}>
                                             {{ $vehicle->full_name }}
                                             @if($vehicle->is_primary) ({{ __('messages.primary') }}) @endif
                                             @if($vehicle->plate) - {{ $vehicle->plate }} @endif
                                         </option>
                                     @endforeach
                                 </select>
+                                <div id="vehicle-error" class="hidden mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center">
+                                    <svg class="w-4 h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span id="vehicle-error-message"></span>
+                                </div>
                                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                                     Don't see your vehicle? 
                                     <button type="button" onclick="openAddVehicleModal()" class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-semibold">
@@ -341,7 +348,8 @@
                             </span>
                         </a>
                         <button type="submit" 
-                                class="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                id="submitButton"
+                                class="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
                             <span class="flex items-center justify-center gap-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -456,6 +464,73 @@
     @include('profile.partials.vehicle-modal')
     
     <script>
+        let vehicleCheckTimeout = null;
+        const submitButton = document.getElementById('submitButton');
+        const appointmentForm = submitButton.closest('form');
+        
+        // Prevent form submission if vehicle is unavailable
+        appointmentForm.addEventListener('submit', function(e) {
+            const vehicleSelect = document.getElementById('vehicle_id');
+            const errorDiv = document.getElementById('vehicle-error');
+            
+            if (vehicleSelect.value && !errorDiv.classList.contains('hidden')) {
+                e.preventDefault();
+                alert('{{ __('messages.vehicle_has_outstanding_appointment') }}');
+                return false;
+            }
+        });
+        
+        function checkVehicleAvailability(vehicleId) {
+            const errorDiv = document.getElementById('vehicle-error');
+            const errorMessage = document.getElementById('vehicle-error-message');
+            
+            // Clear any previous timeout
+            if (vehicleCheckTimeout) {
+                clearTimeout(vehicleCheckTimeout);
+            }
+            
+            // Hide error immediately when changing selection
+            errorDiv.classList.add('hidden');
+            
+            if (!vehicleId) {
+                submitButton.disabled = false;
+                return;
+            }
+            
+            // Debounce the API call
+            vehicleCheckTimeout = setTimeout(() => {
+                console.log('Checking vehicle availability for ID:', vehicleId);
+                fetch(`/api/check-vehicle-availability/${vehicleId}`)
+                    .then(response => {
+                        console.log('Response status:', response.status);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('API response:', data);
+                        if (!data.available) {
+                            errorMessage.textContent = data.message;
+                            errorDiv.classList.remove('hidden');
+                            submitButton.disabled = true;
+                        } else {
+                            errorDiv.classList.add('hidden');
+                            submitButton.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking vehicle availability:', error);
+                        submitButton.disabled = false;
+                    });
+            }, 300);
+        }
+        
+        // Check on page load if vehicle is already selected
+        window.addEventListener('DOMContentLoaded', function() {
+            const vehicleSelect = document.getElementById('vehicle_id');
+            if (vehicleSelect && vehicleSelect.value) {
+                checkVehicleAvailability(vehicleSelect.value);
+            }
+        });
+        
         function openAddVehicleModal() {
             document.getElementById('vehicleModalTitle').textContent = '{{ __("messages.add_vehicle") }}';
             document.getElementById('vehicleForm').action = '{{ route("vehicles.store") }}';

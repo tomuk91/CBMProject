@@ -51,7 +51,8 @@ Route::get('/slots', [AppointmentController::class, 'guestSlots'])->name('guest.
 Route::post('/slots/{slot}/select', [AppointmentController::class, 'selectGuestSlot'])->name('guest.slots.select');
 
 Route::get('/dashboard', function () {
-    $appointments = Appointment::where('user_id', Auth::id())
+    $appointments = Appointment::with('vehicle')
+        ->where('user_id', Auth::id())
         ->where('status', '!=', 'completed')
         ->orderBy('appointment_date', 'desc')
         ->get();
@@ -111,6 +112,7 @@ Route::middleware('auth')->group(function () {
         ->name('appointments.store');
     Route::get('/appointments/confirmation/success', [AppointmentController::class, 'confirmation'])->name('appointments.confirmation');
     Route::post('/appointments/{appointment}/request-cancellation', [AppointmentController::class, 'requestCancellation'])->name('appointments.requestCancellation');
+    Route::get('/api/check-vehicle-availability/{vehicle}', [AppointmentController::class, 'checkVehicleAvailability'])->name('api.check-vehicle-availability');
     
     // Admin appointment routes
     Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {

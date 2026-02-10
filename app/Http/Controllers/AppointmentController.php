@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\PendingAppointment;
 use App\Models\AvailableSlot;
 use App\Models\ActivityLog;
@@ -76,6 +77,23 @@ class AppointmentController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
+        }
+
+        // Check if the vehicle already has an outstanding appointment
+        if ($request->vehicle_id) {
+            $existingAppointment = Appointment::where('vehicle_id', $request->vehicle_id)
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->exists();
+            
+            $existingPendingAppointment = PendingAppointment::where('vehicle_id', $request->vehicle_id)
+                ->where('status', 'pending')
+                ->exists();
+
+            if ($existingAppointment || $existingPendingAppointment) {
+                return redirect()->back()
+                    ->with('error', __('messages.vehicle_has_outstanding_appointment'))
+                    ->withInput();
+            }
         }
 
         try {
@@ -276,13 +294,48 @@ class AppointmentController extends Controller
             ]
         );
 
-        // Notify all admins about the cancellation request
-        $admins = User::where('is_admin', true)->get();
+        // Notify all admins about the cancellation request (cached for 1 hour)
+        $admins = cache()->remember('admin_users', 3600, function() {
+            return User::where('is_admin', true)->get();
+        });
         foreach ($admins as $admin) {
             Mail::to($admin->email)->queue(new CancellationRequested($appointment));
         }
 
         return redirect()->back()->with('success', __('messages.cancellation_requested_success'));
+    }
+
+    /**
+     * Check if vehicle has outstanding appointments (API endpoint)
+     */
+    public function checkVehicleAvailability($vehicleId)
+    {
+        // Verify vehicle belongs to the authenticated user
+        $vehicle = Auth::user()->vehicles()->find($vehicleId);
+        
+        if (!$vehicle) {
+            return response()->json(['available' => true]);
+        }
+
+        // Check appointments table (both vehicle_id foreign key and vehicle text field)
+        $existingAppointment = Appointment::where('user_id', Auth::id())
+            ->where(function($query) use ($vehicleId, $vehicle) {
+                $query->where('vehicle_id', $vehicleId)
+                      ->orWhere('vehicle', 'like', '%' . $vehicle->plate . '%');
+            })
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->exists();
+        
+        $existingPendingAppointment = PendingAppointment::where('vehicle_id', $vehicleId)
+            ->where('status', 'pending')
+            ->exists();
+
+        $hasOutstanding = $existingAppointment || $existingPendingAppointment;
+
+        return response()->json([
+            'available' => !$hasOutstanding,
+            'message' => $hasOutstanding ? __('messages.vehicle_has_outstanding_appointment') : null
+        ]);
     }
 }
 

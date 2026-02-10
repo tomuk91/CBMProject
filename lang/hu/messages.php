@@ -297,6 +297,7 @@ return [
     'vehicle_deleted_successfully' => 'Jármű sikeresen törölve',
     'vehicle_set_as_primary' => 'Jármű beállítva elsődlegesnek',
     'vehicle_has_appointments' => 'Nem törölhető olyan jármű, amelyhez időpontok tartoznak',
+    'vehicle_has_outstanding_appointment' => 'Ennek a járműnek már van függőben lévő vagy megerősített időpontja. Kérjük, várja meg a befejezését, mielőtt újabb szervízt foglalna.',
     'select_vehicle' => 'Válasszon járművet',
     'select_vehicle_for_appointment' => 'Válassza ki a járművet ehhez az időponthoz',
     'vehicle_color' => 'Szín',
