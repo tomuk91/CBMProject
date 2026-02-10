@@ -75,7 +75,7 @@ class VehicleController extends Controller
                 Storage::disk($disk)->getDriver()->write(
                     $path,
                     $contents,
-                    new \League\Flysystem\Config()
+                    []
                 );
                 
                 $validated['image'] = $path;
@@ -162,10 +162,8 @@ class VehicleController extends Controller
                 Storage::disk($disk)->getDriver()->write(
                     $path,
                     $contents,
-                    new \League\Flysystem\Config()
+                    []
                 );
-                
-                $validated['image'] = $path;
                 
                 $validated['image'] = $path;
                 
