@@ -118,7 +118,7 @@ class AnalyticsController extends Controller
             ->where('activity_logs.action', 'appointment_approved')
             ->where('activity_logs.created_at', '>=', $startDate)
             ->join('pending_appointments', 'activity_logs.model_id', '=', 'pending_appointments.id')
-            ->select(DB::raw('AVG(julianday(activity_logs.created_at) - julianday(pending_appointments.created_at)) * 24 as hours'))
+            ->select(DB::raw('AVG(TIMESTAMPDIFF(SECOND, pending_appointments.created_at, activity_logs.created_at) / 3600) as hours'))
             ->value('hours');
 
         return view('admin.analytics.index', compact(
