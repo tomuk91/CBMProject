@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use League\Flysystem\AwsS3V3\PortableVisibilityConverter;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Visibility;
 use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
@@ -44,12 +47,16 @@ class AppServiceProvider extends ServiceProvider
                 $client,
                 $config['bucket'],
                 '',
-                new \League\Flysystem\AwsS3V3\PortableVisibilityConverter(
-                    \League\Flysystem\Visibility::PUBLIC
+                new PortableVisibilityConverter(
+                    Visibility::PUBLIC
                 )
             );
 
-            return new Filesystem($adapter, $config);
+            return new FilesystemAdapter(
+                new Filesystem($adapter, $config),
+                $adapter,
+                $config
+            );
         });
         
         // Set Carbon locale to match application locale
