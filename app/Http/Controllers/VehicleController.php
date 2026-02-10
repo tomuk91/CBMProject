@@ -68,19 +68,16 @@ class VehicleController extends Controller
                 
                 // Store file without ACL headers for R2
                 $filename = $file->hashName();
+                $path = 'vehicles/' . $filename;
                 $contents = file_get_contents($file->getRealPath());
                 
-                $success = Storage::disk($disk)->put(
-                    'vehicles/' . $filename,
+                // Use write() which doesn't add ACL headers
+                Storage::disk($disk)->getDriver()->write(
+                    $path,
                     $contents,
-                    ['CacheControl' => 'max-age=31536000']
+                    new \League\Flysystem\Config()
                 );
                 
-                if (!$success) {
-                    throw new \Exception('Failed to store file. Upload returned: ' . var_export($success, true));
-                }
-                
-                $path = 'vehicles/' . $filename;
                 $validated['image'] = $path;
                 
                 \Log::error('Image upload successful', [
@@ -158,23 +155,17 @@ class VehicleController extends Controller
                 
                 // Store file without ACL headers for R2
                 $filename = $file->hashName();
+                $path = 'vehicles/' . $filename;
                 $contents = file_get_contents($file->getRealPath());
                 
-                $success = Storage::disk($disk)->put(
-                    'vehicles/' . $filename,
+                // Use write() which doesn't add ACL headers
+                Storage::disk($disk)->getDriver()->write(
+                    $path,
                     $contents,
-                    ['CacheControl' => 'max-age=31536000']
+                    new \League\Flysystem\Config()
                 );
                 
-                if (!$success) {
-                    throw new \Exception('Failed to store file. Upload returned: ' . var_export($success, true));
-                }
-                
-                $path = 'vehicles/' . $filename;
                 $validated['image'] = $path;
-                if (!$path) {
-                    throw new \Exception('Failed to store file. Path returned: ' . var_export($path, true));
-                }
                 
                 $validated['image'] = $path;
                 
