@@ -146,6 +146,11 @@
                                     </div>
                                 @endforeach
                             </div>
+                            
+                            <!-- Pagination -->
+                            <div class="mt-6">
+                                {{ $appointments->links() }}
+                            </div>
                         @else
                             <div class="text-center py-16">
                                 <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

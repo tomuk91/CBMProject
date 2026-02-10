@@ -55,7 +55,7 @@ Route::get('/dashboard', function () {
         ->where('user_id', Auth::id())
         ->where('status', '!=', 'completed')
         ->orderBy('appointment_date', 'desc')
-        ->get();
+        ->paginate(5);
     
     $serviceHistory = Appointment::with('vehicle')
         ->where('user_id', Auth::id())
