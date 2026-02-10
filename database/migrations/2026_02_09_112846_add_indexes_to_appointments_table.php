@@ -20,7 +20,6 @@ return new class extends Migration
         // Use raw SQL to safely add indexes only if they don't exist
         $indexes = [
             'appointments_user_id_index' => 'ALTER TABLE appointments ADD INDEX appointments_user_id_index(user_id)',
-            'appointments_slot_id_index' => 'ALTER TABLE appointments ADD INDEX appointments_slot_id_index(slot_id)',
             'appointments_status_index' => 'ALTER TABLE appointments ADD INDEX appointments_status_index(status)',
             'appointments_appointment_date_index' => 'ALTER TABLE appointments ADD INDEX appointments_appointment_date_index(appointment_date)',
             'appointments_user_id_status_index' => 'ALTER TABLE appointments ADD INDEX appointments_user_id_status_index(user_id, status)',
