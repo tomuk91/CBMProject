@@ -56,16 +56,28 @@ class VehicleController extends Controller
                     'size' => $file->getSize(),
                     'mime' => $file->getMimeType(),
                     'original_name' => $file->getClientOriginalName(),
+                    'disk' => config('filesystems.default'),
                 ]);
                 
-                $path = $file->store('vehicles', env('FILESYSTEM_DISK', 'public'));
+                $disk = config('filesystems.default');
+                $path = $file->store('vehicles', $disk);
+                
+                if (!$path) {
+                    throw new \Exception('Failed to store file. Path returned: ' . var_export($path, true));
+                }
+                
                 $validated['image'] = $path;
                 
-                \Log::info('Image upload successful', ['path' => $path]);
+                \Log::info('Image upload successful', [
+                    'path' => $path,
+                    'disk' => $disk,
+                    'url' => Storage::disk($disk)->url($path)
+                ]);
             } catch (\Exception $e) {
                 \Log::error('Image upload error', [
                     'message' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'trace' => $e->getTraceAsString(),
+                    'disk' => env('FILESYSTEM_DISK', 'public'),
                 ]);
                 return redirect()->back()
                     ->withInput()
@@ -110,9 +122,9 @@ class VehicleController extends Controller
             try {
                 // Delete old image if exists
                 if ($vehicle->image) {
-                    Storage::disk(env('FILESYSTEM_DISK', 'public'))->delete($vehicle->image);
+                    Storage::disk(config('filesystems.default'))->delete($vehicle->image);
                 }
-                $path = $request->file('image')->store('vehicles', env('FILESYSTEM_DISK', 'public'));
+                $path = $request->file('image')->store('vehicles', config('filesystems.default'));
                 $validated['image'] = $path;
             } catch (\Exception $e) {
                 return redirect()->back()
@@ -142,7 +154,7 @@ class VehicleController extends Controller
         
         // Delete image file if exists
         if ($vehicle->image) {
-            Storage::disk(env('FILESYSTEM_DISK', 'public'))->delete($vehicle->image);
+            Storage::disk(config('filesystems.default'))->delete($vehicle->image);
         }
         
         $vehicle->delete();
