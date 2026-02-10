@@ -41,7 +41,7 @@
                                             </tr>
                                             <tr>
                                                 <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Date & Time:</td>
-                                                <td style="padding: 8px 0; color: #111827; font-size: 14px; font-weight: 600;">{{ $appointment->appointment_date->format('l, F j, Y \a\t g:i A') }}</td>
+                                                <td style="padding: 8px 0; color: #111827; font-size: 14px; font-weight: 600;">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('l, F j, Y \\a\\t g:i A') }}</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Vehicle:</td>

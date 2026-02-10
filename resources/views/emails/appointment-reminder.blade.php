@@ -40,7 +40,7 @@
                                                     <strong style="color: #374151;">📅 {{ __('messages.date') }}:</strong>
                                                 </td>
                                                 <td style="padding: 8px 0; font-size: 14px; color: #1f2937; text-align: right;">
-                                                    {{ $appointment->appointment_date->format('l, F j, Y') }}
+                                                    {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('l, F j, Y') }}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -48,7 +48,7 @@
                                                     <strong style="color: #374151;">🕐 {{ __('messages.time') }}:</strong>
                                                 </td>
                                                 <td style="padding: 8px 0; font-size: 14px; color: #1f2937; text-align: right;">
-                                                    {{ $appointment->appointment_date->format('H:i') }}
+                                                    {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('H:i') }}
                                                 </td>
                                             </tr>
                                             <tr>

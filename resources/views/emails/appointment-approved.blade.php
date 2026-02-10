@@ -9,9 +9,9 @@ Great news! Your appointment with {{ config('app.name') }} has been confirmed.
 
 **Service:** {{ $appointment->service }}
 
-**Date & Time:** {{ $appointment->appointment_date->format('F j, Y \\a\\t g:i A') }}
+**Date & Time:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y \\a\\t g:i A') }}
 
-**Duration:** {{ $appointment->appointment_date->diffInMinutes($appointment->appointment_end) }} minutes
+**Duration:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->diffInMinutes(\Carbon\Carbon::parse($appointment->appointment_end)) }} minutes
 
 **Vehicle:** {{ $appointment->vehicle }}
 

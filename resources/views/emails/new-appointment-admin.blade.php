@@ -114,11 +114,11 @@
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">{{ __('messages.date') }}:</span>
-                    <span class="detail-value">{{ $appointment->appointment_date->format('F d, Y') }}</span>
+                    <span class="detail-value">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F d, Y') }}</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">{{ __('messages.time') }}:</span>
-                    <span class="detail-value">{{ $appointment->appointment_date->format('g:i A') }}</span>
+                    <span class="detail-value">{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('g:i A') }}</span>
                 </div>
                 @if($appointment->vehicle_id && $appointment->vehicle)
                     <div class="detail-row">

@@ -9,7 +9,7 @@ We regret to inform you that your appointment with {{ config('app.name') }} has 
 
 **Service:** {{ $appointment->service }}
 
-**Scheduled Date & Time:** {{ $appointment->appointment_date->format('F j, Y \\a\\t g:i A') }}
+**Scheduled Date & Time:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y \\a\\t g:i A') }}
 
 **Vehicle:** {{ $appointment->vehicle }}
 
