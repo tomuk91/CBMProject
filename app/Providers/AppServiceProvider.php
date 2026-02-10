@@ -44,7 +44,9 @@ class AppServiceProvider extends ServiceProvider
                 $client,
                 $config['bucket'],
                 '',
-                new \League\Flysystem\AwsS3V3\PortableVisibilityConverter()
+                new \League\Flysystem\AwsS3V3\PortableVisibilityConverter(
+                    \League\Flysystem\Visibility::PUBLIC
+                )
             );
 
             return new Filesystem($adapter, $config);
