@@ -66,17 +66,12 @@ class VehicleController extends Controller
                     ]
                 ]);
                 
-                // Store file without ACL headers for R2
-                $filename = $file->hashName();
-                $path = 'vehicles/' . $filename;
-                $contents = file_get_contents($file->getRealPath());
+                // Store file
+                $path = $file->store('vehicles', $disk);
                 
-                // Use write() which doesn't add ACL headers
-                Storage::disk($disk)->getDriver()->write(
-                    $path,
-                    $contents,
-                    []
-                );
+                if (!$path) {
+                    throw new \Exception('Failed to store file');
+                }
                 
                 $validated['image'] = $path;
                 
@@ -153,17 +148,12 @@ class VehicleController extends Controller
                     Storage::disk($disk)->delete($vehicle->image);
                 }
                 
-                // Store file without ACL headers for R2
-                $filename = $file->hashName();
-                $path = 'vehicles/' . $filename;
-                $contents = file_get_contents($file->getRealPath());
+                // Store file
+                $path = $file->store('vehicles', $disk);
                 
-                // Use write() which doesn't add ACL headers
-                Storage::disk($disk)->getDriver()->write(
-                    $path,
-                    $contents,
-                    []
-                );
+                if (!$path) {
+                    throw new \Exception('Failed to store file');
+                }
                 
                 $validated['image'] = $path;
                 
