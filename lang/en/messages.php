@@ -227,9 +227,9 @@ return [
     'create_slot_description' => 'Create single or multiple slots using bulk patterns',
     'create_slot_question' => 'How would you like to create slots?',
     'create_mode_single' => 'Single Slot',
-    'create_mode_single_desc' => 'Create one slot at a time',
+    'create_mode_single_desc' => 'Create one specific time slot',
     'create_mode_daily' => 'Daily Pattern',
-    'create_mode_daily_desc' => 'Create multiple slots on selected days for 1 week ahead (e.g., 4 slots with 2-hour intervals)',
+    'create_mode_daily_desc' => 'Create multiple slots on specific days with same times, up to 1 week in advance',
     'create_mode_weekly' => 'Weekly Pattern',
     'create_mode_weekly_desc' => 'Create one slot per selected day, repeating for multiple weeks (e.g., every Monday at 9 AM for 4 weeks)',
     'create_start_date' => 'Start Date',
@@ -755,9 +755,9 @@ return [
     'create_mode_single' => 'Single Slot',
     'create_mode_single_desc' => 'Create one specific time slot',
     'create_mode_daily' => 'Daily Pattern',
-    'create_mode_daily_desc' => 'Create multiple slots on specific days with same times',
+    'create_mode_daily_desc' => 'Create multiple slots on specific days with same times, up to 1 week in advance',
     'create_mode_weekly' => 'Weekly Recurring',
-    'create_mode_weekly_desc' => 'Create recurring slots every week on selected days',
+    'create_mode_weekly_desc' => 'Create recurring slots for the specified number of weeks on selected days',
     
     // Cancellation Requests
     'request_cancellation' => 'Request Cancellation',
