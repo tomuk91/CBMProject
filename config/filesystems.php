@@ -70,9 +70,8 @@ return [
             'url' => env('R2_PUBLIC_URL'),
             'use_path_style_endpoint' => true,
             'throw' => true,
-            'options' => [
-                'ACL' => null,
-            ],
+            '@disable_request_compression' => false,
+            '@disable_validate_path' => true,
         ],
 
     ],

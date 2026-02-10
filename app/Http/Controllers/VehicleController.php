@@ -66,18 +66,21 @@ class VehicleController extends Controller
                     ]
                 ]);
                 
-                // Store without ACL for R2 compatibility
-                $path = Storage::disk($disk)->putFileAs(
-                    'vehicles',
-                    $file,
-                    $file->hashName(),
-                    []
+                // Store file without ACL headers for R2
+                $filename = $file->hashName();
+                $contents = file_get_contents($file->getRealPath());
+                
+                $success = Storage::disk($disk)->put(
+                    'vehicles/' . $filename,
+                    $contents,
+                    ['CacheControl' => 'max-age=31536000']
                 );
                 
-                if (!$path) {
-                    throw new \Exception('Failed to store file. Path returned: ' . var_export($path, true));
+                if (!$success) {
+                    throw new \Exception('Failed to store file. Upload returned: ' . var_export($success, true));
                 }
                 
+                $path = 'vehicles/' . $filename;
                 $validated['image'] = $path;
                 
                 \Log::error('Image upload successful', [
@@ -153,14 +156,22 @@ class VehicleController extends Controller
                     Storage::disk($disk)->delete($vehicle->image);
                 }
                 
-                // Store without ACL for R2 compatibility
-                $path = Storage::disk($disk)->putFileAs(
-                    'vehicles',
-                    $file,
-                    $file->hashName(),
-                    []
+                // Store file without ACL headers for R2
+                $filename = $file->hashName();
+                $contents = file_get_contents($file->getRealPath());
+                
+                $success = Storage::disk($disk)->put(
+                    'vehicles/' . $filename,
+                    $contents,
+                    ['CacheControl' => 'max-age=31536000']
                 );
                 
+                if (!$success) {
+                    throw new \Exception('Failed to store file. Upload returned: ' . var_export($success, true));
+                }
+                
+                $path = 'vehicles/' . $filename;
+                $validated['image'] = $path;
                 if (!$path) {
                     throw new \Exception('Failed to store file. Path returned: ' . var_export($path, true));
                 }
