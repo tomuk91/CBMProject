@@ -69,7 +69,7 @@ return [
             'endpoint' => env('R2_ENDPOINT'),
             'url' => env('R2_PUBLIC_URL'),
             'visibility' => 'public',
-            'use_path_style_endpoint' => false,
+            'use_path_style_endpoint' => true,
             'throw' => true,
         ],
 
