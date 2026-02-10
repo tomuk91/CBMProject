@@ -58,7 +58,7 @@ class VehicleController extends Controller
                     'original_name' => $file->getClientOriginalName(),
                 ]);
                 
-                $path = $file->store('vehicles', 'public');
+                $path = $file->store('vehicles', env('FILESYSTEM_DISK', 'public'));
                 $validated['image'] = $path;
                 
                 \Log::info('Image upload successful', ['path' => $path]);
@@ -110,9 +110,9 @@ class VehicleController extends Controller
             try {
                 // Delete old image if exists
                 if ($vehicle->image) {
-                    Storage::disk('public')->delete($vehicle->image);
+                    Storage::disk(env('FILESYSTEM_DISK', 'public'))->delete($vehicle->image);
                 }
-                $path = $request->file('image')->store('vehicles', 'public');
+                $path = $request->file('image')->store('vehicles', env('FILESYSTEM_DISK', 'public'));
                 $validated['image'] = $path;
             } catch (\Exception $e) {
                 return redirect()->back()
@@ -142,7 +142,7 @@ class VehicleController extends Controller
         
         // Delete image file if exists
         if ($vehicle->image) {
-            Storage::disk('public')->delete($vehicle->image);
+            Storage::disk(env('FILESYSTEM_DISK', 'public'))->delete($vehicle->image);
         }
         
         $vehicle->delete();
