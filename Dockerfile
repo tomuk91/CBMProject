@@ -3,7 +3,7 @@ FROM php:8.4-apache
 # Install system deps
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        git unzip libzip-dev libpng-dev libonig-dev libpq-dev \
+        git unzip libzip-dev libpng-dev libonig-dev libpq-dev supervisor \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip gd \
     && pecl install redis \
     && docker-php-ext-enable redis \
@@ -47,5 +47,8 @@ RUN echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf \
 EXPOSE 80
 
 RUN chmod +x docker/entrypoint.sh
+
+# Copy supervisor config
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 CMD ["/var/www/html/docker/entrypoint.sh"]

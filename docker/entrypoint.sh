@@ -29,4 +29,4 @@ if [ -n "${ADMIN_EMAIL}" ] && [ -n "${ADMIN_PASSWORD}" ]; then
   php artisan user:create-admin "${ADMIN_EMAIL}" --name="${ADMIN_NAME:-Admin}" --password="${ADMIN_PASSWORD}"
 fi
 
-exec apache2-foreground
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
