@@ -20,7 +20,8 @@ fi
 # Always run migrations on Railway
 php artisan migrate --force
 
-# Cache config for performance
+# Cache config for performance (clear first to ensure fresh config)
+php artisan config:clear
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
