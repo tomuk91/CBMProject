@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Configure R2 storage without ACL headers
-        Storage::extend('r2-no-acl', function ($app, $config) {
+        Storage::extend('r2', function ($app, $config) {
             $client = new S3Client([
                 'credentials' => [
                     'key' => $config['key'],
