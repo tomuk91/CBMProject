@@ -54,7 +54,7 @@ class VehicleController extends Controller
                 $file = $request->file('image');
                 $disk = config('filesystems.default');
                 
-                \Log::info('Image upload attempt', [
+                \Log::error('Image upload attempt', [
                     'size' => $file->getSize(),
                     'mime' => $file->getMimeType(),
                     'original_name' => $file->getClientOriginalName(),
@@ -74,7 +74,7 @@ class VehicleController extends Controller
                 
                 $validated['image'] = $path;
                 
-                \Log::info('Image upload successful', [
+                \Log::error('Image upload successful', [
                     'path' => $path,
                     'disk' => $disk,
                     'url' => Storage::disk($disk)->url($path)
@@ -129,7 +129,7 @@ class VehicleController extends Controller
                 $file = $request->file('image');
                 $disk = config('filesystems.default');
                 
-                \Log::info('Image upload attempt (update)', [
+                \Log::error('Image upload attempt (update)', [
                     'vehicle_id' => $vehicle->id,
                     'size' => $file->getSize(),
                     'mime' => $file->getMimeType(),
@@ -149,7 +149,7 @@ class VehicleController extends Controller
                 
                 $validated['image'] = $path;
                 
-                \Log::info('Image upload successful (update)', [
+                \Log::error('Image upload successful (update)', [
                     'path' => $path,
                     'url' => Storage::disk($disk)->url($path)
                 ]);
