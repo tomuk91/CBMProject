@@ -295,6 +295,8 @@ return [
     'vehicle_added_successfully' => 'Jármű sikeresen hozzáadva',
     'vehicle_updated_successfully' => 'Jármű sikeresen frissítve',
     'vehicle_deleted_successfully' => 'Jármű sikeresen törölve',
+    'vehicle_limit_reached' => 'Legfeljebb 4 járművet adhat hozzá profiljához',
+    'vehicle_limit_info' => ':count / :max járműve van. Még :remaining járművet adhat hozzá.',
     'vehicle_set_as_primary' => 'Jármű beállítva elsődlegesnek',
     'vehicle_has_appointments' => 'Nem törölhető olyan jármű, amelyhez időpontok tartoznak',
     'vehicle_has_outstanding_appointment' => 'Ennek a járműnek már van függőben lévő vagy megerősített időpontja. Kérjük, várja meg a befejezését, mielőtt újabb szervízt foglalna.',

@@ -307,6 +307,8 @@ return [
     'vehicle_added_successfully' => 'Vehicle added successfully',
     'vehicle_updated_successfully' => 'Vehicle updated successfully',
     'vehicle_deleted_successfully' => 'Vehicle deleted successfully',
+    'vehicle_limit_reached' => 'You can only add up to 4 vehicles to your profile',
+    'vehicle_limit_info' => 'You have :count of :max vehicles. You can add :remaining more.',
     'vehicle_set_as_primary' => 'Vehicle set as primary',
     'vehicle_has_appointments' => 'Cannot delete vehicle with existing appointments',
     'vehicle_has_outstanding_appointment' => 'This vehicle already has a pending or confirmed appointment. Please wait until it is completed before booking another service.',

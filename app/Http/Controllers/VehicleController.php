@@ -17,6 +17,12 @@ class VehicleController extends Controller
 
     public function store(Request $request)
     {
+        // Check if user already has 4 vehicles
+        if (Auth::user()->vehicles()->count() >= 4) {
+            return redirect()->back()
+                ->with('error', __('messages.vehicle_limit_reached'));
+        }
+
         $validated = $request->validate([
             'make' => 'required|string|max:255',
             'model' => 'required|string|max:255',
