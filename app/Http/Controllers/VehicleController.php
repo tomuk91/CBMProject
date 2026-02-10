@@ -52,14 +52,20 @@ class VehicleController extends Controller
         if ($request->hasFile('image')) {
             try {
                 $file = $request->file('image');
+                $disk = config('filesystems.default');
+                
                 \Log::info('Image upload attempt', [
                     'size' => $file->getSize(),
                     'mime' => $file->getMimeType(),
                     'original_name' => $file->getClientOriginalName(),
-                    'disk' => config('filesystems.default'),
+                    'disk' => $disk,
+                    'r2_config' => [
+                        'bucket' => config('filesystems.disks.r2.bucket'),
+                        'endpoint' => config('filesystems.disks.r2.endpoint'),
+                        'region' => config('filesystems.disks.r2.region'),
+                    ]
                 ]);
                 
-                $disk = config('filesystems.default');
                 $path = $file->store('vehicles', $disk);
                 
                 if (!$path) {
@@ -77,7 +83,7 @@ class VehicleController extends Controller
                 \Log::error('Image upload error', [
                     'message' => $e->getMessage(),
                     'trace' => $e->getTraceAsString(),
-                    'disk' => env('FILESYSTEM_DISK', 'public'),
+                    'disk' => $disk ?? 'unknown',
                 ]);
                 return redirect()->back()
                     ->withInput()
@@ -120,13 +126,39 @@ class VehicleController extends Controller
         // Handle image upload
         if ($request->hasFile('image')) {
             try {
+                $file = $request->file('image');
+                $disk = config('filesystems.default');
+                
+                \Log::info('Image upload attempt (update)', [
+                    'vehicle_id' => $vehicle->id,
+                    'size' => $file->getSize(),
+                    'mime' => $file->getMimeType(),
+                    'disk' => $disk,
+                ]);
+                
                 // Delete old image if exists
                 if ($vehicle->image) {
-                    Storage::disk(config('filesystems.default'))->delete($vehicle->image);
+                    Storage::disk($disk)->delete($vehicle->image);
                 }
-                $path = $request->file('image')->store('vehicles', config('filesystems.default'));
+                
+                $path = $file->store('vehicles', $disk);
+                
+                if (!$path) {
+                    throw new \Exception('Failed to store file. Path returned: ' . var_export($path, true));
+                }
+                
                 $validated['image'] = $path;
+                
+                \Log::info('Image upload successful (update)', [
+                    'path' => $path,
+                    'url' => Storage::disk($disk)->url($path)
+                ]);
             } catch (\Exception $e) {
+                \Log::error('Image upload error (update)', [
+                    'message' => $e->getMessage(),
+                    'vehicle_id' => $vehicle->id,
+                ]);
+                
                 return redirect()->back()
                     ->withInput()
                     ->with('error', 'Failed to upload image: ' . $e->getMessage());
