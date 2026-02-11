@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Enums\SlotStatus;
 use App\Models\ScheduleTemplate;
 use App\Models\AvailableSlot;
 use App\Models\BlockedDate;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SlotGenerationService
 {
@@ -23,10 +26,19 @@ class SlotGenerationService
         $totals = ['created' => 0, 'skipped' => 0, 'blocked' => 0];
 
         foreach ($templates as $template) {
-            $result = $this->generateFromTemplate($template, $weeksAhead ?? $template->max_weeks_ahead);
-            $totals['created'] += $result['created'];
-            $totals['skipped'] += $result['skipped'];
-            $totals['blocked'] += $result['blocked'];
+            try {
+                $result = DB::transaction(function () use ($template, $weeksAhead) {
+                    return $this->generateFromTemplate($template, $weeksAhead ?? $template->max_weeks_ahead);
+                });
+                $totals['created'] += $result['created'];
+                $totals['skipped'] += $result['skipped'];
+                $totals['blocked'] += $result['blocked'];
+            } catch (\Throwable $e) {
+                Log::error('Slot generation failed for template #' . $template->id . ': ' . $e->getMessage(), [
+                    'template_id' => $template->id,
+                    'exception' => $e,
+                ]);
+            }
         }
 
         return $totals;
@@ -156,18 +168,20 @@ class SlotGenerationService
     {
         $fromDate = $fromDate ?? now();
 
-        // Delete future auto-generated slots that are still 'available' for this template
-        $deleted = AvailableSlot::where('schedule_template_id', $template->id)
-            ->where('source', 'auto')
-            ->where('status', 'available')
-            ->where('start_time', '>=', $fromDate)
-            ->delete();
+        return DB::transaction(function () use ($template, $fromDate) {
+            // Delete future auto-generated slots that are still 'available' for this template
+            $deleted = AvailableSlot::where('schedule_template_id', $template->id)
+                ->where('source', 'auto')
+                ->where('status', 'available')
+                ->where('start_time', '>=', $fromDate)
+                ->delete();
 
-        // Regenerate
-        $result = $this->generateFromTemplate($template);
-        $result['deleted'] = $deleted;
+            // Regenerate
+            $result = $this->generateFromTemplate($template);
+            $result['deleted'] = $deleted;
 
-        return $result;
+            return $result;
+        });
     }
 
     /**
@@ -199,7 +213,7 @@ class SlotGenerationService
                 AvailableSlot::create([
                     'start_time' => $slotStart,
                     'end_time' => $slotEnd,
-                    'status' => 'available',
+                    'status' => SlotStatus::Available,
                     'schedule_template_id' => $template->id,
                     'source' => 'auto',
                 ]);

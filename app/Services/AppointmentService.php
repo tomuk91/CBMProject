@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\AppointmentStatus;
+use App\Enums\SlotStatus;
 use App\Models\Appointment;
 use App\Models\PendingAppointment;
 use App\Models\AvailableSlot;
@@ -20,7 +22,7 @@ class AppointmentService
         return DB::transaction(function () use ($pendingAppointment, $adminNotes) {
             $slot = $pendingAppointment->availableSlot;
 
-            if (!$slot || $slot->status !== 'available') {
+            if (!$slot || $slot->status !== SlotStatus::Available) {
                 throw new \Exception('Slot is no longer available');
             }
 
@@ -34,6 +36,7 @@ class AppointmentService
             // Create confirmed appointment
             $appointment = Appointment::create([
                 'user_id' => $pendingAppointment->user_id,
+                'available_slot_id' => $slot->id,
                 'vehicle_id' => $pendingAppointment->vehicle_id,
                 'name' => $pendingAppointment->name,
                 'email' => $pendingAppointment->email,
@@ -44,11 +47,11 @@ class AppointmentService
                 'admin_notes' => $adminNotes,
                 'appointment_date' => $slot->start_time,
                 'appointment_end' => $slot->end_time,
-                'status' => 'confirmed',
+                'status' => AppointmentStatus::Confirmed,
             ]);
 
             // Update slot and pending appointment
-            $slot->update(['status' => 'booked']);
+            $slot->update(['status' => SlotStatus::Booked]);
             $pendingAppointment->update([
                 'status' => 'approved',
                 'admin_notes' => $adminNotes,
@@ -80,7 +83,7 @@ class AppointmentService
                 ->first();
 
             if ($slot) {
-                $slot->update(['status' => 'available']);
+                $slot->update(['status' => SlotStatus::Available]);
             }
 
             // Log cancellation

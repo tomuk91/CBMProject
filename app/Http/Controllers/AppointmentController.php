@@ -7,6 +7,8 @@ use App\Models\PendingAppointment;
 use App\Models\AvailableSlot;
 use App\Models\ActivityLog;
 use App\Models\User;
+use App\Enums\AppointmentStatus;
+use App\Enums\SlotStatus;
 use App\Mail\AppointmentConfirmation;
 use App\Mail\NewAppointmentAdmin;
 use App\Mail\CancellationRequested;
@@ -56,7 +58,7 @@ class AppointmentController extends Controller
      */
     public function show(AvailableSlot $slot)
     {
-        if ($slot->status !== 'available') {
+        if ($slot->status !== SlotStatus::Available) {
             return redirect()->route('appointments.index')
                 ->with('error', 'This appointment slot is no longer available.');
         }
@@ -120,7 +122,7 @@ class AppointmentController extends Controller
                     ->first();
 
                 // Check if slot is still available after locking
-                if (!$lockedSlot || $lockedSlot->status !== 'available') {
+                if (!$lockedSlot || $lockedSlot->status !== SlotStatus::Available) {
                     return redirect()->route('appointments.index')
                         ->with('error', 'This appointment slot is no longer available. Please select another slot.');
                 }
@@ -144,7 +146,7 @@ class AppointmentController extends Controller
                 }
 
                 // Mark slot as pending
-                $lockedSlot->update(['status' => 'pending']);
+                $lockedSlot->update(['status' => SlotStatus::Pending]);
 
                 // Create pending appointment
                 $pendingAppointment = PendingAppointment::create([
@@ -258,7 +260,7 @@ class AppointmentController extends Controller
     {
         $slot = AvailableSlot::findOrFail($slotId);
         
-        if ($slot->status !== 'available') {
+        if ($slot->status !== SlotStatus::Available) {
             return redirect()->route('guest.slots')
                 ->with('error', 'This slot is no longer available. Please select another.');
         }
@@ -286,7 +288,7 @@ class AppointmentController extends Controller
         }
 
         // Can't request cancellation if already cancelled or already requested
-        if ($appointment->status === 'cancelled') {
+        if ($appointment->status === AppointmentStatus::Cancelled) {
             return redirect()->back()->with('error', __('messages.appointment_already_cancelled'));
         }
 

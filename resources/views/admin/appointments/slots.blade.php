@@ -826,7 +826,7 @@
                                     @foreach ($slots as $slot)
                                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                                             <td class="px-6 py-4 w-12">
-                                                @if($slot->status === 'available')
+                                                @if($slot->status->value === 'available')
                                                     <input type="checkbox" value="{{ $slot->id }}" x-model="selectedSlots" class="slot-checkbox w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 @else
                                                     <input type="checkbox" disabled class="slot-checkbox w-4 h-4 text-gray-400 bg-gray-100 border-gray-300 rounded cursor-not-allowed dark:bg-gray-700 dark:border-gray-600">
@@ -850,16 +850,16 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold
-                                                    @if($slot->status === 'available') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ring-1 ring-green-600/20
-                                                    @elseif($slot->status === 'pending') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 ring-1 ring-yellow-600/20
+                                                    @if($slot->status->value === 'available') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ring-1 ring-green-600/20
+                                                    @elseif($slot->status->value === 'pending') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 ring-1 ring-yellow-600/20
                                                     @else bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400 ring-1 ring-gray-600/20
                                                     @endif">
-                                                    @if($slot->status === 'available')
+                                                    @if($slot->status->value === 'available')
                                                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                                         </svg>
                                                     @endif
-                                                    {{ ucfirst($slot->status) }}
+                                                    {{ ucfirst($slot->status->value) }}
                                                 </span>
                                                 @if($slot->source === 'auto')
                                                     <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400" title="Auto-generated from schedule template">
@@ -869,7 +869,7 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <div class="flex items-center justify-end space-x-3">
-                                                    @if($slot->status === 'available')
+                                                    @if($slot->status->value === 'available')
                                                         <button type="button" 
                                                                 onclick="openBookingModal({{ $slot->id }}, '{{ $slot->start_time->format('M d, Y') }}', '{{ $slot->start_time->format('g:i A') }} - {{ $slot->end_time->format('g:i A') }}')"
                                                                 class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white text-xs font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">

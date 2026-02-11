@@ -122,7 +122,7 @@
             <div class="status-change">
                 <span class="status-badge">{{ __('messages.status_' . $oldStatus) }}</span>
                 <span style="font-size: 24px;">→</span>
-                <span class="status-badge status-{{ $appointment->status }}">{{ __('messages.status_' . $appointment->status) }}</span>
+                <span class="status-badge status-{{ $appointment->status->value }}">{{ __('messages.status_' . $appointment->status->value) }}</span>
             </div>
             
             <div class="appointment-details">
@@ -140,13 +140,13 @@
                 </div>
             </div>
             
-            @if($appointment->status === 'approved')
+            @if($appointment->status->value === 'approved')
                 <p><strong>{{ __('messages.email_approved_notice') }}</strong></p>
-            @elseif($appointment->status === 'confirmed')
+            @elseif($appointment->status->value === 'confirmed')
                 <p><strong>{{ __('messages.email_confirmed_notice') }}</strong></p>
-            @elseif($appointment->status === 'completed')
+            @elseif($appointment->status->value === 'completed')
                 <p>{{ __('messages.email_completed_thanks') }}</p>
-            @elseif($appointment->status === 'cancelled')
+            @elseif($appointment->status->value === 'cancelled')
                 <p>{{ __('messages.email_cancelled_notice') }}</p>
             @endif
             

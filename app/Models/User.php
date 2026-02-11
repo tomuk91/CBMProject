@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -28,16 +29,6 @@ class User extends Authenticatable
         'city',
         'postal_code',
         'country',
-        'vehicle_make',
-        'vehicle_model',
-        'vehicle_year',
-        'vehicle_color',
-        'vehicle_plate',
-        'vehicle_notes',
-        'vehicle_fuel_type',
-        'vehicle_transmission',
-        'vehicle_engine_size',
-        'vehicle_mileage',
     ];
 
     /**
@@ -115,5 +106,15 @@ class User extends Authenticatable
     public function primaryVehicle()
     {
         return $this->hasOne(Vehicle::class)->where('is_primary', true);
+    }
+
+    public function pendingAppointments(): HasMany
+    {
+        return $this->hasMany(PendingAppointment::class);
+    }
+
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class);
     }
 }

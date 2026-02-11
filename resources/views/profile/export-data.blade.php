@@ -292,7 +292,7 @@
                 <div class="card">
                     <h3>
                         {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y') }}
-                        <span class="badge {{ $appointment->status }}">{{ ucfirst($appointment->status) }}</span>
+                        <span class="badge {{ $appointment->status->value }}">{{ ucfirst($appointment->status->value) }}</span>
                     </h3>
                     <div class="info-grid">
                         <div class="info-item">
@@ -311,7 +311,7 @@
                         </div>
                         <div class="info-item">
                             <div class="info-label">Status</div>
-                            <div class="info-value">{{ ucfirst($appointment->status) }}</div>
+                            <div class="info-value">{{ ucfirst($appointment->status->value) }}</div>
                         </div>
                         @if($appointment->notes)
                         <div class="info-item" style="grid-column: 1 / -1;">

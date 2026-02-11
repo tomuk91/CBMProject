@@ -35,6 +35,10 @@ return [
         ],
     ],
 
+    'unsplash' => [
+        'access_key' => env('UNSPLASH_ACCESS_KEY'),
+    ],
+
     'google' => [
         'service_account_json' => env('GOOGLE_SERVICE_ACCOUNT_JSON', storage_path('app/google-credentials.json')),
         'calendar_id' => env('GOOGLE_CALENDAR_ID', 'primary'),

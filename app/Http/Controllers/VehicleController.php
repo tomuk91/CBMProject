@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVehicleRequest;
+use App\Http\Requests\UpdateVehicleRequest;
 use App\Models\Vehicle;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,7 +16,7 @@ class VehicleController extends Controller
         return view('profile.vehicles', compact('vehicles'));
     }
 
-    public function store(Request $request)
+    public function store(StoreVehicleRequest $request)
     {
         // Check if user already has 4 vehicles
         if (Auth::user()->vehicles()->count() >= 4) {
@@ -23,31 +24,7 @@ class VehicleController extends Controller
                 ->with('error', __('messages.vehicle_limit_reached'));
         }
 
-        $validated = $request->validate([
-            'make' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'year' => 'required|string|max:4',
-            'color' => 'nullable|string|max:255',
-            'plate' => 'nullable|string|max:255',
-            'fuel_type' => 'nullable|string|max:255',
-            'transmission' => 'nullable|string|max:255',
-            'engine_size' => 'nullable|string|max:255',
-            'mileage' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
-            'is_primary' => 'sometimes|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ], [
-            'make.required' => __('messages.validation.vehicle_make_required'),
-            'make.max' => __('messages.validation.max_length', ['max' => 255]),
-            'model.required' => __('messages.validation.vehicle_model_required'),
-            'model.max' => __('messages.validation.max_length', ['max' => 255]),
-            'year.required' => __('messages.validation.vehicle_year_required'),
-            'year.max' => __('messages.validation.vehicle_year_format'),
-            'plate.max' => __('messages.validation.vehicle_plate_max', ['max' => 255]),
-            'image.image' => __('messages.validation.image_type'),
-            'image.mimes' => __('messages.validation.image_format'),
-            'image.max' => __('messages.validation.image_size', ['max' => 2]),
-        ]);
+        $validated = $request->validated();
 
         // If this is set as primary, unset all other primary vehicles
         if ($request->boolean('is_primary')) {
@@ -92,38 +69,11 @@ class VehicleController extends Controller
         return redirect()->back()->with('success', __('messages.vehicle_added_successfully'));
     }
 
-    public function update(Request $request, Vehicle $vehicle)
+    public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
     {
-        // Ensure the vehicle belongs to the authenticated user
-        if ($vehicle->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('update', $vehicle);
 
-        $validated = $request->validate([
-            'make' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'year' => 'required|string|max:4',
-            'color' => 'nullable|string|max:255',
-            'plate' => 'nullable|string|max:255',
-            'fuel_type' => 'nullable|string|max:255',
-            'transmission' => 'nullable|string|max:255',
-            'engine_size' => 'nullable|string|max:255',
-            'mileage' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
-            'is_primary' => 'sometimes|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ], [
-            'make.required' => __('messages.validation.vehicle_make_required'),
-            'make.max' => __('messages.validation.max_length', ['max' => 255]),
-            'model.required' => __('messages.validation.vehicle_model_required'),
-            'model.max' => __('messages.validation.max_length', ['max' => 255]),
-            'year.required' => __('messages.validation.vehicle_year_required'),
-            'year.max' => __('messages.validation.vehicle_year_format'),
-            'plate.max' => __('messages.validation.vehicle_plate_max', ['max' => 255]),
-            'image.image' => __('messages.validation.image_type'),
-            'image.mimes' => __('messages.validation.image_format'),
-            'image.max' => __('messages.validation.image_size', ['max' => 2]),
-        ]);
+        $validated = $request->validated();
 
         // If this is set as primary, unset all other primary vehicles
         if ($request->boolean('is_primary')) {
@@ -169,10 +119,7 @@ class VehicleController extends Controller
 
     public function destroy(Vehicle $vehicle)
     {
-        // Ensure the vehicle belongs to the authenticated user
-        if ($vehicle->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('delete', $vehicle);
 
         // Don't allow deletion if there are appointments linked to this vehicle
         if ($vehicle->appointments()->count() > 0) {
@@ -201,10 +148,7 @@ class VehicleController extends Controller
 
     public function setPrimary(Vehicle $vehicle)
     {
-        // Ensure the vehicle belongs to the authenticated user
-        if ($vehicle->user_id !== Auth::id()) {
-            abort(403);
-        }
+        $this->authorize('update', $vehicle);
 
         // Unset all other primary vehicles
         Auth::user()->vehicles()->update(['is_primary' => false]);

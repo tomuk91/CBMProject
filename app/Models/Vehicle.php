@@ -56,4 +56,9 @@ class Vehicle extends Model
     {
         return "{$this->year} {$this->make} {$this->model}";
     }
+
+    public function pendingAppointments(): HasMany
+    {
+        return $this->hasMany(PendingAppointment::class);
+    }
 }

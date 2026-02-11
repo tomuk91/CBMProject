@@ -23,7 +23,7 @@ class CarImageService
                     'query' => $query,
                     'per_page' => 1,
                     'orientation' => 'landscape',
-                    'client_id' => env('UNSPLASH_ACCESS_KEY', 'your_access_key_here')
+                    'client_id' => config('services.unsplash.access_key')
                 ]);
 
                 if ($response->successful() && isset($response->json()['results'][0])) {

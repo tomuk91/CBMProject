@@ -110,11 +110,11 @@
                                                     {{ $appointment->service }}
                                                 </h4>
                                                 <span class="px-3 py-1 text-xs font-bold rounded-full
-                                                    @if($appointment->status === 'confirmed') bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400
-                                                    @elseif($appointment->status === 'completed') bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400
+                                                    @if($appointment->status->value === 'confirmed') bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400
+                                                    @elseif($appointment->status->value === 'completed') bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400
                                                     @else bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300
                                                     @endif">
-                                                    {{ ucfirst($appointment->status) }}
+                                                    {{ ucfirst($appointment->status->value) }}
                                                 </span>
                                             </div>
                                             <p class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -135,7 +135,7 @@
                                                     </svg>
                                                     {{ __('messages.cancellation_requested_on') }} {{ $appointment->cancellation_requested_at->format('M j, Y') }}
                                                 </div>
-                                            @elseif($appointment->status === 'confirmed' && $appointment->appointment_date > now()->addHours(24))
+                                            @elseif($appointment->status->value === 'confirmed' && $appointment->appointment_date > now()->addHours(24))
                                                 <div class="mt-3">
                                                     <button onclick="showCancellationModal({{ $appointment->id }})" class="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
                                                         {{ __('messages.request_cancellation') }}
