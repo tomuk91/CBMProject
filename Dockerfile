@@ -43,12 +43,13 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 # Copy PHP configuration
 COPY docker/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
-# Apache config
+# Apache config - listen on all interfaces
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf \
     && a2enconf servername \
     && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
+    && sed -ri -e 's!Listen 80!Listen 0.0.0.0:80!g' /etc/apache2/ports.conf \
     && echo '<Directory /var/www/html/public>\n\
     Options Indexes FollowSymLinks\n\
     AllowOverride All\n\

@@ -10,7 +10,12 @@
         </div>
     </x-slot>
 
-    <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div class="flex bg-gray-50 dark:bg-gray-900 min-h-screen">
+        {{-- Admin Sidebar --}}
+        @include('admin.partials.sidebar')
+
+        {{-- Main Content --}}
+        <div class="flex-1 py-4 min-w-0">
         <div class="max-w-7xl mx-auto sm:px-4 lg:px-6 space-y-6">
             <!-- Welcome Banner -->
             <div class="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 rounded-xl shadow-lg overflow-hidden">
@@ -66,7 +71,7 @@
                         </div>
                         <p class="text-5xl font-bold text-red-600 dark:text-red-400 mb-2">{{ $availableSlotsCount }}</p>
                         <p class="text-gray-600 dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">{{ __('messages.status_available') }}</p>
-                        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Available Appointments</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">{{ __('messages.admin_available_appointments') }}</p>
                     </div>
                 </div>
 
@@ -83,7 +88,7 @@
                         </div>
                         <p class="text-5xl font-bold text-red-700 dark:text-red-400 mb-2">{{ $bookedSlotsCount }}</p>
                         <p class="text-gray-600 dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">{{ __('messages.status_booked') }}</p>
-                        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Bookings Confirmed</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">{{ __('messages.admin_bookings_confirmed') }}</p>
                     </div>
                 </div>
 
@@ -336,6 +341,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
     @include('admin.partials.tour', [

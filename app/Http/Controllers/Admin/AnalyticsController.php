@@ -11,6 +11,7 @@ use App\Models\Vehicle;
 use App\Models\ActivityLog;
 use App\Models\AvailableSlot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -21,121 +22,131 @@ class AnalyticsController extends Controller
      */
     public function index(Request $request)
     {
-        $period = $request->get('period', '30'); // 7, 30, 90 days
+        // Period validation (#46)
+        $period = in_array($request->get('period'), ['7', '30', '90']) ? $request->get('period', '30') : '30';
         $startDate = Carbon::now()->subDays($period);
 
-        // Overview Statistics
-        $stats = [
-            'total_users' => User::count(),
-            'new_users_period' => User::where('created_at', '>=', $startDate)->count(),
-            
-            'total_appointments' => Appointment::count(),
-            'pending_appointments' => PendingAppointment::where('status', 'pending')->count(),
-            'confirmed_appointments' => Appointment::where('status', AppointmentStatus::Confirmed)->count(),
-            'completed_appointments' => Appointment::where('status', AppointmentStatus::Completed)->count(),
-            'cancelled_appointments' => Appointment::onlyTrashed()->count(),
-            
-            'appointments_period' => Appointment::where('created_at', '>=', $startDate)->count(),
-            'cancellation_requests' => Appointment::where('cancellation_requested', true)
-                ->whereNull('deleted_at')
-                ->count(),
-            
-            'total_vehicles' => Vehicle::count(),
-            'available_slots' => AvailableSlot::where('status', 'available')->count(),
-        ];
+        // Cache analytics data for 5 minutes (#45)
+        $cachedData = Cache::remember('analytics_' . $period, 300, function () use ($startDate) {
+            // Overview Statistics
+            $stats = [
+                'total_users' => User::count(),
+                'new_users_period' => User::where('created_at', '>=', $startDate)->count(),
+                
+                'total_appointments' => Appointment::count(),
+                'pending_appointments' => PendingAppointment::where('status', 'pending')->count(),
+                'confirmed_appointments' => Appointment::where('status', AppointmentStatus::Confirmed)->count(),
+                'completed_appointments' => Appointment::where('status', AppointmentStatus::Completed)->count(),
+                'cancelled_appointments' => Appointment::onlyTrashed()->count(),
+                
+                'appointments_period' => Appointment::where('created_at', '>=', $startDate)->count(),
+                'cancellation_requests' => Appointment::where('cancellation_requested', true)
+                    ->whereNull('deleted_at')
+                    ->count(),
+                
+                'total_vehicles' => Vehicle::count(),
+                'available_slots' => AvailableSlot::where('status', 'available')->count(),
+            ];
 
-        // Appointments by Status (for pie chart)
-        $appointmentsByStatus = Appointment::select('status', DB::raw('count(*) as count'))
-            ->groupBy('status')
-            ->get()
-            ->mapWithKeys(function ($item) {
-                return [($item->status instanceof \App\Enums\AppointmentStatus ? $item->status->value : (string) $item->status) => $item->count];
-            });
+            // Conversion Rate (#44)
+            $stats['conversion_rate'] = $stats['total_appointments'] > 0
+                ? round(($stats['completed_appointments'] / $stats['total_appointments']) * 100, 1)
+                : 0;
 
-        // Appointments Over Time (for line chart)
-        $appointmentsOverTime = Appointment::where('created_at', '>=', $startDate)
-            ->select(
-                DB::raw('DATE(created_at) as date'),
-                DB::raw('count(*) as count')
-            )
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
+            // Appointments by Status (for pie chart)
+            $appointmentsByStatus = Appointment::select('status', DB::raw('count(*) as count'))
+                ->groupBy('status')
+                ->get()
+                ->mapWithKeys(function ($item) {
+                    return [($item->status instanceof \App\Enums\AppointmentStatus ? $item->status->value : (string) $item->status) => $item->count];
+                });
 
-        // Top Services
-        $topServices = Appointment::select('service', DB::raw('count(*) as count'))
-            ->where('created_at', '>=', $startDate)
-            ->groupBy('service')
-            ->orderByDesc('count')
-            ->limit(5)
-            ->get();
+            // Appointments Over Time (for line chart)
+            $appointmentsOverTime = Appointment::where('created_at', '>=', $startDate)
+                ->select(
+                    DB::raw('DATE(created_at) as date'),
+                    DB::raw('count(*) as count')
+                )
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get();
 
-        // Recent Activity
-        $recentActivity = ActivityLog::with('user')
-            ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get();
+            // Top Services
+            $topServices = Appointment::select('service', DB::raw('count(*) as count'))
+                ->where('created_at', '>=', $startDate)
+                ->groupBy('service')
+                ->orderByDesc('count')
+                ->limit(5)
+                ->get();
 
-        // Busiest Days of Week
-        $busiestDays = Appointment::select(
-                DB::raw('CASE 
-                    WHEN DAYOFWEEK(appointment_date) = 1 THEN 7
-                    ELSE DAYOFWEEK(appointment_date) - 1
-                END as day_of_week'),
-                DB::raw('count(*) as count')
-            )
-            ->where('created_at', '>=', $startDate)
-            ->groupBy('day_of_week')
-            ->orderBy('day_of_week')
-            ->get()
-            ->map(function($item) {
-                $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                $item->day_name = $days[$item->day_of_week - 1];
-                return $item;
-            });
+            // Recent Activity
+            $recentActivity = ActivityLog::with('user')
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get();
 
-        // Busiest Times of Day
-        $busiestTimes = Appointment::select(
-                DB::raw('HOUR(appointment_date) as hour'),
-                DB::raw('count(*) as count')
-            )
-            ->where('created_at', '>=', $startDate)
-            ->groupBy('hour')
-            ->orderBy('hour')
-            ->get()
-            ->map(function($item) {
-                $item->time_label = str_pad($item->hour, 2, '0', STR_PAD_LEFT) . ':00';
-                return $item;
-            });
+            // Busiest Days of Week
+            $busiestDays = Appointment::select(
+                    DB::raw('CASE 
+                        WHEN DAYOFWEEK(appointment_date) = 1 THEN 7
+                        ELSE DAYOFWEEK(appointment_date) - 1
+                    END as day_of_week'),
+                    DB::raw('count(*) as count')
+                )
+                ->where('created_at', '>=', $startDate)
+                ->groupBy('day_of_week')
+                ->orderBy('day_of_week')
+                ->get()
+                ->map(function($item) {
+                    $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                    $item->day_name = $days[$item->day_of_week - 1];
+                    return $item;
+                });
 
-        // No-show rate (appointments marked as no-show vs completed)
-        $noShowRate = 0;
-        $totalCompleted = Appointment::whereIn('status', ['completed', 'no-show'])->count();
-        if ($totalCompleted > 0) {
-            $noShows = Appointment::where('status', 'no-show')->count();
-            $noShowRate = round(($noShows / $totalCompleted) * 100, 1);
-        }
+            // Busiest Times of Day
+            $busiestTimes = Appointment::select(
+                    DB::raw('HOUR(appointment_date) as hour'),
+                    DB::raw('count(*) as count')
+                )
+                ->where('created_at', '>=', $startDate)
+                ->groupBy('hour')
+                ->orderBy('hour')
+                ->get()
+                ->map(function($item) {
+                    $item->time_label = str_pad($item->hour, 2, '0', STR_PAD_LEFT) . ':00';
+                    return $item;
+                });
 
-        // Average time to approval (pending to approved)
-        $avgApprovalTime = DB::table('activity_logs')
-            ->where('activity_logs.action', 'approved')
-            ->where('activity_logs.created_at', '>=', $startDate)
-            ->join('pending_appointments', 'activity_logs.model_id', '=', 'pending_appointments.id')
-            ->select(DB::raw('AVG(TIMESTAMPDIFF(SECOND, pending_appointments.created_at, activity_logs.created_at) / 3600) as hours'))
-            ->value('hours');
+            // No-show rate (appointments marked as no-show vs completed)
+            $noShowRate = 0;
+            $totalCompleted = Appointment::whereIn('status', ['completed', 'no-show'])->count();
+            if ($totalCompleted > 0) {
+                $noShows = Appointment::where('status', 'no-show')->count();
+                $noShowRate = round(($noShows / $totalCompleted) * 100, 1);
+            }
 
-        return view('admin.analytics.index', compact(
-            'stats',
-            'appointmentsByStatus',
-            'appointmentsOverTime',
-            'topServices',
-            'recentActivity',
-            'busiestDays',
-            'busiestTimes',
-            'noShowRate',
-            'avgApprovalTime',
-            'period'
-        ));
+            // Average time to approval (pending to approved)
+            $avgApprovalTime = DB::table('activity_logs')
+                ->where('activity_logs.action', 'approved')
+                ->where('activity_logs.created_at', '>=', $startDate)
+                ->join('pending_appointments', 'activity_logs.model_id', '=', 'pending_appointments.id')
+                ->select(DB::raw('AVG(TIMESTAMPDIFF(SECOND, pending_appointments.created_at, activity_logs.created_at) / 3600) as hours'))
+                ->value('hours');
+
+            return compact(
+                'stats',
+                'appointmentsByStatus',
+                'appointmentsOverTime',
+                'topServices',
+                'recentActivity',
+                'busiestDays',
+                'busiestTimes',
+                'noShowRate',
+                'avgApprovalTime'
+            );
+        });
+
+        return view('admin.analytics.index', array_merge($cachedData, ['period' => $period]));
     }
 
     /**

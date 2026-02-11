@@ -5,26 +5,6 @@ set -e
 a2dismod mpm_event mpm_worker 2>/dev/null || true
 a2enmod mpm_prefork 2>/dev/null || true
 
-# Configure Apache to use Railway's PORT (default to 80)
-if [ -z "$PORT" ]; then
-  export PORT=80
-fi
-
-echo "Configuring Apache to listen on port ${PORT}"
-sed -i "s/Listen 80/Listen 0.0.0.0:${PORT}/g" /etc/apache2/ports.conf
-sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/g" /etc/apache2/sites-enabled/*.conf
-
-# Verify Apache configuration
-echo "=== Apache ports.conf ==="
-grep "Listen" /etc/apache2/ports.conf || true
-echo "=== VirtualHost configuration ==="
-cat /etc/apache2/sites-enabled/*.conf || true
-echo "=== Testing Apache config ==="
-apache2ctl -t || true
-echo "=== Starting test Apache to verify binding ==="
-timeout 3 apache2ctl -D FOREGROUND 2>&1 | head -5 || echo "Apache started successfully"
-echo "=========================="
-
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
   if [ -z "${DB_DATABASE}" ]; then
     export DB_DATABASE="/var/www/html/database/database.sqlite"
@@ -50,19 +30,4 @@ if [ -n "${ADMIN_EMAIL}" ] && [ -n "${ADMIN_PASSWORD}" ]; then
   php artisan user:create-admin "${ADMIN_EMAIL}" --name="${ADMIN_NAME:-Admin}" --password="${ADMIN_PASSWORD}"
 fi
 
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &
-
-# Wait for Apache to start
-sleep 3
-
-# Test if Apache is responding locally
-echo "=== Testing Apache locally ==="
-curl -I http://localhost:${PORT}/ 2>&1 || echo "Apache not responding locally"
-echo "=== Testing Apache on 0.0.0.0 ==="
-curl -I http://0.0.0.0:${PORT}/ 2>&1 || echo "Apache not responding on 0.0.0.0"
-echo "=== Checking what Apache is actually listening on ==="
-cat /etc/apache2/ports.conf | grep -v "^#" | grep -v "^$"
-echo "=========================="
-
-# Keep the script running
-wait
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
