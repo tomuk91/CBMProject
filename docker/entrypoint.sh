@@ -58,8 +58,10 @@ sleep 3
 # Test if Apache is responding locally
 echo "=== Testing Apache locally ==="
 curl -I http://localhost:${PORT}/ 2>&1 || echo "Apache not responding locally"
-echo "=== Checking Apache is listening on correct port ==="
-netstat -tlnp 2>&1 | grep ${PORT} || ss -tlnp 2>&1 | grep ${PORT} || echo "Port check tools not available"
+echo "=== Testing Apache on 0.0.0.0 ==="
+curl -I http://0.0.0.0:${PORT}/ 2>&1 || echo "Apache not responding on 0.0.0.0"
+echo "=== Checking what Apache is actually listening on ==="
+cat /etc/apache2/ports.conf | grep -v "^#" | grep -v "^$"
 echo "=========================="
 
 # Keep the script running
