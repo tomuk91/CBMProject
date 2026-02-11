@@ -1433,6 +1433,7 @@ return [
     'confirm_reschedule_slot' => 'Biztosan erre az időpontra szeretné átütemezni?',
     'appointment_rescheduled_success' => 'Az időpont sikeresen átütemezve!',
     'slot_no_longer_available' => 'Ez az időpont már nem elérhető. Kérjük, válasszon másikat.',
+    'already_rescheduled' => 'Ez az időpont már egyszer át lett ütemezve.',
 
     // Admin JS fordítások
     'calendar_not_available' => 'N/A',

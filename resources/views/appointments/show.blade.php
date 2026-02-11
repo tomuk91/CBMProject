@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="py-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div class="py-8 bg-gradient-to-br from-gray-50 via-gray-50 to-red-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 min-h-screen">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Back link --}}
             <div class="mb-6">
-                <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition">
+                <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition min-h-[44px]">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
@@ -12,49 +12,73 @@
                 </a>
             </div>
 
-            {{-- Header Card --}}
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-6">
-                {{-- Status accent bar --}}
-                <div class="h-1.5
-                    @if($appointment->status->value === 'confirmed') bg-green-500
-                    @elseif($appointment->status->value === 'pending') bg-amber-500
-                    @elseif($appointment->status->value === 'completed') bg-blue-500
-                    @elseif($appointment->status->value === 'cancelled') bg-red-500
-                    @elseif($appointment->status->value === 'no-show') bg-gray-400
-                    @else bg-gray-300
-                    @endif">
-                </div>
-
+            {{-- Hero Header Banner --}}
+            <div class="mb-6 bg-gradient-to-r from-red-600 to-red-700 rounded-xl sm:rounded-2xl shadow-xl overflow-hidden">
                 <div class="px-6 py-6 sm:px-8 sm:py-8">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <div>
-                            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
-                                {{ $appointment->service }}
-                            </h1>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                {{ __('messages.appointment_id') }}: #{{ $appointment->id }}
-                            </p>
+                    <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+                        <div class="bg-white/20 backdrop-blur-sm p-3 sm:p-4 rounded-xl flex-shrink-0">
+                            <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
                         </div>
-                        <span class="self-start sm:self-auto inline-flex items-center px-3.5 py-1.5 text-sm font-bold rounded-full
-                            @if($appointment->status->value === 'confirmed') bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400
-                            @elseif($appointment->status->value === 'pending') bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400
-                            @elseif($appointment->status->value === 'completed') bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400
-                            @elseif($appointment->status->value === 'cancelled') bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400
-                            @elseif($appointment->status->value === 'no-show') bg-gray-100 text-gray-600 dark:bg-gray-600 dark:text-gray-300
-                            @else bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300
-                            @endif">
-                            @if($appointment->status->value === 'pending')
-                                {{ __('messages.status_pending') }}
-                            @elseif($appointment->status->value === 'confirmed')
-                                {{ __('messages.status_confirmed') }}
-                            @elseif($appointment->status->value === 'completed')
-                                {{ __('messages.status_completed') }}
-                            @elseif($appointment->status->value === 'cancelled')
-                                {{ __('messages.status_cancelled') }}
-                            @elseif($appointment->status->value === 'no-show')
-                                {{ __('messages.status_no_show') }}
-                            @endif
-                        </span>
+                        <div class="flex-1">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                <div>
+                                    <h1 class="text-2xl sm:text-3xl font-bold text-white">
+                                        {{ $appointment->service }}
+                                    </h1>
+                                    <p class="text-red-100 mt-1 text-sm">
+                                        {{ __('messages.appointment_id') }}: #{{ $appointment->id }}
+                                    </p>
+                                </div>
+                                <span class="self-start sm:self-auto inline-flex items-center px-3.5 py-1.5 text-sm font-bold rounded-full shadow-sm
+                                    @if($appointment->status->value === 'confirmed') bg-green-100 text-green-800
+                                    @elseif($appointment->status->value === 'pending') bg-amber-100 text-amber-800
+                                    @elseif($appointment->status->value === 'completed') bg-blue-100 text-blue-800
+                                    @elseif($appointment->status->value === 'cancelled') bg-red-100 text-red-800
+                                    @elseif($appointment->status->value === 'no-show') bg-gray-100 text-gray-700
+                                    @else bg-gray-100 text-gray-700
+                                    @endif">
+                                    @if($appointment->status->value === 'pending')
+                                        {{ __('messages.status_pending') }}
+                                    @elseif($appointment->status->value === 'confirmed')
+                                        {{ __('messages.status_confirmed') }}
+                                    @elseif($appointment->status->value === 'completed')
+                                        {{ __('messages.status_completed') }}
+                                    @elseif($appointment->status->value === 'cancelled')
+                                        {{ __('messages.status_cancelled') }}
+                                    @elseif($appointment->status->value === 'no-show')
+                                        {{ __('messages.status_no_show') }}
+                                    @endif
+                                </span>
+                            </div>
+                            {{-- Quick date/time info in banner --}}
+                            <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-red-100 text-sm">
+                                <span class="inline-flex items-center">
+                                    <svg class="w-4 h-4 mr-1.5 text-red-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    {{ $appointment->appointment_date->format('l, M j, Y') }}
+                                </span>
+                                <span class="inline-flex items-center">
+                                    <svg class="w-4 h-4 mr-1.5 text-red-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    {{ $appointment->appointment_date->format('g:i A') }}
+                                    @if($appointment->appointment_end)
+                                        – {{ $appointment->appointment_end->format('g:i A') }}
+                                    @endif
+                                </span>
+                                @if($appointment->appointment_end)
+                                    <span class="inline-flex items-center">
+                                        <svg class="w-4 h-4 mr-1.5 text-red-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                        </svg>
+                                        {{ $appointment->appointment_date->diffInMinutes($appointment->appointment_end) }} {{ __('messages.appointment_minutes') }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,12 +118,14 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                 {{-- Service Details --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-lg transition duration-300">
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                         <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
+                            <div class="flex-shrink-0 bg-red-50 dark:bg-red-900/20 rounded-lg p-2 mr-3">
+                                <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                </svg>
+                            </div>
                             {{ __('messages.appointment_service_details') }}
                         </h2>
                     </div>
@@ -135,13 +161,15 @@
                 </div>
 
                 {{-- Vehicle Information --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-lg transition duration-300">
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                         <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
-                                <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
-                            </svg>
+                            <div class="flex-shrink-0 bg-red-50 dark:bg-red-900/20 rounded-lg p-2 mr-3">
+                                <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                                    <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
+                                </svg>
+                            </div>
                             {{ __('messages.appointment_vehicle_info') }}
                         </h2>
                     </div>
@@ -187,12 +215,14 @@
                 </div>
 
                 {{-- Contact Information --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-lg transition duration-300">
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                         <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                            </svg>
+                            <div class="flex-shrink-0 bg-red-50 dark:bg-red-900/20 rounded-lg p-2 mr-3">
+                                <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                            </div>
                             {{ __('messages.appointment_contact_info') }}
                         </h2>
                     </div>
@@ -215,12 +245,14 @@
                 </div>
 
                 {{-- Status Information --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-lg transition duration-300">
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                         <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
+                            <div class="flex-shrink-0 bg-red-50 dark:bg-red-900/20 rounded-lg p-2 mr-3">
+                                <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
                             {{ __('messages.appointment_status_info') }}
                         </h2>
                     </div>
@@ -294,12 +326,14 @@
 
             {{-- Notes Section --}}
             @if($appointment->notes)
-                <div class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                <div class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-lg transition duration-300">
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                         <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
+                            <div class="flex-shrink-0 bg-red-50 dark:bg-red-900/20 rounded-lg p-2 mr-3">
+                                <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
                             {{ __('messages.appointment_notes') }}
                         </h2>
                     </div>
@@ -309,49 +343,45 @@
                 </div>
             @endif
 
-            {{-- Admin Notes Section --}}
-            @if($appointment->admin_notes)
-                <div class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
-                    <div class="px-6 py-4 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800">
-                        <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            {{ __('messages.appointment_admin_notes') }}
-                        </h2>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">{{ $appointment->admin_notes }}</p>
-                    </div>
-                </div>
-            @endif
-
             {{-- Action Buttons --}}
-            <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <a href="{{ route('dashboard') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-semibold rounded-xl border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 shadow-sm">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                    {{ __('messages.appointment_back_to_dashboard') }}
-                </a>
-
-                @if(!$appointment->cancellation_requested && in_array($appointment->status->value, ['confirmed', 'pending']))
-                    <a href="{{ route('appointments.reschedule', $appointment) }}" 
-                       class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg">
+            <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                <div class="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <a href="{{ route('dashboard') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-xl border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 min-h-[44px]">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                         </svg>
-                        {{ __('messages.request_reschedule') }}
+                        {{ __('messages.appointment_back_to_dashboard') }}
                     </a>
-                    @if($appointment->status->value === 'confirmed' && $appointment->appointment_date > now()->addHours(24))
-                        <button onclick="showCancellationModal({{ $appointment->id }})" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-semibold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                            {{ __('messages.request_cancellation') }}
-                        </button>
+
+                    @if(!$appointment->cancellation_requested && in_array($appointment->status->value, ['confirmed', 'pending']))
+                        <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                            @if($appointment->rescheduled_at)
+                                <span class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-semibold rounded-xl cursor-not-allowed min-h-[44px]">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    {{ __('messages.already_rescheduled') }}
+                                </span>
+                            @else
+                                <a href="{{ route('appointments.reschedule', $appointment) }}" 
+                                   class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-semibold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 min-h-[44px]">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    {{ __('messages.request_reschedule') }}
+                                </a>
+                            @endif
+                            @if($appointment->status->value === 'confirmed' && $appointment->appointment_date > now()->addHours(24))
+                                <button onclick="showCancellationModal({{ $appointment->id }})" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 font-semibold rounded-xl border-2 border-red-300 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 min-h-[44px]">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                    {{ __('messages.request_cancellation') }}
+                                </button>
+                            @endif
+                        </div>
                     @endif
-                @endif
+                </div>
             </div>
         </div>
     </div>

@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class AppointmentController extends Controller
@@ -393,6 +394,12 @@ class AppointmentController extends Controller
             abort(403);
         }
 
+        // Only allow one reschedule per appointment
+        if (Schema::hasColumn('appointments', 'rescheduled_at') && $appointment->rescheduled_at) {
+            return redirect()->route('appointments.details', $appointment)
+                ->with('error', __('messages.already_rescheduled'));
+        }
+
         $availableSlots = AvailableSlot::available()
             ->where('start_time', '>', now())
             ->orderBy('start_time', 'asc')
@@ -411,6 +418,12 @@ class AppointmentController extends Controller
             abort(403);
         }
 
+        // Only allow one reschedule per appointment
+        if (Schema::hasColumn('appointments', 'rescheduled_at') && $appointment->rescheduled_at) {
+            return redirect()->route('appointments.details', $appointment)
+                ->with('error', __('messages.already_rescheduled'));
+        }
+
         $request->validate([
             'slot_id' => 'required|exists:available_slots,id',
         ]);
@@ -422,8 +435,10 @@ class AppointmentController extends Controller
         }
 
         DB::transaction(function () use ($appointment, $newSlot) {
+            $hasSlotColumn = Schema::hasColumn('appointments', 'available_slot_id');
+
             // Release old slot if it exists
-            if ($appointment->available_slot_id) {
+            if ($hasSlotColumn && $appointment->available_slot_id) {
                 AvailableSlot::where('id', $appointment->available_slot_id)
                     ->update(['status' => SlotStatus::Available]);
             }
@@ -432,11 +447,20 @@ class AppointmentController extends Controller
             $newSlot->update(['status' => SlotStatus::Booked]);
 
             // Update appointment
-            $appointment->update([
+            $updateData = [
                 'appointment_date' => $newSlot->start_time,
                 'appointment_end' => $newSlot->end_time,
-                'available_slot_id' => $newSlot->id,
-            ]);
+            ];
+
+            if ($hasSlotColumn) {
+                $updateData['available_slot_id'] = $newSlot->id;
+            }
+
+            if (Schema::hasColumn('appointments', 'rescheduled_at')) {
+                $updateData['rescheduled_at'] = now();
+            }
+
+            $appointment->update($updateData);
 
             // Log
             ActivityLog::log(

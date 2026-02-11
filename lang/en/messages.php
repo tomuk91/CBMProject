@@ -1451,6 +1451,7 @@ return [
     'confirm_reschedule_slot' => 'Are you sure you want to reschedule to this time?',
     'appointment_rescheduled_success' => 'Your appointment has been rescheduled successfully!',
     'slot_no_longer_available' => 'This slot is no longer available. Please select another.',
+    'already_rescheduled' => 'This appointment has already been rescheduled once.',
 
     // Admin JS Translations
     'calendar_not_available' => 'N/A',
