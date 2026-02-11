@@ -10,8 +10,6 @@
 </head>
 <body class="bg-white dark:bg-gray-900">
     <x-public-navigation currentPage="contact" />
-        </div>
-    </nav>
 
     <!-- Contact Form Content -->
 <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">

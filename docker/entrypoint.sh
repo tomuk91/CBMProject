@@ -50,4 +50,17 @@ if [ -n "${ADMIN_EMAIL}" ] && [ -n "${ADMIN_PASSWORD}" ]; then
   php artisan user:create-admin "${ADMIN_EMAIL}" --name="${ADMIN_NAME:-Admin}" --password="${ADMIN_PASSWORD}"
 fi
 
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &
+
+# Wait for Apache to start
+sleep 3
+
+# Test if Apache is responding locally
+echo "=== Testing Apache locally ==="
+curl -I http://localhost:${PORT}/ 2>&1 || echo "Apache not responding locally"
+echo "=== Checking Apache is listening on correct port ==="
+netstat -tlnp 2>&1 | grep ${PORT} || ss -tlnp 2>&1 | grep ${PORT} || echo "Port check tools not available"
+echo "=========================="
+
+# Keep the script running
+wait
