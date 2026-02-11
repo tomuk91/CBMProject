@@ -7,10 +7,7 @@
         </div>
     </x-slot>
 
-    <div class="flex bg-gray-50 dark:bg-gray-900 min-h-screen">
-        @include('admin.partials.sidebar')
-
-        <div class="flex-1 py-4 min-w-0">
+    <div class="py-4">
             <div class="max-w-7xl mx-auto sm:px-4 lg:px-6 space-y-6">
                 {{-- Back link --}}
                 <div>
@@ -42,7 +39,7 @@
                                     <p class="text-gray-900 dark:text-gray-100">{{ $user->phone ?? '—' }}</p>
                                 </div>
                                 <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.address') }}</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.profile_address') }}</p>
                                     <p class="text-gray-900 dark:text-gray-100">
                                         @if($user->address || $user->city)
                                             {{ $user->address }}{{ $user->city ? ', ' . $user->city : '' }}{{ $user->postal_code ? ' ' . $user->postal_code : '' }}
@@ -86,7 +83,7 @@
                                             </div>
                                         </div>
                                         @if($vehicle->is_primary)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">Primary</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">{{ __('messages.primary_vehicle') }}</span>
                                         @endif
                                     </div>
                                 @endforeach
@@ -132,7 +129,7 @@
                                                 ];
                                             @endphp
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusColors[$statusValue] ?? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300' }}">
-                                                {{ ucfirst($statusValue) }}
+                                                {{ __('messages.status_' . $statusValue) }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
@@ -151,6 +148,5 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </x-app-layout>

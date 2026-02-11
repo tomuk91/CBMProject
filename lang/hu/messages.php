@@ -186,6 +186,7 @@ return [
     'time_morning' => 'Reggel (6:00 - 12:00)',
     'time_afternoon' => 'Délután (12:00 - 17:00)',
     'time_evening' => 'Este (17:00 - 21:00)',
+    'action_search' => 'Keresés',
     'action_apply_filters' => 'Szűrők alkalmazása',
     'action_clear_filters' => 'Szűrők törlése',
     'filters_active' => 'Szűrők aktívak',
@@ -1519,6 +1520,8 @@ return [
     'admin_no_submissions' => 'Nem található kapcsolatfelvételi üzenet',
     'admin_read' => 'Olvasott',
     'admin_unread' => 'Olvasatlan',
+    'admin_full_message' => 'Teljes üzenet',
+    'admin_reply_email' => 'Válasz e-mailben',
 
     // Item #57: Admin beállítások
     'admin_settings' => 'Beállítások',

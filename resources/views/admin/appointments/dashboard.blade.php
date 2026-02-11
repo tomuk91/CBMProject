@@ -10,12 +10,7 @@
         </div>
     </x-slot>
 
-    <div class="flex bg-gray-50 dark:bg-gray-900 min-h-screen">
-        {{-- Admin Sidebar --}}
-        @include('admin.partials.sidebar')
-
-        {{-- Main Content --}}
-        <div class="flex-1 py-4 min-w-0">
+    <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-4 lg:px-6 space-y-6">
             <!-- Welcome Banner -->
             <div class="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 rounded-xl shadow-lg overflow-hidden">
@@ -341,7 +336,6 @@
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
     @include('admin.partials.tour', [

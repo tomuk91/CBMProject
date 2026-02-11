@@ -7,10 +7,7 @@
         </div>
     </x-slot>
 
-    <div class="flex bg-gray-50 dark:bg-gray-900 min-h-screen">
-        @include('admin.partials.sidebar')
-
-        <div class="flex-1 py-4 min-w-0">
+    <div class="py-4">
             <div class="max-w-7xl mx-auto sm:px-4 lg:px-6 space-y-6">
                 {{-- Search & Filter --}}
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
@@ -31,74 +28,108 @@
                     </form>
                 </div>
 
-                {{-- Submissions Table --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-700/50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">{{ __('messages.status') }}</th>
-                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">{{ __('messages.name') }}</th>
-                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">{{ __('messages.email') }}</th>
-                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">{{ __('messages.admin_message_preview') }}</th>
-                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">{{ __('messages.date') }}</th>
-                                    <th class="px-6 py-3"></th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                                @forelse($submissions as $submission)
-                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors {{ !$submission->is_read ? 'bg-red-50/50 dark:bg-red-900/10' : '' }}">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($submission->is_read)
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300">{{ __('messages.admin_read') }}</span>
-                                            @else
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">{{ __('messages.admin_unread') }}</span>
-                                            @endif
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="text-sm font-medium text-gray-900 dark:text-gray-100 {{ !$submission->is_read ? 'font-bold' : '' }}">{{ $submission->name }}</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
-                                            {{ $submission->email }}
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300 max-w-xs truncate">
-                                            {{ Str::limit($submission->message, 80) }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
-                                            {{ $submission->created_at->format('Y-m-d H:i') }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                            @if(!$submission->is_read)
-                                                <form method="POST" action="{{ route('admin.contact-submissions.mark-read', $submission) }}" class="inline">
-                                                    @csrf
-                                                    <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium">
-                                                        {{ __('messages.admin_mark_as_read') }}
-                                                    </button>
-                                                </form>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                            </svg>
-                                            <p class="text-lg font-medium">{{ __('messages.admin_no_submissions') }}</p>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                {{-- Submissions List --}}
+                <div class="space-y-4">
+                    @forelse($submissions as $submission)
+                        <div x-data="{ expanded: false }" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden {{ !$submission->is_read ? 'ring-2 ring-red-200 dark:ring-red-900/50' : '' }}">
+                            {{-- Header row --}}
+                            <div class="p-4 sm:p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors" @click="expanded = !expanded">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                                    <div class="flex items-center gap-3 flex-1 min-w-0">
+                                        {{-- Status badge --}}
+                                        @if($submission->is_read)
+                                            <span class="flex-shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300">{{ __('messages.admin_read') }}</span>
+                                        @else
+                                            <span class="flex-shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">{{ __('messages.admin_unread') }}</span>
+                                        @endif
+                                        {{-- Name --}}
+                                        <span class="text-sm font-semibold text-gray-900 dark:text-gray-100 {{ !$submission->is_read ? 'font-bold' : '' }} truncate">{{ $submission->name }}</span>
+                                        {{-- Email --}}
+                                        <span class="hidden sm:inline text-sm text-gray-500 dark:text-gray-400 truncate">{{ $submission->email }}</span>
+                                        {{-- Subject badge --}}
+                                        @if($submission->subject)
+                                            <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+                                                {{ __('messages.contact_subject_' . str_replace('_inquiry', '', $submission->subject)) }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="flex items-center gap-3 flex-shrink-0">
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">{{ $submission->created_at->diffForHumans() }}</span>
+                                        <svg class="w-5 h-5 text-gray-400 transition-transform" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                {{-- Message preview (collapsed) --}}
+                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300 truncate" x-show="!expanded">{{ Str::limit($submission->message, 120) }}</p>
+                            </div>
+                            {{-- Expanded content --}}
+                            <div x-show="expanded" x-collapse class="border-t border-gray-200 dark:border-gray-700">
+                                <div class="p-4 sm:p-6 space-y-4">
+                                    {{-- Contact info --}}
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                                        <div>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold mb-1">{{ __('messages.email') }}</p>
+                                            <a href="mailto:{{ $submission->email }}" class="text-red-600 dark:text-red-400 hover:underline">{{ $submission->email }}</a>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold mb-1">{{ __('messages.phone') }}</p>
+                                            <p class="text-gray-900 dark:text-gray-100">{{ $submission->phone ?: '—' }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold mb-1">{{ __('messages.contact_subject') }}</p>
+                                            <p class="text-gray-900 dark:text-gray-100">
+                                                @if($submission->subject)
+                                                    {{ __('messages.contact_subject_' . str_replace('_inquiry', '', $submission->subject)) }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold mb-1">{{ __('messages.date') }}</p>
+                                            <p class="text-gray-900 dark:text-gray-100">{{ $submission->created_at->format('Y-m-d H:i') }}</p>
+                                        </div>
+                                    </div>
+                                    {{-- Full message --}}
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold mb-2">{{ __('messages.admin_full_message') }}</p>
+                                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 text-sm text-gray-800 dark:text-gray-200 whitespace-pre-line">{{ $submission->message }}</div>
+                                    </div>
+                                    {{-- Actions --}}
+                                    <div class="flex items-center gap-3">
+                                        @if(!$submission->is_read)
+                                            <form method="POST" action="{{ route('admin.contact-submissions.mark-read', $submission) }}">
+                                                @csrf
+                                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                    {{ __('messages.admin_mark_as_read') }}
+                                                </button>
+                                            </form>
+                                        @endif
+                                        <a href="mailto:{{ $submission->email }}" class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                            {{ __('messages.admin_reply_email') }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-12 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            <p class="text-lg font-medium text-gray-500 dark:text-gray-400">{{ __('messages.admin_no_submissions') }}</p>
+                        </div>
+                    @endforelse
 
                     @if($submissions->hasPages())
-                        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+                        <div class="mt-4">
                             {{ $submissions->links() }}
                         </div>
                     @endif
                 </div>
             </div>
-        </div>
     </div>
 </x-app-layout>

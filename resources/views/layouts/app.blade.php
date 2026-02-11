@@ -101,7 +101,16 @@
 
             <!-- Page Content -->
             <main id="main-content" role="main" aria-label="{{ __('messages.main_content') }}" class="flex-1">
-                {{ $slot }}
+                @if(Auth::check() && Auth::user()->is_admin && request()->routeIs('admin.*') && !request()->routeIs('admin.appointments.print-schedule'))
+                    <div class="flex bg-gray-50 dark:bg-gray-900 min-h-full">
+                        @include('admin.partials.sidebar')
+                        <div class="flex-1 min-w-0">
+                            {{ $slot }}
+                        </div>
+                    </div>
+                @else
+                    {{ $slot }}
+                @endif
             </main>
 
             <!-- Footer -->

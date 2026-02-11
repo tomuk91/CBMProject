@@ -25,7 +25,7 @@ class ContactFormRequest extends FormRequest
             'name' => 'required|string|max:255|regex:/^[\p{L}\s\-\']+$/u',
             'email' => 'required|email:rfc,dns|max:255',
             'phone' => 'nullable|string|max:20|regex:/^[+]?[0-9\s\-()]+$/',
-            'subject' => 'required|string|in:appointment,service,general,other',
+            'subject' => 'required|string|in:service_inquiry,booking_inquiry,general_inquiry,feedback,other',
             'message' => 'required|string|max:2000|min:10',
         ];
     }

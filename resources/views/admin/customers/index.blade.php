@@ -7,10 +7,7 @@
         </div>
     </x-slot>
 
-    <div class="flex bg-gray-50 dark:bg-gray-900 min-h-screen">
-        @include('admin.partials.sidebar')
-
-        <div class="flex-1 py-4 min-w-0">
+    <div class="py-4">
             <div class="max-w-7xl mx-auto sm:px-4 lg:px-6 space-y-6">
                 {{-- Search --}}
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
@@ -107,7 +104,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
                                             <a href="{{ route('admin.customers.show', $customer) }}" class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium">
-                                                {{ __('messages.dashboard_view_all') }} →
+                                                {{ __('messages.appointment_view_details') }} →
                                             </a>
                                         </td>
                                     </tr>
@@ -132,6 +129,5 @@
                     @endif
                 </div>
             </div>
-        </div>
     </div>
 </x-app-layout>

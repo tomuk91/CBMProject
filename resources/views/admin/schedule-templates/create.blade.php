@@ -17,7 +17,7 @@
     </x-slot>
 
     <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div class="max-w-3xl mx-auto sm:px-4 lg:px-6 space-y-6">
+        <div class="max-w-3xl mx-auto px-4 sm:px-4 lg:px-6 space-y-6">
 
             {{-- Admin Guidelines --}}
             <div x-data="{ open: false }" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700">

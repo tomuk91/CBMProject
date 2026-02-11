@@ -13,7 +13,7 @@
     </x-slot>
 
     <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div class="max-w-5xl mx-auto sm:px-4 lg:px-6 space-y-6">
+        <div class="max-w-5xl mx-auto px-4 sm:px-4 lg:px-6 space-y-6">
 
             {{-- Flash Messages --}}
             @if (session('success'))

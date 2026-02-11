@@ -11,8 +11,6 @@ use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Admin\CancellationController;
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\ServiceController;
-use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ContactSubmissionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -146,12 +144,6 @@ Route::middleware('auth')->group(function () {
         // Customers
         Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
         Route::get('/customers/{user}', [CustomerController::class, 'show'])->name('customers.show');
-
-        // Services
-        Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
-
-        // Settings
-        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
 
         // Notifications
         Route::get('/notifications', [AdminAppointmentController::class, 'notifications'])->name('notifications');

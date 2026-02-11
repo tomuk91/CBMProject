@@ -22,7 +22,7 @@
     </x-slot>
 
     <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-4 lg:px-6 space-y-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 space-y-6">
             
             <!-- Filters -->
             <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl border border-gray-100 dark:border-gray-700 p-6">
@@ -105,7 +105,7 @@
                                             <p class="text-gray-900 dark:text-gray-100 font-medium mb-1">
                                                 {{ $activity->description }}
                                             </p>
-                                            <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                            <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-gray-600 dark:text-gray-400">
                                                 @if($activity->user)
                                                     <span class="flex items-center">
                                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">

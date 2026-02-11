@@ -196,6 +196,7 @@ return [
     'time_morning' => 'Morning (6 AM - 12 PM)',
     'time_afternoon' => 'Afternoon (12 PM - 5 PM)',
     'time_evening' => 'Evening (5 PM - 9 PM)',
+    'action_search' => 'Search',
     'action_apply_filters' => 'Apply Filters',
     'action_clear_filters' => 'Clear Filters',
     'filters_active' => 'Filters active',
@@ -1537,6 +1538,8 @@ return [
     'admin_no_submissions' => 'No contact submissions found',
     'admin_read' => 'Read',
     'admin_unread' => 'Unread',
+    'admin_full_message' => 'Full Message',
+    'admin_reply_email' => 'Reply via Email',
 
     // Item #57: Admin Settings
     'admin_settings' => 'Settings',

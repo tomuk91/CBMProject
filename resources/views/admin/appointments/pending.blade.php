@@ -22,7 +22,7 @@
     </x-slot>
 
     <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-4 lg:px-6 space-y-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 space-y-6">
             @if (session('success'))
                 <div x-data="{ show: true }" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
                     <div class="flex items-center justify-between">
@@ -144,7 +144,7 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-1">{{ __('messages.cancellation_reason') }}:</p>
                             <p class="text-sm text-gray-700 dark:text-gray-300">{{ $request->cancellation_reason }}</p>
                         </div>
-                        <div class="flex items-center justify-between">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <p class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ __('messages.cancellation_requested_on') }} {{ $request->cancellation_requested_at->format('F j, Y \a\t g:i A') }}
                             </p>
