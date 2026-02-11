@@ -2,7 +2,11 @@
 set -e
 
 # Configure Apache to use Railway's PORT (default to 80)
-export PORT=${PORT:-80}
+if [ -z "$PORT" ]; then
+  export PORT=80
+fi
+
+echo "Configuring Apache to listen on port ${PORT}"
 sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf
 sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/g" /etc/apache2/sites-enabled/*.conf
 
