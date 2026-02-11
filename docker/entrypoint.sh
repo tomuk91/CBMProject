@@ -17,8 +17,31 @@ if [ "${DB_CONNECTION}" = "sqlite" ]; then
   chmod -R ug+rw "$(dirname "${DB_DATABASE}")"
 fi
 
-# Always run migrations on Railway
-php artisan migrate --force
+# Wait for database to be ready (retry up to 30 times with 2s delay = 60s max)
+if [ "${DB_CONNECTION}" != "sqlite" ]; then
+  echo "Waiting for database connection..."
+  MAX_RETRIES=30
+  RETRY_COUNT=0
+  until php artisan db:monitor --databases="${DB_CONNECTION:-mysql}" > /dev/null 2>&1 || php -r "
+    \$host = getenv('DB_HOST') ?: '127.0.0.1';
+    \$port = getenv('DB_PORT') ?: '3306';
+    \$conn = @fsockopen(\$host, \$port, \$errno, \$errstr, 5);
+    if (\$conn) { fclose(\$conn); exit(0); }
+    exit(1);
+  "; do
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    if [ "$RETRY_COUNT" -ge "$MAX_RETRIES" ]; then
+      echo "ERROR: Could not connect to database after ${MAX_RETRIES} attempts. Starting without migrations."
+      break
+    fi
+    echo "Database not ready yet (attempt ${RETRY_COUNT}/${MAX_RETRIES}). Retrying in 2s..."
+    sleep 2
+  done
+  echo "Database connection established."
+fi
+
+# Run migrations
+php artisan migrate --force || echo "WARNING: Migration failed, continuing startup..."
 
 # Cache config for performance (clear first to ensure fresh config)
 php artisan config:clear

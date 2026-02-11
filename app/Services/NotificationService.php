@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Appointment;
-use App\Mail\AppointmentReminder;
+use App\Mail\AppointmentReminder24Hours;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -22,7 +22,7 @@ class NotificationService
     public function sendAppointmentReminder(Appointment $appointment): bool
     {
         try {
-            Mail::to($appointment->email)->queue(new AppointmentReminder($appointment));
+            Mail::to($appointment->email)->queue(new AppointmentReminder24Hours($appointment));
             
             Log::info("Appointment reminder sent", [
                 'appointment_id' => $appointment->id,
@@ -50,7 +50,7 @@ class NotificationService
         foreach ($appointments as $appointment) {
             $emails[] = [
                 'to' => $appointment->email,
-                'mailable' => new AppointmentReminder($appointment),
+                'mailable' => new AppointmentReminder24Hours($appointment),
             ];
         }
 
