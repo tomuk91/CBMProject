@@ -5,6 +5,12 @@ set -e
 a2dismod mpm_event mpm_worker 2>/dev/null || true
 a2enmod mpm_prefork 2>/dev/null || true
 
+# Railway provides a dynamic $PORT — make Apache listen on it (default 80 for local Docker)
+LISTEN_PORT="${PORT:-80}"
+sed -i "s/Listen 80/Listen ${LISTEN_PORT}/g" /etc/apache2/ports.conf
+sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${LISTEN_PORT}>/g" /etc/apache2/sites-available/*.conf
+echo "Apache configured to listen on port ${LISTEN_PORT}"
+
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
   if [ -z "${DB_DATABASE}" ]; then
     export DB_DATABASE="/var/www/html/database/database.sqlite"
