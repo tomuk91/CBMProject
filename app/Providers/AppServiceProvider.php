@@ -39,9 +39,6 @@ class AppServiceProvider extends ServiceProvider
             });
         }
         
-        // Enable query result caching for production
-        if (config('app.env') === 'production') {
-            DB::enableQueryLog();
-        }
+
     }
 }

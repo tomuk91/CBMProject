@@ -5,18 +5,19 @@ Hello {{ $user->name }},
 
 An account has been created for you at {{ config('app.name') }}. You can now access your account and manage your appointments online.
 
-## Your Login Credentials
+## Get Started
 
-**Email:** {{ $user->email }}  
-**Temporary Password:** {{ $temporaryPassword }}
+**Email:** {{ $user->email }}
+
+To get started, please set your password by clicking the button below:
+
+<x-mail::button :url="$resetUrl">
+Set Your Password
+</x-mail::button>
 
 <x-mail::panel>
-**Important:** For security reasons, please change your password after your first login.
+This password reset link will expire in 60 minutes. If you need a new link, you can request one from the login page.
 </x-mail::panel>
-
-<x-mail::button :url="url('/login')">
-Login to Your Account
-</x-mail::button>
 
 Once logged in, you can:
 - View your upcoming appointments

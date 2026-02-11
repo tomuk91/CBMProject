@@ -16,6 +16,7 @@ use App\Mail\NewClientAccountCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 
 class AppointmentController extends Controller
 {
@@ -59,6 +60,11 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+        ]);
+
         $query = Appointment::with(['user', 'vehicle']);
 
         // Search filter
@@ -95,7 +101,12 @@ class AppointmentController extends Controller
 
         // Sorting
         $sort = $request->get('sort', 'appointment_date');
+        $allowedSorts = ['appointment_date', 'created_at', 'name', 'service', 'status'];
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'appointment_date';
+        }
         $direction = $request->get('direction', 'asc');
+        $direction = in_array($direction, ['asc', 'desc']) ? $direction : 'asc';
         $query->orderBy($sort, $direction);
 
         $appointments = $query->get();
@@ -145,7 +156,12 @@ class AppointmentController extends Controller
 
         // Sorting
         $sort = $request->get('sort', 'created_at');
+        $allowedSorts = ['created_at', 'name', 'date', 'service', 'status'];
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'created_at';
+        }
         $direction = $request->get('direction', 'desc');
+        $direction = in_array($direction, ['asc', 'desc']) ? $direction : 'desc';
         
         if ($sort === 'name') {
             $query->orderBy('name', $direction);
@@ -1076,7 +1092,6 @@ class AppointmentController extends Controller
                     'new_name' => 'required|string|max:255',
                     'new_email' => 'required|email|unique:users,email',
                     'new_phone' => 'required|string|max:20',
-                    'new_password' => 'required|string|min:6',
                     'new_vehicle_make' => 'required|string|max:255',
                     'new_vehicle_model' => 'required|string|max:255',
                     'new_vehicle_year' => 'required|integer|min:1900|max:2100',
@@ -1084,13 +1099,11 @@ class AppointmentController extends Controller
                     'service' => 'required|string|max:255',
                 ]);
 
-                $temporaryPassword = $request->new_password;
-
                 $user = \App\Models\User::create([
                     'name' => $request->new_name,
                     'email' => $request->new_email,
                     'phone' => $request->new_phone,
-                    'password' => bcrypt($temporaryPassword),
+                    'password' => bcrypt(\Illuminate\Support\Str::random(32)),
                 ]);
 
                 $vehicle = \App\Models\Vehicle::create([
@@ -1104,8 +1117,12 @@ class AppointmentController extends Controller
                 $vehicleId = $vehicle->id;
                 $vehicleString = "{$vehicle->year} {$vehicle->make} {$vehicle->model}" . ($vehicle->plate ? " ({$vehicle->plate})" : "");
 
-                // Send welcome email with temporary password (queued)
-                Mail::to($user->email)->queue(new NewClientAccountCreated($user, $temporaryPassword));
+                // Generate password reset token and URL
+                $token = Password::broker()->createToken($user);
+                $resetUrl = url('/reset-password/' . $token . '?email=' . urlencode($user->email));
+
+                // Send welcome email with password reset link (queued)
+                Mail::to($user->email)->queue(new NewClientAccountCreated($user, $resetUrl));
             } else {
                 // Existing client
                 $request->validate([

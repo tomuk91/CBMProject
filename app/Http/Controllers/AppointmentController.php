@@ -23,6 +23,11 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+        ]);
+
         $query = AvailableSlot::available();
 
         // Filter by date range
@@ -68,7 +73,7 @@ class AppointmentController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
-            'vehicle_id' => 'nullable|exists:vehicles,id',
+            'vehicle_id' => ['nullable', \Illuminate\Validation\Rule::exists('vehicles', 'id')->where('user_id', auth()->id())],
             'service' => 'required|string|max:255',
             'notes' => 'nullable|string|max:1000',
         ], [
@@ -223,6 +228,11 @@ class AppointmentController extends Controller
      */
     public function guestSlots(Request $request)
     {
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+        ]);
+
         $query = AvailableSlot::available();
 
         // Filter by date range

@@ -1128,19 +1128,14 @@
                                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                 </div>
                                 <div>
-                                    <label for="new_password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                        {{ __('messages.book_temp_password') }} <span class="text-red-600">*</span>
-                                    </label>
-                                    <div class="relative">
-                                        <input type="text" id="new_password" name="new_password" value="{{ Str::random(8) }}"
-                                               class="w-full px-4 py-3 pr-24 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                                        <button type="button" onclick="copyPassword()" class="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded transition-colors">
-                                            Copy
-                                        </button>
+                                    <div class="flex items-start gap-2 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                                        <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <p class="text-sm text-blue-700 dark:text-blue-300">
+                                            A secure password will be auto-generated and the client will receive an email with a link to set their own password.
+                                        </p>
                                     </div>
-                                    <p class="mt-1 text-xs text-blue-600 dark:text-blue-400">
-                                        💡 This password will be emailed to the client automatically
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -1268,7 +1263,6 @@
                         document.getElementById('new_email').disabled = true;
                         document.getElementById('new_phone').removeAttribute('required');
                         document.getElementById('new_phone').disabled = true;
-                        document.getElementById('new_password').disabled = true;
                         document.getElementById('new_client_vehicle_make').removeAttribute('required');
                         document.getElementById('new_client_vehicle_make').disabled = true;
                         document.getElementById('new_client_vehicle_model').removeAttribute('required');
@@ -1292,7 +1286,6 @@
                         document.getElementById('new_email').disabled = false;
                         document.getElementById('new_phone').setAttribute('required', 'required');
                         document.getElementById('new_phone').disabled = false;
-                        document.getElementById('new_password').disabled = false;
                         document.getElementById('new_client_vehicle_make').setAttribute('required', 'required');
                         document.getElementById('new_client_vehicle_make').disabled = false;
                         document.getElementById('new_client_vehicle_model').setAttribute('required', 'required');
@@ -1533,31 +1526,6 @@
                     
                     // Reset current user vehicles
                     currentUserVehicles = [];
-                }
-
-                // Copy password to clipboard
-                function copyPassword() {
-                    const passwordInput = document.getElementById('new_password');
-                    passwordInput.select();
-                    passwordInput.setSelectionRange(0, 99999); // For mobile devices
-                    
-                    navigator.clipboard.writeText(passwordInput.value).then(function() {
-                        // Show feedback
-                        const button = event.target;
-                        const originalText = button.textContent;
-                        button.textContent = 'Copied!';
-                        button.classList.add('bg-green-600');
-                        button.classList.remove('bg-red-600', 'hover:bg-red-700');
-                        
-                        setTimeout(function() {
-                            button.textContent = originalText;
-                            button.classList.remove('bg-green-600');
-                            button.classList.add('bg-red-600', 'hover:bg-red-700');
-                        }, 2000);
-                    }).catch(function(err) {
-                        console.error('Failed to copy password:', err);
-                        alert('Password: ' + passwordInput.value);
-                    });
                 }
 
                 // Close modal on backdrop click

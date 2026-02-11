@@ -34,6 +34,7 @@ class AppointmentService
             // Create confirmed appointment
             $appointment = Appointment::create([
                 'user_id' => $pendingAppointment->user_id,
+                'vehicle_id' => $pendingAppointment->vehicle_id,
                 'name' => $pendingAppointment->name,
                 'email' => $pendingAppointment->email,
                 'phone' => $pendingAppointment->phone,
@@ -103,7 +104,7 @@ class AppointmentService
     /**
      * Get upcoming appointments for reminders
      */
-    public function getAppointmentsForReminders(int $hoursAhead = 24): array
+    public function getAppointmentsForReminders(int $hoursAhead = 24): \Illuminate\Database\Eloquent\Collection
     {
         $targetTime = now()->addHours($hoursAhead);
         
@@ -113,7 +114,6 @@ class AppointmentService
                 $targetTime->copy()->subMinutes(30),
                 $targetTime->copy()->addMinutes(30)
             ])
-            ->get()
-            ->toArray();
+            ->get();
     }
 }

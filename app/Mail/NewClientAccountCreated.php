@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NewClientAccountCreated extends Mailable
+class NewClientAccountCreated extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +19,7 @@ class NewClientAccountCreated extends Mailable
      */
     public function __construct(
         public User $user,
-        public string $temporaryPassword
+        public string $resetUrl
     ) {
         //
     }

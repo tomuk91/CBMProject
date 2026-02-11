@@ -66,7 +66,7 @@ class CleanupOldSlots extends Command
             $this->info("✓ Deleted {$oldPending} old pending appointment(s)");
         }
 
-        if ($oldSlots === 0 && $oldPending === 0) {
+        if ($oldAvailableSlots === 0 && $veryOldSlots === 0 && $oldPending === 0) {
             $this->info('✓ No old data to clean up');
         }
 

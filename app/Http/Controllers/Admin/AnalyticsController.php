@@ -115,7 +115,7 @@ class AnalyticsController extends Controller
 
         // Average time to approval (pending to approved)
         $avgApprovalTime = DB::table('activity_logs')
-            ->where('activity_logs.action', 'appointment_approved')
+            ->where('activity_logs.action', 'approved')
             ->where('activity_logs.created_at', '>=', $startDate)
             ->join('pending_appointments', 'activity_logs.model_id', '=', 'pending_appointments.id')
             ->select(DB::raw('AVG(TIMESTAMPDIFF(SECOND, pending_appointments.created_at, activity_logs.created_at) / 3600) as hours'))
