@@ -57,7 +57,7 @@
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.date_to') }}
                         </label>
-                        <input type="date" id="dateTo" name="date_to" value="{{ request('date_to', now()->addWeeks(2)->format('Y-m-d')) }}" data-min-today class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base">
+                        <input type="date" id="dateTo" name="date_to" value="{{ request('date_to', now()->addWeek()->format('Y-m-d')) }}" data-min-today class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 text-base">
                     </div>
 
                     <div class="w-full sm:flex-1 sm:min-w-[200px]">
@@ -157,6 +157,17 @@
                         @endforeach
                     </div>
                 @endif
+
+                <!-- Show More Dates -->
+                <div class="text-center mt-6">
+                    <a href="{{ route('appointments.index', ['date_from' => request('date_from', now()->format('Y-m-d')), 'date_to' => now()->addWeeks(4)->format('Y-m-d')]) }}" 
+                       class="inline-flex items-center px-6 py-3 bg-white dark:bg-gray-800 border-2 border-red-600 text-red-600 dark:text-red-400 font-semibold rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        {{ __('messages.show_more_dates') }}
+                    </a>
+                </div>
             </div>
         </div>
     </div>

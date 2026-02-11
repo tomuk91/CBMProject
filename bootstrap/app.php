@@ -16,7 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\SecurityHeaders::class,
             \App\Http\Middleware\LogFailedLogins::class,
-            \App\Http\Middleware\OptimizeResponse::class,
         ]);
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class,

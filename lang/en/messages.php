@@ -1349,4 +1349,10 @@ return [
     'customer_calendar_week' => 'Week',
     'customer_calendar_list' => 'List',
     'customer_calendar_no_slots' => 'No available slots in this period',
+
+    // Booking Flow
+    'confirmation_estimated_wait' => 'Your booking is pending admin review. You\'ll typically receive a response within 2–4 hours during business hours.',
+    'add_to_calendar' => 'Add to Calendar',
+    'download_ical' => 'Download iCal (.ics)',
+    'show_more_dates' => 'Show More Dates',
 ];

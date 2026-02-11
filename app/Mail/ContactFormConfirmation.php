@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Appointment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,18 +9,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AppointmentCancellationApproved extends Mailable implements ShouldQueue
+class ContactFormConfirmation extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-
-    public $appointment;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Appointment $appointment)
-    {
-        $this->appointment = $appointment;
+    public function __construct(
+        public array $contactData
+    ) {
+        //
     }
 
     /**
@@ -30,7 +28,7 @@ class AppointmentCancellationApproved extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Appointment Cancellation Approved - CBM Auto',
+            subject: __('messages.contact_confirmation_subject', ['app' => config('app.name')]),
         );
     }
 
@@ -40,7 +38,7 @@ class AppointmentCancellationApproved extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.cancellation-approved',
+            markdown: 'emails.contact-form-confirmation',
         );
     }
 

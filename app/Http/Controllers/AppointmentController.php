@@ -25,31 +25,7 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
-        $request->validate([
-            'date_from' => 'nullable|date',
-            'date_to' => 'nullable|date|after_or_equal:date_from',
-        ]);
-
-        $query = AvailableSlot::available();
-
-        // Filter by date range
-        $dateFrom = $request->filled('date_from') ? $request->date_from : now()->format('Y-m-d');
-        $dateTo = $request->filled('date_to') ? $request->date_to : now()->addWeeks(2)->format('Y-m-d');
-        
-        $query->whereBetween('start_time', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59']);
-
-        // Filter by day of week (SQLite compatible) - supports multiple days
-        if ($request->filled('days') && is_array($request->days)) {
-            $query->dayOfWeek($request->days);
-        }
-
-        // Filter by time of day (SQLite compatible)
-        if ($request->filled('time_period')) {
-            $query->timeOfDay($request->time_period);
-        }
-
-        $availableSlots = $query->orderBy('start_time', 'asc')->get();
-        
+        $availableSlots = $this->getAvailableSlots($request);
         return view('appointments.index', compact('availableSlots'));
     }
 
@@ -238,7 +214,17 @@ class AppointmentController extends Controller
                 }
 
                 return redirect()->route('appointments.confirmation')
-                    ->with('success', 'Your appointment request has been submitted and is pending approval!');
+                    ->with('success', 'Your appointment request has been submitted and is pending approval!')
+                    ->with('booking_details', [
+                        'name' => $pendingAppointment->name,
+                        'email' => $pendingAppointment->email,
+                        'phone' => $pendingAppointment->phone,
+                        'vehicle' => $pendingAppointment->vehicleDetails ?? null,
+                        'service' => $request->service,
+                        'notes' => $pendingAppointment->notes,
+                        'start_time' => $lockedSlot->start_time->toIso8601String(),
+                        'end_time' => $lockedSlot->end_time->toIso8601String(),
+                    ]);
             });
         } catch (\Exception $e) {
             \Log::error('Appointment submission error: ' . $e->getMessage(), [
@@ -268,26 +254,7 @@ class AppointmentController extends Controller
      */
     public function guestSlots(Request $request)
     {
-        $request->validate([
-            'date_from' => 'nullable|date',
-            'date_to' => 'nullable|date|after_or_equal:date_from',
-        ]);
-
-        $query = AvailableSlot::available();
-
-        // Filter by date range
-        $dateFrom = $request->filled('date_from') ? $request->date_from : now()->format('Y-m-d');
-        $dateTo = $request->filled('date_to') ? $request->date_to : now()->addWeeks(2)->format('Y-m-d');
-        
-        $query->whereBetween('start_time', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59']);
-
-        // Filter by time of day (using scope)
-        if ($request->filled('time_period')) {
-            $query->timeOfDay($request->time_period);
-        }
-
-        $availableSlots = $query->orderBy('start_time', 'asc')->get();
-        
+        $availableSlots = $this->getAvailableSlots($request);
         return view('appointments.guest-slots', compact('availableSlots'));
     }
 
@@ -415,6 +382,34 @@ class AppointmentController extends Controller
             'available' => !$hasOutstanding,
             'message' => $hasOutstanding ? __('messages.vehicle_has_outstanding_appointment') : null
         ]);
+    }
+
+    /**
+     * Get available slots based on request filters (shared by index and guestSlots)
+     */
+    private function getAvailableSlots(Request $request): \Illuminate\Database\Eloquent\Collection
+    {
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+        ]);
+
+        $query = AvailableSlot::available();
+
+        $dateFrom = $request->filled('date_from') ? $request->date_from : now()->format('Y-m-d');
+        $dateTo = $request->filled('date_to') ? $request->date_to : now()->addWeek()->format('Y-m-d');
+
+        $query->whereBetween('start_time', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59']);
+
+        if ($request->filled('days') && is_array($request->days)) {
+            $query->dayOfWeek($request->days);
+        }
+
+        if ($request->filled('time_period')) {
+            $query->timeOfDay($request->time_period);
+        }
+
+        return $query->orderBy('start_time', 'asc')->get();
     }
 }
 

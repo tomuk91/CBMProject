@@ -50,6 +50,11 @@ class SecurityHeaders
         // Permissions Policy (formerly Feature Policy)
         $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
 
+        // Cache control headers for static assets
+        if ($request->is('build/*')) {
+            $response->headers->set('Cache-Control', 'public, max-age=31536000, immutable');
+        }
+
         return $response;
     }
 }

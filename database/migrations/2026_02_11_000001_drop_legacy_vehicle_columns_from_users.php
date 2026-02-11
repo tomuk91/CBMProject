@@ -1,0 +1,62 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        $columns = [
+            'vehicle_make',
+            'vehicle_model',
+            'vehicle_year',
+            'vehicle_color',
+            'vehicle_plate',
+            'vehicle_fuel_type',
+            'vehicle_transmission',
+            'vehicle_engine_size',
+            'vehicle_mileage',
+            'vehicle_image',
+        ];
+
+        foreach ($columns as $column) {
+            if (Schema::hasColumn('users', $column)) {
+                Schema::table('users', function (Blueprint $table) use ($column) {
+                    $table->dropColumn($column);
+                });
+            }
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $columns = [
+                'vehicle_make',
+                'vehicle_model',
+                'vehicle_year',
+                'vehicle_color',
+                'vehicle_plate',
+                'vehicle_fuel_type',
+                'vehicle_transmission',
+                'vehicle_engine_size',
+                'vehicle_mileage',
+                'vehicle_image',
+            ];
+
+            foreach ($columns as $column) {
+                if (!Schema::hasColumn('users', $column)) {
+                    $table->string($column)->nullable();
+                }
+            }
+        });
+    }
+};

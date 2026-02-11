@@ -7,6 +7,15 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- Dark Mode Script (must be in head to prevent flash) -->
+        <script>
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -15,6 +24,13 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
+        <div class="fixed top-4 right-4 z-50">
+            <div class="inline-flex rounded-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-sm border border-gray-200 dark:border-gray-700">
+                <a href="/language/hu" class="px-3 py-1.5 text-sm font-semibold rounded-l-lg transition {{ app()->getLocale() == 'hu' ? 'bg-red-600 text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' }}">HU</a>
+                <a href="/language/en" class="px-3 py-1.5 text-sm font-semibold rounded-r-lg transition {{ app()->getLocale() == 'en' ? 'bg-red-600 text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' }}">EN</a>
+            </div>
+        </div>
+
         <!-- Toast Notifications -->
         <x-toast-notification />
 

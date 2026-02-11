@@ -20,6 +20,11 @@ class PendingAppointmentController extends Controller
      */
     public function pending(Request $request)
     {
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+        ]);
+
         $query = PendingAppointment::with(['user', 'availableSlot', 'vehicleDetails'])
             ->where('status', 'pending');
 

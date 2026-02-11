@@ -24,7 +24,7 @@ class StoreVehicleRequest extends FormRequest
         return [
             'make' => 'required|string|max:255',
             'model' => 'required|string|max:255',
-            'year' => 'required|string|max:4',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
             'color' => 'nullable|string|max:255',
             'plate' => 'nullable|string|max:255',
             'fuel_type' => 'nullable|string|max:255',

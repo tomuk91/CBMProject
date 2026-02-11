@@ -10,6 +10,13 @@ echo "Configuring Apache to listen on port ${PORT}"
 sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf
 sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/g" /etc/apache2/sites-enabled/*.conf
 
+# Verify Apache configuration
+echo "=== Apache ports.conf ==="
+grep "Listen" /etc/apache2/ports.conf || true
+echo "=== VirtualHost configuration ==="
+grep "VirtualHost" /etc/apache2/sites-enabled/*.conf || true
+echo "=========================="
+
 # Fix Apache MPM conflict
 a2dismod mpm_event mpm_worker 2>/dev/null || true
 a2enmod mpm_prefork 2>/dev/null || true

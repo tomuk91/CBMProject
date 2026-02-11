@@ -29,7 +29,7 @@ class ContactController extends Controller
         Mail::to(config('mail.from.address'))->queue(new ContactFormSubmitted($validated));
 
         // Send confirmation email to user
-        // Mail::to($validated['email'])->send(new ContactFormConfirmation($validated));
+        Mail::to($validated['email'])->queue(new \App\Mail\ContactFormConfirmation($validated));
 
         return redirect()->route('contact.show')->with('success', __('messages.contact_success'));
     }

@@ -1331,4 +1331,10 @@ return [
     'customer_calendar_week' => 'Hét',
     'customer_calendar_list' => 'Lista',
     'customer_calendar_no_slots' => 'Nincs elérhető időpont ebben az időszakban',
+
+    // Foglalási folyamat
+    'confirmation_estimated_wait' => 'A foglalása adminisztrátori jóváhagyásra vár. Általában 2–4 órán belül választ kap munkaidőben.',
+    'add_to_calendar' => 'Hozzáadás a naptárhoz',
+    'download_ical' => 'iCal letöltése (.ics)',
+    'show_more_dates' => 'További dátumok mutatása',
 ];
