@@ -67,8 +67,8 @@ RUN echo '<IfModule mod_deflate.c>\n\
 </IfModule>' > /etc/apache2/conf-available/performance.conf \
     && a2enconf performance
 
-EXPOSE 80
-ENV PORT=80
+# Railway will set PORT environment variable - expose common ports
+EXPOSE 80 8080
 
 RUN chmod +x docker/entrypoint.sh
 
