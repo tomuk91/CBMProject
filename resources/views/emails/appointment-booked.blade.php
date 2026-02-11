@@ -1,32 +1,32 @@
 <x-mail::message>
-# Appointment Request Received
+# {{ __('messages.email_booked_title') }}
 
-Hello {{ $appointment->name }},
+{{ __('messages.email_greeting', ['name' => $appointment->name]) }},
 
-Thank you for requesting an appointment with {{ config('app.name') }}. We have received your request and it is currently pending approval.
+{{ __('messages.email_booked_message', ['app_name' => config('app.name')]) }}
 
-## Appointment Details
+## {{ __('messages.email_appointment_details') }}
 
-**Service:** {{ $appointment->service }}
+**{{ __('messages.email_service_label') }}:** {{ $appointment->service }}
 
-**Requested Time:** {{ $appointment->availableSlot->start_time->format('F j, Y \\a\\t g:i A') }}
+**{{ __('messages.email_requested_time_label') }}:** {{ $appointment->availableSlot->start_time->format('F j, Y \\a\\t g:i A') }}
 
-**Vehicle:** {{ $appointment->vehicle }}
+**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle }}
 
-**Phone:** {{ $appointment->phone }}
+**{{ __('messages.email_phone_label') }}:** {{ $appointment->phone }}
 
 @if($appointment->notes)
-**Additional Notes:** {{ $appointment->notes }}
+**{{ __('messages.email_additional_notes') }}:** {{ $appointment->notes }}
 @endif
 
-Our team will review your request and send you a confirmation email once your appointment is approved.
+{{ __('messages.email_booked_pending') }}
 
 <x-mail::button :url="url('/dashboard')">
-View Your Dashboard
+{{ __('messages.view_dashboard') }}
 </x-mail::button>
 
-If you have any questions, please don't hesitate to contact us.
+{{ __('messages.email_questions') }}
 
-Thanks,<br>
+{{ __('messages.email_thanks') }}<br>
 {{ config('app.name') }}
 </x-mail::message>

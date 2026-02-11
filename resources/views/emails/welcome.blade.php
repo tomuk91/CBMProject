@@ -1,18 +1,18 @@
 <x-mail::message>
-# Welcome to {{ config('app.name') }}!
+# {{ __('messages.email_welcome_title', ['app_name' => config('app.name')]) }}
 
-Hello {{ $user->name }},
+{{ __('messages.email_greeting', ['name' => $user->name]) }},
 
-Thank you for registering with us! We're excited to have you on board.
+{{ __('messages.email_welcome_message') }}
 
-You can now book appointments for your vehicle service needs. Our team is here to provide you with the best service possible.
+{{ __('messages.email_welcome_services') }}
 
 <x-mail::button :url="url('/appointments')">
-View Available Appointments
+{{ __('messages.email_view_available') }}
 </x-mail::button>
 
-If you have any questions, feel free to reach out to us.
+{{ __('messages.email_welcome_questions') }}
 
-Thanks,<br>
+{{ __('messages.email_thanks') }}<br>
 {{ config('app.name') }}
 </x-mail::message>

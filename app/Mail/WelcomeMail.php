@@ -28,7 +28,7 @@ class WelcomeMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to ' . config('app.name'),
+            subject: __('messages.email_subject_welcome', ['app_name' => config('app.name')]),
         );
     }
 

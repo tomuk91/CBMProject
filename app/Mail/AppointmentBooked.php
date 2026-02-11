@@ -28,7 +28,7 @@ class AppointmentBooked extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Appointment Request Received - Pending Approval',
+            subject: __('messages.email_subject_booked'),
         );
     }
 

@@ -9,55 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-white dark:bg-gray-900">
-    <!-- Simple Navigation -->
-    <nav class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="flex items-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="CBM Auto" class="h-12 w-auto dark:hidden">
-                        <img src="{{ asset('images/logo-white.png') }}" alt="CBM Auto" class="h-12 w-auto hidden dark:block">
-                    </a>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ route('home') }}#about" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_about') }}</a>
-                    <a href="{{ route('home') }}#services" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_services') }}</a>
-                    <a href="{{ route('contact.show') }}" class="text-red-600 dark:text-red-500 font-medium">{{ __('messages.nav_contact') }}</a>
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-gray-800 dark:bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-900 dark:hover:bg-gray-600 transition">{{ __('messages.nav_dashboard') }}</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_login') }}</a>
-                    @endauth
-                </div>
-
-                <!-- Language Switcher -->
-                <div class="flex items-center space-x-2">
-                    <a href="{{ route('language.switch', 'en') }}" class="px-3 py-1 {{ app()->getLocale() == 'en' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300' }} rounded transition">EN</a>
-                    <a href="{{ route('language.switch', 'hu') }}" class="px-3 py-1 {{ app()->getLocale() == 'hu' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300' }} rounded transition">HU</a>
-                </div>
-
-                <!-- Mobile menu button -->
-                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="hidden md:hidden pb-4">
-                <a href="{{ route('home') }}#about" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_about') }}</a>
-                <a href="{{ route('home') }}#services" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_services') }}</a>
-                <a href="{{ route('contact.show') }}" class="block px-4 py-2 text-red-600 dark:text-red-500 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_contact') }}</a>
-                @auth
-                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 bg-gray-800 text-white text-center rounded-lg font-semibold mt-2">{{ __('messages.nav_dashboard') }}</a>
-                @else
-                    <a href="{{ route('login') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_login') }}</a>
-                @endauth
-            </div>
+    <x-public-navigation currentPage="contact" />
         </div>
     </nav>
 
@@ -260,13 +212,6 @@
         <p class="text-gray-400">&copy; {{ date('Y') }} CBM Auto. {{ __('messages.footer_copyright') }}</p>
     </div>
 </footer>
-
-<script>
-    function toggleMobileMenu() {
-        const menu = document.getElementById('mobileMenu');
-        menu.classList.toggle('hidden');
-    }
-</script>
 
 </body>
 </html>

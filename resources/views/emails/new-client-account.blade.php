@@ -1,32 +1,32 @@
 <x-mail::message>
-# Account Created Successfully
+# {{ __('messages.email_account_created_title') }}
 
-Hello {{ $user->name }},
+{{ __('messages.email_greeting', ['name' => $user->name]) }},
 
-An account has been created for you at {{ config('app.name') }}. You can now access your account and manage your appointments online.
+{{ __('messages.email_account_created_message', ['app_name' => config('app.name')]) }}
 
-## Get Started
+## {{ __('messages.email_get_started') }}
 
-**Email:** {{ $user->email }}
+**{{ __('messages.email_email_label') }}:** {{ $user->email }}
 
-To get started, please set your password by clicking the button below:
+{{ __('messages.email_set_password_intro') }}
 
 <x-mail::button :url="$resetUrl">
-Set Your Password
+{{ __('messages.email_set_password') }}
 </x-mail::button>
 
 <x-mail::panel>
-This password reset link will expire in 60 minutes. If you need a new link, you can request one from the login page.
+{{ __('messages.email_reset_link_expiry') }}
 </x-mail::panel>
 
-Once logged in, you can:
-- View your upcoming appointments
-- Update your vehicle information
-- Book new appointments
-- Manage your profile
+{{ __('messages.email_once_logged_in') }}
+- {{ __('messages.email_feature_view_appointments') }}
+- {{ __('messages.email_feature_update_vehicle') }}
+- {{ __('messages.email_feature_book_new') }}
+- {{ __('messages.email_feature_manage_profile') }}
 
-If you have any questions or need assistance, please don't hesitate to contact us.
+{{ __('messages.email_contact_us') }}
 
-Thanks,<br>
+{{ __('messages.email_thanks') }}<br>
 {{ config('app.name') }}
 </x-mail::message>

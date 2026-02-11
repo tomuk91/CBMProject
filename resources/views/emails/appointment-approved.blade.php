@@ -1,36 +1,36 @@
 <x-mail::message>
-# Appointment Confirmed! ✓
+# {{ __('messages.email_approved_title') }}
 
-Hello {{ $appointment->name }},
+{{ __('messages.email_greeting', ['name' => $appointment->name]) }},
 
-Great news! Your appointment with {{ config('app.name') }} has been confirmed.
+{{ __('messages.email_approved_message', ['app_name' => config('app.name')]) }}
 
-## Appointment Details
+## {{ __('messages.email_appointment_details') }}
 
-**Service:** {{ $appointment->service }}
+**{{ __('messages.email_service_label') }}:** {{ $appointment->service }}
 
-**Date & Time:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y \\a\\t g:i A') }}
+**{{ __('messages.email_date_time_label') }}:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y \\a\\t g:i A') }}
 
-**Duration:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->diffInMinutes(\Carbon\Carbon::parse($appointment->appointment_end)) }} minutes
+**{{ __('messages.email_duration_label') }}:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->diffInMinutes(\Carbon\Carbon::parse($appointment->appointment_end)) }} {{ __('messages.email_minutes') }}
 
-**Vehicle:** {{ $appointment->vehicle }}
+**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle }}
 
-**Phone:** {{ $appointment->phone }}
+**{{ __('messages.email_phone_label') }}:** {{ $appointment->phone }}
 
 @if($appointment->notes)
-**Additional Notes:** {{ $appointment->notes }}
+**{{ __('messages.email_additional_notes') }}:** {{ $appointment->notes }}
 @endif
 
 <x-mail::panel>
-Please arrive 5-10 minutes early to ensure we can start on time.
+{{ __('messages.email_arrive_early') }}
 </x-mail::panel>
 
 <x-mail::button :url="url('/appointments')">
-View Your Appointments
+{{ __('messages.email_view_appointments') }}
 </x-mail::button>
 
-If you need to reschedule or cancel, please contact us as soon as possible.
+{{ __('messages.email_reschedule_notice') }}
 
-Thanks,<br>
+{{ __('messages.email_thanks') }}<br>
 {{ config('app.name') }}
 </x-mail::message>

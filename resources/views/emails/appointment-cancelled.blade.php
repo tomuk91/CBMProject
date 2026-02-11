@@ -1,32 +1,32 @@
 <x-mail::message>
-# Appointment Cancelled
+# {{ __('messages.email_cancelled_title') }}
 
-Hello {{ $appointment->name }},
+{{ __('messages.email_greeting', ['name' => $appointment->name]) }},
 
-We regret to inform you that your appointment with {{ config('app.name') }} has been cancelled.
+{{ __('messages.email_cancelled_message', ['app_name' => config('app.name')]) }}
 
-## Appointment Details
+## {{ __('messages.email_appointment_details') }}
 
-**Service:** {{ $appointment->service }}
+**{{ __('messages.email_service_label') }}:** {{ $appointment->service }}
 
-**Scheduled Date & Time:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y \\a\\t g:i A') }}
+**{{ __('messages.email_scheduled_date_time') }}:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y \\a\\t g:i A') }}
 
-**Vehicle:** {{ $appointment->vehicle }}
+**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle }}
 
 @if($reason)
 <x-mail::panel>
-**Reason for Cancellation:** {{ $reason }}
+**{{ __('messages.email_cancellation_reason') }}:** {{ $reason }}
 </x-mail::panel>
 @endif
 
-We apologize for any inconvenience this may cause. If you would like to reschedule, please feel free to book a new appointment at your convenience.
+{{ __('messages.email_cancelled_apology') }}
 
 <x-mail::button :url="url('/appointments')">
-Book New Appointment
+{{ __('messages.email_book_new') }}
 </x-mail::button>
 
-If you have any questions or concerns, please don't hesitate to contact us.
+{{ __('messages.email_questions') }}
 
-Thanks,<br>
+{{ __('messages.email_thanks') }}<br>
 {{ config('app.name') }}
 </x-mail::message>

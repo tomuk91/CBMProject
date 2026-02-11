@@ -21,6 +21,8 @@ echo "=== VirtualHost configuration ==="
 cat /etc/apache2/sites-enabled/*.conf || true
 echo "=== Testing Apache config ==="
 apache2ctl -t || true
+echo "=== Starting test Apache to verify binding ==="
+timeout 3 apache2ctl -D FOREGROUND 2>&1 | head -5 || echo "Apache started successfully"
 echo "=========================="
 
 if [ "${DB_CONNECTION}" = "sqlite" ]; then

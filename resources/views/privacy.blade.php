@@ -11,36 +11,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 antialiased">
-    <!-- Guest Navigation -->
-    <nav class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-sm z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="flex items-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="CBM Auto" class="h-20 w-auto max-w-none">
-                    </a>
-                </div>
-                <div class="flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_home') }}</a>
-                    
-                    <!-- Language Toggle -->
-                    <div class="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
-                        <a href="{{ route('language.switch', 'en') }}" 
-                           class="px-3 py-1.5 rounded {{ app()->getLocale() == 'en' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition">EN</a>
-                        <a href="{{ route('language.switch', 'hu') }}" 
-                           class="px-3 py-1.5 rounded {{ app()->getLocale() == 'hu' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition">HU</a>
-                    </div>
-                    
-                    @guest
-                        <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_login') }}</a>
-                        <a href="{{ route('register') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-lg font-semibold transition shadow-sm">{{ __('messages.nav_register') }}</a>
-                    @else
-                        <a href="{{ route('dashboard') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-lg font-semibold transition shadow-sm">{{ __('messages.nav_dashboard') }}</a>
-                    @endguest
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-public-navigation currentPage="privacy" />
 
     <!-- Hero Section -->
     <div class="relative bg-gradient-to-r from-red-600 to-red-700 text-white py-20 mt-20">

@@ -28,7 +28,7 @@ class AppointmentCancelled extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Appointment Cancelled - ' . config('app.name'),
+            subject: __('messages.email_subject_cancelled', ['app_name' => config('app.name')]),
         );
     }
 

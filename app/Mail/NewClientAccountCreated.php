@@ -30,7 +30,7 @@ class NewClientAccountCreated extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your Account Has Been Created - ' . config('app.name'),
+            subject: __('messages.email_subject_account_created', ['app_name' => config('app.name')]),
         );
     }
 

@@ -33,74 +33,7 @@
     </style>
 </head>
 <body class="bg-white dark:bg-gray-900 antialiased">
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center">
-                    <a href="/" class="flex items-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="CBM Auto" class="h-16 w-auto max-w-none">
-                    </a>
-                </div>
-
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="/#about" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_about') }}</a>
-                    <a href="/#services" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_services') }}</a>
-                    <a href="{{ route('contact.show') }}" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">{{ __('messages.nav_contact') }}</a>
-                    
-                    <!-- Language Toggle -->
-                    <div class="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
-                        <a href="{{ route('language.switch', 'en') }}" 
-                           class="px-3 py-1.5 rounded {{ app()->getLocale() === 'en' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium transition">
-                            EN
-                        </a>
-                        <a href="{{ route('language.switch', 'hu') }}" 
-                           class="px-3 py-1.5 rounded {{ app()->getLocale() === 'hu' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium transition">
-                            HU
-                        </a>
-                    </div>
-
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg hover:shadow-xl">
-                            {{ __('messages.nav_dashboard') }}
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-500 font-medium transition">
-                            {{ __('messages.nav_login') }}
-                        </a>
-                        <a href="{{ route('guest.slots') }}" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg hover:shadow-xl">
-                            {{ __('messages.hero_cta_primary') }}
-                        </a>
-                    @endauth
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <button class="md:hidden text-gray-700 dark:text-gray-300" 
-                        onclick="toggleMobileMenu()" 
-                        aria-label="{{ __('messages.toggle_mobile_menu') }}">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-            <div class="px-4 py-4 space-y-3">
-                <a href="/#about" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_about') }}</a>
-                <a href="/#services" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_services') }}</a>
-                <a href="{{ route('contact.show') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_contact') }}</a>
-                @auth
-                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 bg-red-600 text-white text-center rounded-lg font-semibold">{{ __('messages.nav_dashboard') }}</a>
-                @else
-                    <a href="{{ route('login') }}" class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">{{ __('messages.nav_login') }}</a>
-                    <a href="{{ route('guest.slots') }}" class="block px-4 py-2 bg-red-600 text-white text-center rounded-lg font-semibold">{{ __('messages.hero_cta_primary') }}</a>
-                @endauth
-            </div>
-        </div>
-    </nav>
+    <x-public-navigation currentPage="about" />
 
     <!-- Main Content -->
     <main class="pt-20">
@@ -398,12 +331,5 @@
     </footer>
 
     <x-cookie-consent />
-
-    <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        }
-    </script>
 </body>
 </html>

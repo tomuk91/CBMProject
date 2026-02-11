@@ -28,7 +28,7 @@ class AppointmentRejected extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Appointment Request Update - ' . config('app.name'),
+            subject: __('messages.email_subject_rejected', ['app_name' => config('app.name')]),
         );
     }
 

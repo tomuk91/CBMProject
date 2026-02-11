@@ -1,32 +1,32 @@
 <x-mail::message>
-# Appointment Request Update
+# {{ __('messages.email_rejected_title') }}
 
-Hello {{ $appointment->name }},
+{{ __('messages.email_greeting', ['name' => $appointment->name]) }},
 
-Thank you for your interest in booking an appointment with {{ config('app.name') }}.
+{{ __('messages.email_rejected_interest', ['app_name' => config('app.name')]) }}
 
-Unfortunately, we are unable to accommodate your appointment request for the following reason:
+{{ __('messages.email_rejected_reason_intro') }}
 
 <x-mail::panel>
-{{ $reason ?: 'The requested time slot is no longer available.' }}
+{{ $reason ?: __('messages.email_rejected_default_reason') }}
 </x-mail::panel>
 
-## Original Request Details
+## {{ __('messages.email_original_details') }}
 
-**Service:** {{ $appointment->service }}
+**{{ __('messages.email_service_label') }}:** {{ $appointment->service }}
 
-**Requested Time:** {{ $appointment->availableSlot ? $appointment->availableSlot->start_time->format('F j, Y \\a\\t g:i A') : 'N/A' }}
+**{{ __('messages.email_requested_time_label') }}:** {{ $appointment->availableSlot ? $appointment->availableSlot->start_time->format('F j, Y \\a\\t g:i A') : 'N/A' }}
 
-**Vehicle:** {{ $appointment->vehicle }}
+**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle }}
 
-We would love to help you find an alternative time. Please browse our available appointment slots and submit a new request.
+{{ __('messages.email_rejected_alternative') }}
 
 <x-mail::button :url="url('/appointments')">
-View Available Appointments
+{{ __('messages.email_view_available') }}
 </x-mail::button>
 
-If you have any questions or concerns, please don't hesitate to contact us.
+{{ __('messages.email_questions') }}
 
-Thanks,<br>
+{{ __('messages.email_thanks') }}<br>
 {{ config('app.name') }}
 </x-mail::message>
