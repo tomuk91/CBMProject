@@ -136,10 +136,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="ml-4 flex-1">
-                                                    <div class="flex items-center justify-between">
+                                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                                                         <div class="flex-1">
                                                             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ $service->service }}</h3>
-                                                            <div class="flex items-center gap-4 mt-2">
+                                                            <div class="flex flex-wrap items-center gap-2 sm:gap-4 mt-2">
                                                                 <p class="text-sm text-gray-600 dark:text-gray-400 flex items-center">
                                                                     <svg class="inline w-4 h-4 mr-1.5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                                                         <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
@@ -160,7 +160,7 @@
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-400 shadow-md border border-green-200 dark:border-green-700">
+                                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-400 shadow-md border border-green-200 dark:border-green-700 mt-2 sm:mt-0 self-start sm:self-auto">
                                                             <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                                             </svg>

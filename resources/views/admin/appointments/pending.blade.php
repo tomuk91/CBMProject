@@ -1,21 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('messages.admin_pending_requests') }}
             </h2>
-            <div class="flex gap-3">
-                <a href="{{ route('admin.appointments.slots') }}" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <div class="flex flex-wrap gap-2 sm:gap-3">
+                <a href="{{ route('admin.appointments.slots') }}" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+                    <svg class="w-4 h-4 sm:mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
                     </svg>
-                    {{ __('messages.admin_manage_slots') }}
+                    <span class="hidden sm:inline">{{ __('messages.admin_manage_slots') }}</span>
                 </a>
-                <a href="{{ route('admin.appointments.calendar') }}" class="bg-red-700 hover:bg-red-800 dark:bg-red-800 dark:hover:bg-red-900 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <a href="{{ route('admin.appointments.calendar') }}" class="bg-red-700 hover:bg-red-800 dark:bg-red-800 dark:hover:bg-red-900 text-white text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+                    <svg class="w-4 h-4 sm:mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
                     </svg>
-                    {{ __('messages.admin_view_calendar') }}
+                    <span class="hidden sm:inline">{{ __('messages.admin_view_calendar') }}</span>
                 </a>
             </div>
         </div>
@@ -186,12 +186,12 @@
                                 <p class="text-gray-600 dark:text-gray-400 font-semibold text-lg">
                                     No results found
                                 </p>
-                                <p class="text-gray-500 dark:text-gray-500 text-sm mt-2">Try adjusting your filters or search term</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">Try adjusting your filters or search term</p>
                             @else
                                 <p class="text-gray-600 dark:text-gray-400 font-semibold text-lg">
                                     {{ __('messages.appointments_no_slots') }}
                                 </p>
-                                <p class="text-gray-500 dark:text-gray-500 text-sm mt-2">All appointments have been reviewed</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">All appointments have been reviewed</p>
                             @endif
                         </div>
                     @else
@@ -200,7 +200,7 @@
                              x-init="$watch('selectAll', value => { if(value) { selectedRequests = {{ $pendingAppointments->pluck('id')->toJson() }} } else { selectedRequests = [] } })">
                             
                             <!-- Bulk Actions Bar -->
-                            <div x-show="selectedRequests.length > 0" x-transition class="mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex items-center justify-between">
+                            <div x-show="selectedRequests.length > 0" x-transition class="mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 text-red-600 dark:text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
@@ -218,7 +218,7 @@
                             </div>
 
                             <!-- Summary Bar -->
-                            <div class="mb-4 flex items-center justify-between text-sm">
+                            <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm">
                                 <div class="flex items-center gap-4">
                                     <input type="checkbox" x-model="selectAll" class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <span class="text-gray-600 dark:text-gray-400">
@@ -428,10 +428,10 @@
             <form id="approveForm" method="POST">
                 @csrf
                 <!-- Modal Header -->
-                <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-t-xl px-6 py-4">
+                <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-xl px-6 py-4">
                     <div class="flex items-center space-x-3">
                         <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-full bg-white shadow-md">
-                            <svg class="h-6 w-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="h-6 w-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
@@ -444,7 +444,7 @@
                 <!-- Modal Body -->
                 <div class="p-6 space-y-5">
                     <p class="text-base text-gray-700 dark:text-gray-300">
-                        {{ __('messages.modal_approve_confirm') }} <strong class="text-green-600 dark:text-green-400" id="approveName"></strong>?
+                        {{ __('messages.modal_approve_confirm') }} <strong class="text-red-600 dark:text-red-400" id="approveName"></strong>?
                     </p>
                     <div>
                         <label for="approve_admin_notes" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
@@ -454,22 +454,22 @@
                             id="approve_admin_notes" 
                             name="admin_notes" 
                             rows="3"
-                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-900/30 transition-all duration-200"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
                             placeholder="{{ __('messages.placeholder_admin_notes') }}"></textarea>
                     </div>
                 </div>
                 
                 <!-- Modal Footer -->
-                <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 rounded-b-xl flex items-center justify-end gap-3">
+                <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 rounded-b-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
                     <button 
                         type="button" 
                         onclick="closeApproveModal()" 
-                        class="px-5 py-2.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm">
+                        class="px-5 py-2.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm min-h-[44px]">
                         {{ __('messages.action_cancel') }}
                     </button>
                     <button 
                         type="submit" 
-                        class="px-5 py-2.5 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center">
+                        class="px-5 py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center min-h-[44px]">
                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                         </svg>
@@ -518,16 +518,16 @@
                 </div>
                 
                 <!-- Modal Footer -->
-                <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 rounded-b-xl flex items-center justify-end gap-3">
+                <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 rounded-b-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
                     <button 
                         type="button" 
                         onclick="closeRejectModal()" 
-                        class="px-5 py-2.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm">
+                        class="px-5 py-2.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm min-h-[44px]">
                         {{ __('messages.action_cancel') }}
                     </button>
                     <button 
                         type="submit" 
-                        class="px-5 py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center">
+                        class="px-5 py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center min-h-[44px]">
                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                         </svg>

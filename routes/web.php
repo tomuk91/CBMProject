@@ -156,6 +156,43 @@ Route::middleware('auth')->group(function () {
         Route::get('/appointments/slots/export', [AdminAppointmentController::class, 'exportSlots'])->name('slots.export');
         Route::post('/appointments/bulk-email', [AdminAppointmentController::class, 'sendBulkEmail'])->name('appointments.bulk-email');
         
+        // Schedule Template routes
+        Route::get('/schedule-templates', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'index'])->name('schedule-templates.index');
+        Route::get('/schedule-templates/create', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'create'])->name('schedule-templates.create');
+        Route::post('/schedule-templates', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'store'])->name('schedule-templates.store');
+        Route::get('/schedule-templates/{template}/edit', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'edit'])->name('schedule-templates.edit');
+        Route::put('/schedule-templates/{template}', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'update'])->name('schedule-templates.update');
+        Route::delete('/schedule-templates/{template}', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'destroy'])->name('schedule-templates.destroy');
+        Route::post('/schedule-templates/{template}/toggle', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'toggleActive'])->name('schedule-templates.toggle');
+        Route::post('/schedule-templates/{template}/duplicate', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'duplicate'])->name('schedule-templates.duplicate');
+        Route::post('/schedule-templates/preview', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'preview'])->name('schedule-templates.preview');
+        Route::post('/schedule-templates/bulk-activate', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'bulkActivate'])->name('schedule-templates.bulk-activate');
+        Route::post('/schedule-templates/bulk-deactivate', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'bulkDeactivate'])->name('schedule-templates.bulk-deactivate');
+        Route::delete('/schedule-templates/bulk-delete', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'bulkDestroy'])->name('schedule-templates.bulk-delete');
+        
+        // Blocked Dates routes
+        Route::get('/blocked-dates', [\App\Http\Controllers\Admin\BlockedDateController::class, 'index'])->name('blocked-dates.index');
+        Route::post('/blocked-dates', [\App\Http\Controllers\Admin\BlockedDateController::class, 'store'])->name('blocked-dates.store');
+        Route::delete('/blocked-dates/{blockedDate}', [\App\Http\Controllers\Admin\BlockedDateController::class, 'destroy'])->name('blocked-dates.destroy');
+
+        // Admin Tour
+        Route::post('/tour/{page}/complete', function (string $page) {
+            $allowed = ['dashboard', 'slots', 'schedule-templates'];
+            if (!in_array($page, $allowed)) {
+                return response()->json(['error' => 'Invalid page'], 422);
+            }
+            auth()->user()->completeTour($page);
+            return response()->json(['success' => true]);
+        })->name('tour.complete');
+        Route::post('/tour/{page}/reset', function (string $page) {
+            $allowed = ['dashboard', 'slots', 'schedule-templates'];
+            if (!in_array($page, $allowed)) {
+                return response()->json(['error' => 'Invalid page'], 422);
+            }
+            auth()->user()->resetTour($page);
+            return response()->json(['success' => true]);
+        })->name('tour.reset');
+
         // API endpoint to get user vehicles
         Route::get('/api/users/{user}/vehicles', function(\App\Models\User $user) {
             // Only return essential vehicle information

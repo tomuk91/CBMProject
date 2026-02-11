@@ -336,10 +336,10 @@
                                                 </div>
                                             </div>
                                             <div class="ml-3 flex-1">
-                                                <div class="flex items-center justify-between">
+                                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                                                     <div class="flex-1">
                                                         <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">{{ $service->service }}</h4>
-                                                        <div class="flex items-center gap-3 mt-1">
+                                                        <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-1">
                                                             <p class="text-xs text-gray-600 dark:text-gray-400 flex items-center">
                                                                 <svg class="inline w-3.5 h-3.5 mr-1 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                                                     <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
@@ -357,7 +357,7 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-400 shadow-sm border border-green-200 dark:border-green-700">
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 dark:from-green-900/30 dark:to-emerald-900/30 dark:text-green-400 shadow-sm border border-green-200 dark:border-green-700 mt-2 sm:mt-0 self-start sm:self-auto">
                                                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                                         </svg>
@@ -437,18 +437,20 @@
     </div>
 
     <!-- Cancellation Request Modal -->
-    <div id="cancellationModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full z-50">
-        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-lg bg-white dark:bg-gray-800">
-            <div class="mt-3">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('messages.request_cancellation') }}</h3>
-                    <button onclick="closeCancellationModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+    <div id="cancellationModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
+        <div class="relative mx-auto w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700">
+            <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-xl px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-white">{{ __('messages.request_cancellation') }}</h3>
+                    <button onclick="closeCancellationModal()" class="text-white hover:text-red-100">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
                 </div>
-                
+            </div>
+            
+            <div class="p-6">
                 <!-- 24-Hour Policy Notice -->
                 <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded">
                     <div class="flex items-start">
@@ -477,16 +479,16 @@
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100"
                             placeholder="{{ __('messages.cancellation_reason_placeholder') }}"></textarea>
                     </div>
-                    <div class="flex justify-end space-x-3">
+                    <div class="flex flex-col sm:flex-row justify-end gap-3">
                         <button 
                             type="button" 
                             onclick="closeCancellationModal()"
-                            class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+                            class="px-5 py-2.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm min-h-[44px]">
                             {{ __('messages.cancel') }}
                         </button>
                         <button 
                             type="submit"
-                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                            class="px-5 py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg min-h-[44px]">
                             {{ __('messages.request_cancellation') }}
                         </button>
                     </div>

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
@@ -108,35 +108,55 @@
         
         <!-- Dark Mode Toggle Script -->
         <script>
+            // Desktop theme toggle
             const themeToggleBtn = document.getElementById('theme-toggle');
             const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
             const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-            // Show the correct icon on page load
-            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                themeToggleLightIcon?.classList.remove('hidden');
-                if (themeToggleBtn) themeToggleBtn.setAttribute('aria-pressed', 'true');
-            } else {
-                themeToggleDarkIcon?.classList.remove('hidden');
-                if (themeToggleBtn) themeToggleBtn.setAttribute('aria-pressed', 'false');
+            // Mobile theme toggle
+            const themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+            const themeToggleMobileDarkIcon = document.getElementById('theme-toggle-mobile-dark-icon');
+            const themeToggleMobileLightIcon = document.getElementById('theme-toggle-mobile-light-icon');
+
+            // Function to update all toggle buttons
+            function updateThemeIcons(isDark) {
+                if (isDark) {
+                    themeToggleLightIcon?.classList.remove('hidden');
+                    themeToggleDarkIcon?.classList.add('hidden');
+                    themeToggleMobileLightIcon?.classList.remove('hidden');
+                    themeToggleMobileDarkIcon?.classList.add('hidden');
+                    if (themeToggleBtn) themeToggleBtn.setAttribute('aria-pressed', 'true');
+                    if (themeToggleMobileBtn) themeToggleMobileBtn.setAttribute('aria-pressed', 'true');
+                } else {
+                    themeToggleDarkIcon?.classList.remove('hidden');
+                    themeToggleLightIcon?.classList.add('hidden');
+                    themeToggleMobileDarkIcon?.classList.remove('hidden');
+                    themeToggleMobileLightIcon?.classList.add('hidden');
+                    if (themeToggleBtn) themeToggleBtn.setAttribute('aria-pressed', 'false');
+                    if (themeToggleMobileBtn) themeToggleMobileBtn.setAttribute('aria-pressed', 'false');
+                }
             }
 
-            themeToggleBtn?.addEventListener('click', function() {
-                // Toggle icons
-                themeToggleDarkIcon?.classList.toggle('hidden');
-                themeToggleLightIcon?.classList.toggle('hidden');
-
-                // Toggle dark mode
+            // Function to toggle theme
+            function toggleTheme() {
                 if (document.documentElement.classList.contains('dark')) {
                     document.documentElement.classList.remove('dark');
                     localStorage.setItem('theme', 'light');
-                    themeToggleBtn.setAttribute('aria-pressed', 'false');
+                    updateThemeIcons(false);
                 } else {
                     document.documentElement.classList.add('dark');
                     localStorage.setItem('theme', 'dark');
-                    themeToggleBtn.setAttribute('aria-pressed', 'true');
+                    updateThemeIcons(true);
                 }
-            });
+            }
+
+            // Show the correct icon on page load
+            const isDarkMode = localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            updateThemeIcons(isDarkMode);
+
+            // Add event listeners to both buttons
+            themeToggleBtn?.addEventListener('click', toggleTheme);
+            themeToggleMobileBtn?.addEventListener('click', toggleTheme);
         </script>
         
         <!-- Initialize Flatpickr -->
@@ -306,5 +326,7 @@
                 color: white;
             }
         </style>
+
+        @stack('scripts')
     </body>
 </html>

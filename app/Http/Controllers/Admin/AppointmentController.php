@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use App\Models\PendingAppointment;
 use App\Models\AvailableSlot;
 use App\Models\ActivityLog;
+use App\Models\BlockedDate;
 use App\Models\User;
 use App\Mail\AppointmentStatusChanged;
 use App\Mail\CancellationRequested;
@@ -628,7 +629,12 @@ class AppointmentController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('admin.appointments.slots', compact('slots', 'users'));
+        // Get blocked dates for the form
+        $blockedDates = BlockedDate::where('date', '>=', now()->startOfDay())
+            ->orderBy('date')
+            ->get();
+
+        return view('admin.appointments.slots', compact('slots', 'users', 'blockedDates'));
     }
 
     /**
@@ -655,6 +661,7 @@ class AppointmentController extends Controller
         $selectedDays = $request->selected_days ?? [];
         
         $conflicts = [];
+        $blockedConflicts = [];
         $willCreateCount = 0;
 
         if ($request->bulk_type === 'single' || !$request->bulk_type) {
@@ -662,20 +669,28 @@ class AppointmentController extends Controller
             $startDateTime = \Carbon\Carbon::parse($request->start_date . ' ' . $request->start_time);
             $endDateTime = $startDateTime->copy()->addMinutes($duration);
 
-            $existing = AvailableSlot::where('start_time', '<', $endDateTime)
-                ->where('end_time', '>', $startDateTime)
-                ->first();
-
-            if ($existing) {
-                $conflicts[] = [
+            // Check blocked date first
+            if (BlockedDate::isBlocked($startDateTime)) {
+                $blockedConflicts[] = [
                     'date' => $startDateTime->format('M d, Y'),
-                    'new_start' => $startDateTime->format('g:i A'),
-                    'new_end' => $endDateTime->format('g:i A'),
-                    'existing_start' => $existing->start_time->format('g:i A'),
-                    'existing_end' => $existing->end_time->format('g:i A'),
+                    'reason' => BlockedDate::where('date', $startDateTime->toDateString())->value('reason') ?? __('messages.slot_blocked_no_reason'),
                 ];
             } else {
-                $willCreateCount = 1;
+                $existing = AvailableSlot::where('start_time', '<', $endDateTime)
+                    ->where('end_time', '>', $startDateTime)
+                    ->first();
+
+                if ($existing) {
+                    $conflicts[] = [
+                        'date' => $startDateTime->format('M d, Y'),
+                        'new_start' => $startDateTime->format('g:i A'),
+                        'new_end' => $endDateTime->format('g:i A'),
+                        'existing_start' => $existing->start_time->format('g:i A'),
+                        'existing_end' => $existing->end_time->format('g:i A'),
+                    ];
+                } else {
+                    $willCreateCount = 1;
+                }
             }
         } elseif ($request->bulk_type === 'daily') {
             // Check daily slots
@@ -690,6 +705,16 @@ class AppointmentController extends Controller
             
             while ($currentDate <= $endDate) {
                 if (in_array($currentDate->dayOfWeek, $selectedDays)) {
+                    // Check blocked date for this day
+                    if (BlockedDate::isBlocked($currentDate)) {
+                        $blockedConflicts[] = [
+                            'date' => $currentDate->format('M d, Y'),
+                            'reason' => BlockedDate::where('date', $currentDate->toDateString())->value('reason') ?? __('messages.slot_blocked_no_reason'),
+                        ];
+                        $currentDate->addDay();
+                        continue;
+                    }
+
                     for ($i = 0; $i < $count; $i++) {
                         $slotStart = $currentDate->copy()
                             ->setTimeFromTimeString($request->start_time)
@@ -730,6 +755,15 @@ class AppointmentController extends Controller
                     $targetDate = $startDateTime->copy()->addWeeks($week)->startOfWeek();
                     $targetDate->addDays($dayOfWeek);
                     
+                    // Check blocked date for this day
+                    if (BlockedDate::isBlocked($targetDate)) {
+                        $blockedConflicts[] = [
+                            'date' => $targetDate->format('M d, Y'),
+                            'reason' => BlockedDate::where('date', $targetDate->toDateString())->value('reason') ?? __('messages.slot_blocked_no_reason'),
+                        ];
+                        continue;
+                    }
+
                     $slotStart = $targetDate->copy()->setTimeFromTimeString($request->start_time);
                     $slotEnd = $slotStart->copy()->addMinutes($duration);
                     
@@ -756,7 +790,9 @@ class AppointmentController extends Controller
 
         return response()->json([
             'has_conflicts' => count($conflicts) > 0,
+            'has_blocked' => count($blockedConflicts) > 0,
             'conflicts' => $conflicts,
+            'blocked' => $blockedConflicts,
             'will_create' => $willCreateCount,
         ]);
     }
@@ -785,6 +821,7 @@ class AppointmentController extends Controller
 
         $createdCount = 0;
         $skippedCount = 0;
+        $blockedCount = 0;
         $duration = (int) $request->duration;
         $interval = (int) ($request->bulk_interval ?? 60);
         $count = (int) ($request->bulk_count ?? 5);
@@ -794,6 +831,13 @@ class AppointmentController extends Controller
         if ($request->bulk_type === 'single' || !$request->bulk_type) {
             // Single slot creation
             $endDateTime = $startDateTime->copy()->addMinutes($duration);
+
+            // Check blocked date
+            if (BlockedDate::isBlocked($startDateTime)) {
+                return redirect()->back()
+                    ->with('error', __('messages.slot_blocked_date_error', ['date' => $startDateTime->format('M d, Y')]))
+                    ->withInput();
+            }
 
             // Check for conflicts only if not forcing
             if (!$forceCreate) {
@@ -829,6 +873,13 @@ class AppointmentController extends Controller
             
             while ($currentDate <= $endDate) {
                 if (in_array($currentDate->dayOfWeek, $selectedDays)) {
+                    // Skip blocked dates
+                    if (BlockedDate::isBlocked($currentDate)) {
+                        $blockedCount++;
+                        $currentDate->addDay();
+                        continue;
+                    }
+
                     // Create multiple slots on this day
                     for ($i = 0; $i < $count; $i++) {
                         $slotStart = $currentDate->copy()
@@ -874,6 +925,12 @@ class AppointmentController extends Controller
                     // Find the next occurrence of this day of week from the start date
                     $targetDate = $startDateTime->copy()->addWeeks($week)->startOfWeek();
                     $targetDate->addDays($dayOfWeek); // 0=Sunday, 1=Monday, etc.
+
+                    // Skip blocked dates
+                    if (BlockedDate::isBlocked($targetDate)) {
+                        $blockedCount++;
+                        continue;
+                    }
                     
                     $slotStart = $targetDate->copy()->setTimeFromTimeString($request->start_time);
                     $slotEnd = $slotStart->copy()->addMinutes($duration);
@@ -901,9 +958,12 @@ class AppointmentController extends Controller
             }
         }
 
-        $message = "Created $createdCount available slot(s) successfully.";
+        $message = __('messages.slot_created_success', ['count' => $createdCount]);
         if ($skippedCount > 0) {
-            $message .= " Skipped $skippedCount slot(s) due to time conflicts.";
+            $message .= ' ' . __('messages.slot_skipped_conflicts', ['count' => $skippedCount]);
+        }
+        if ($blockedCount > 0) {
+            $message .= ' ' . __('messages.slot_skipped_blocked', ['count' => $blockedCount]);
         }
 
         // Log activity for slot creation
@@ -995,6 +1055,7 @@ class AppointmentController extends Controller
 
     /**
      * Book a slot for a client (admin booking)
+     * Creates a confirmed appointment directly — no pending approval step needed.
      */
     public function bookSlot(Request $request, AvailableSlot $slot)
     {
@@ -1005,72 +1066,33 @@ class AppointmentController extends Controller
 
         $clientType = $request->input('client_type');
         
-        if ($clientType === 'new') {
-            // Create new user for new clients
-            $request->validate([
-                'new_name' => 'required|string|max:255',
-                'new_email' => 'required|email|unique:users,email',
-                'new_phone' => 'required|string|max:20',
-                'new_password' => 'required|string|min:6',
-                'new_vehicle_make' => 'required|string|max:255',
-                'new_vehicle_model' => 'required|string|max:255',
-                'new_vehicle_year' => 'required|integer|min:1900|max:2100',
-                'new_vehicle_plate' => 'nullable|string|max:20',
-                'service' => 'required|string|max:255',
-            ]);
-
-            // Store the plain password before hashing to send in email
-            $temporaryPassword = $request->new_password;
-
-            $user = \App\Models\User::create([
-                'name' => $request->new_name,
-                'email' => $request->new_email,
-                'phone' => $request->new_phone,
-                'password' => bcrypt($temporaryPassword),
-            ]);
-
-            // Create vehicle for the new user
-            $vehicle = \App\Models\Vehicle::create([
-                'user_id' => $user->id,
-                'make' => $request->new_vehicle_make,
-                'model' => $request->new_vehicle_model,
-                'year' => $request->new_vehicle_year,
-                'plate' => $request->new_vehicle_plate,
-            ]);
-
-            $vehicleString = "{$vehicle->year} {$vehicle->make} {$vehicle->model}" . ($vehicle->plate ? " ({$vehicle->plate})" : "");
-
-            // Create pending appointment for new client
-            $pendingAppointment = PendingAppointment::create([
-                'user_id' => $user->id,
-                'available_slot_id' => $slot->id,
-                'vehicle_id' => $vehicle->id,
-                'name' => $request->new_name,
-                'email' => $request->new_email,
-                'phone' => $request->new_phone ?? 'Not provided',
-                'vehicle' => $vehicleString,
-                'service' => $request->service,
-                'notes' => $request->notes,
-                'status' => 'pending',
-            ]);
-
-            // Send welcome email with temporary password (queued)
-            Mail::to($user->email)->queue(new NewClientAccountCreated($user, $temporaryPassword));
-        } else {
-            // Existing client
-            $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'service' => 'required|string|max:255',
-            ]);
-
-            $user = \App\Models\User::find($request->user_id);
-            
-            // Determine vehicle information
+        return DB::transaction(function () use ($request, $slot, $clientType) {
             $vehicleId = null;
             $vehicleString = null;
-            
-            if ($request->filled('new_vehicle_make') && $request->filled('new_vehicle_model') && $request->filled('new_vehicle_year')) {
-                // Create new vehicle for the user
+
+            if ($clientType === 'new') {
+                // Create new user for new clients
+                $request->validate([
+                    'new_name' => 'required|string|max:255',
+                    'new_email' => 'required|email|unique:users,email',
+                    'new_phone' => 'required|string|max:20',
+                    'new_password' => 'required|string|min:6',
+                    'new_vehicle_make' => 'required|string|max:255',
+                    'new_vehicle_model' => 'required|string|max:255',
+                    'new_vehicle_year' => 'required|integer|min:1900|max:2100',
+                    'new_vehicle_plate' => 'nullable|string|max:20',
+                    'service' => 'required|string|max:255',
+                ]);
+
+                $temporaryPassword = $request->new_password;
+
+                $user = \App\Models\User::create([
+                    'name' => $request->new_name,
+                    'email' => $request->new_email,
+                    'phone' => $request->new_phone,
+                    'password' => bcrypt($temporaryPassword),
+                ]);
+
                 $vehicle = \App\Models\Vehicle::create([
                     'user_id' => $user->id,
                     'make' => $request->new_vehicle_make,
@@ -1078,39 +1100,81 @@ class AppointmentController extends Controller
                     'year' => $request->new_vehicle_year,
                     'plate' => $request->new_vehicle_plate,
                 ]);
+
                 $vehicleId = $vehicle->id;
                 $vehicleString = "{$vehicle->year} {$vehicle->make} {$vehicle->model}" . ($vehicle->plate ? " ({$vehicle->plate})" : "");
-            } elseif ($request->filled('vehicle_id')) {
-                // Using selected vehicle from dropdown
-                $vehicleId = $request->vehicle_id;
-                $vehicle = \App\Models\Vehicle::find($vehicleId);
-                if ($vehicle) {
+
+                // Send welcome email with temporary password (queued)
+                Mail::to($user->email)->queue(new NewClientAccountCreated($user, $temporaryPassword));
+            } else {
+                // Existing client
+                $request->validate([
+                    'user_id' => 'required|exists:users,id',
+                    'service' => 'required|string|max:255',
+                ]);
+
+                $user = \App\Models\User::find($request->user_id);
+                
+                if ($request->filled('new_vehicle_make') && $request->filled('new_vehicle_model') && $request->filled('new_vehicle_year')) {
+                    $vehicle = \App\Models\Vehicle::create([
+                        'user_id' => $user->id,
+                        'make' => $request->new_vehicle_make,
+                        'model' => $request->new_vehicle_model,
+                        'year' => $request->new_vehicle_year,
+                        'plate' => $request->new_vehicle_plate,
+                    ]);
+                    $vehicleId = $vehicle->id;
                     $vehicleString = "{$vehicle->year} {$vehicle->make} {$vehicle->model}" . ($vehicle->plate ? " ({$vehicle->plate})" : "");
+                } elseif ($request->filled('vehicle_id')) {
+                    $vehicleId = $request->vehicle_id;
+                    $vehicle = \App\Models\Vehicle::find($vehicleId);
+                    if ($vehicle) {
+                        $vehicleString = "{$vehicle->year} {$vehicle->make} {$vehicle->model}" . ($vehicle->plate ? " ({$vehicle->plate})" : "");
+                    }
+                } elseif ($request->filled('vehicle')) {
+                    $vehicleString = $request->vehicle;
                 }
-            } elseif ($request->filled('vehicle')) {
-                // Manual entry (not saved to profile)
-                $vehicleString = $request->vehicle;
             }
 
-            // Create pending appointment for existing client
-            $pendingAppointment = PendingAppointment::create([
+            // Create confirmed appointment directly (skip pending step for admin bookings)
+            $appointment = Appointment::create([
                 'user_id' => $user->id,
-                'available_slot_id' => $slot->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone ?? 'Not provided',
+                'vehicle_id' => $vehicleId,
+                'name' => $clientType === 'new' ? $request->new_name : $user->name,
+                'email' => $clientType === 'new' ? $request->new_email : $user->email,
+                'phone' => $clientType === 'new' ? ($request->new_phone ?? 'Not provided') : ($user->phone ?? 'Not provided'),
                 'vehicle' => $vehicleString,
                 'service' => $request->service,
-                'notes' => $request->notes,
-                'status' => 'pending',
+                'notes' => $request->notes ? clean($request->notes) : null,
+                'admin_notes' => $request->admin_notes,
+                'appointment_date' => $slot->start_time,
+                'appointment_end' => $slot->end_time,
+                'status' => 'confirmed',
+                'booked_by_admin' => true,
             ]);
-        }
 
-        // Update slot status to pending
-        $slot->update(['status' => 'booked']);
+            // Mark slot as booked
+            $slot->update(['status' => 'booked']);
 
-        return redirect()->route('admin.appointments.pending')
-            ->with('success', 'Appointment request created successfully and is pending approval.');
+            // Log activity
+            ActivityLog::log(
+                'admin_booked',
+                "Admin booked appointment for {$appointment->name} - {$appointment->service}",
+                $appointment,
+                [
+                    'client_type' => $clientType,
+                    'appointment_date' => $slot->start_time->toDateTimeString(),
+                    'service' => $appointment->service,
+                    'admin_user' => auth()->user()?->name,
+                ]
+            );
+
+            // Send confirmation email to client
+            Mail::to($appointment->email)->queue(new \App\Mail\AppointmentApproved($appointment));
+
+            return redirect()->route('admin.appointments.calendar')
+                ->with('success', "Appointment confirmed directly for {$appointment->name}.");
+        });
     }
 
     /**

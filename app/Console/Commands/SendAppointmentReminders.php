@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\Appointment;
 use App\Mail\AppointmentReminder24Hours;
+use App\Services\BatchEmailService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 
 class SendAppointmentReminders extends Command
 {
@@ -26,7 +26,7 @@ class SendAppointmentReminders extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(BatchEmailService $batchEmailService)
     {
         $hoursAhead = (int) $this->option('hours');
         $targetTime = now()->addHours($hoursAhead);
@@ -49,29 +49,22 @@ class SendAppointmentReminders extends Command
 
         $this->info("Found {$appointments->count()} appointment(s) to remind.");
 
-        $bar = $this->output->createProgressBar($appointments->count());
-        $bar->start();
-
-        $sent = 0;
-        $failed = 0;
-
+        // Build batch email payload
+        $emails = [];
         foreach ($appointments as $appointment) {
-            try {
-                Mail::to($appointment->email)->queue(new AppointmentReminder24Hours($appointment));
-                $sent++;
-            } catch (\Exception $e) {
-                \Log::error("Failed to send reminder for appointment {$appointment->id}: " . $e->getMessage());
-                $failed++;
-            }
-            $bar->advance();
+            $emails[] = [
+                'to' => $appointment->email,
+                'mailable' => new AppointmentReminder24Hours($appointment),
+            ];
         }
 
-        $bar->finish();
-        $this->newLine(2);
+        // Send all reminders via Resend batch API (up to 100 per request)
+        $this->info('Sending reminders via batch API...');
+        $result = $batchEmailService->sendBatch($emails);
 
-        $this->info("✓ Sent: {$sent}");
-        if ($failed > 0) {
-            $this->error("✗ Failed: {$failed}");
+        $this->info("✓ Sent: {$result['sent']}");
+        if ($result['failed'] > 0) {
+            $this->error("✗ Failed: {$result['failed']}");
         }
 
         return 0;

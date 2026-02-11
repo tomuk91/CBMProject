@@ -71,6 +71,17 @@ class AppointmentController extends Controller
             'vehicle_id' => 'nullable|exists:vehicles,id',
             'service' => 'required|string|max:255',
             'notes' => 'nullable|string|max:1000',
+        ], [
+            'name.required' => __('messages.validation.name_required'),
+            'name.max' => __('messages.validation.name_max', ['max' => 255]),
+            'email.required' => __('messages.validation.email_required'),
+            'email.email' => __('messages.validation.email_valid'),
+            'email.max' => __('messages.validation.email_max', ['max' => 255]),
+            'phone.required' => __('messages.validation.phone_required'),
+            'phone.max' => __('messages.validation.phone_max', ['max' => 20]),
+            'service.required' => __('messages.validation.service_required'),
+            'service.max' => __('messages.validation.max_length', ['max' => 255]),
+            'notes.max' => __('messages.validation.notes_max', ['max' => 1000]),
         ]);
 
         if ($validator->fails()) {
@@ -275,6 +286,9 @@ class AppointmentController extends Controller
 
         $request->validate([
             'cancellation_reason' => 'required|string|max:500',
+        ], [
+            'cancellation_reason.required' => __('messages.validation.required'),
+            'cancellation_reason.max' => __('messages.validation.max_length', ['max' => 500]),
         ]);
 
         $appointment->update([

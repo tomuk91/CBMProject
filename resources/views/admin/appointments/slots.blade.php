@@ -1,27 +1,33 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('messages.slots_title') }}
             </h2>
-            <div class="flex gap-3">
-                <a href="{{ route('admin.slots.export') }}" class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div data-tour="slots-header-actions" class="flex flex-wrap gap-2 sm:gap-3">
+                <a href="{{ route('admin.schedule-templates.index') }}" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+                    <svg class="w-4 h-4 sm:mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="hidden sm:inline">{{ __('messages.schedule_templates') }}</span>
+                </a>
+                <a href="{{ route('admin.slots.export') }}" class="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+                    <svg class="w-4 h-4 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                     </svg>
-                    {{ __('messages.export_slots') }}
+                    <span class="hidden sm:inline">{{ __('messages.export_slots') }}</span>
                 </a>
-                <a href="{{ route('admin.appointments.pending') }}" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <a href="{{ route('admin.appointments.pending') }}" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+                    <svg class="w-4 h-4 sm:mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                     </svg>
-                    {{ __('messages.admin_pending_requests') }}
+                    <span class="hidden sm:inline">{{ __('messages.admin_pending_requests') }}</span>
                 </a>
-                <a href="{{ route('admin.appointments.calendar') }}" class="bg-red-700 hover:bg-red-800 dark:bg-red-800 dark:hover:bg-red-900 text-white text-sm px-5 py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <a href="{{ route('admin.appointments.calendar') }}" class="bg-red-700 hover:bg-red-800 dark:bg-red-800 dark:hover:bg-red-900 text-white text-xs sm:text-sm px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center">
+                    <svg class="w-4 h-4 sm:mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
                     </svg>
-                    {{ __('messages.admin_view_calendar') }}
+                    <span class="hidden sm:inline">{{ __('messages.admin_view_calendar') }}</span>
                 </a>
             </div>
         </div>
@@ -91,7 +97,7 @@
             @endif
 
             <!-- Create New Slot Form -->
-            <div x-data="{ expanded: {{ $errors->any() || old('start_date') ? 'true' : 'false' }} }" class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
+            <div data-tour="slots-create-form" x-data="slotCreator()" class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
                 <div @click="expanded = !expanded" class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 cursor-pointer hover:from-red-700 hover:to-red-800 transition-all duration-200">
                     <div class="flex items-center justify-between">
                         <div>
@@ -101,7 +107,7 @@
                                 </svg>
                                 {{ __('messages.slots_create') }}
                             </h3>
-                            <p class="text-red-100 text-sm mt-1">Create single or multiple slots using bulk patterns</p>
+                            <p class="text-red-100 text-sm mt-1">{{ __('messages.create_slot_description') }}</p>
                         </div>
                         <div class="ml-4 p-2 rounded-lg bg-red-700/50 text-white">
                             <svg x-show="!expanded" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,42 +127,82 @@
                      x-transition:leave-start="opacity-100 transform translate-y-0"
                      x-transition:leave-end="opacity-0 transform -translate-y-2"
                      class="p-6">
-                    <form method="POST" action="{{ route('admin.appointments.slots.store') }}" id="slotForm" class="space-y-8">
+
+                    {{-- Blocked Dates Banner --}}
+                    @if($blockedDates->isNotEmpty())
+                        <div class="mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-0.5">
+                                    <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-3 flex-1">
+                                    <h4 class="text-sm font-bold text-amber-800 dark:text-amber-200">{{ __('messages.slot_blocked_dates_warning') }}</h4>
+                                    <p class="text-xs text-amber-700 dark:text-amber-300 mt-1">{{ __('messages.slot_blocked_dates_will_skip') }}</p>
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                        @foreach($blockedDates->take(10) as $bd)
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 ring-1 ring-amber-300 dark:ring-amber-700">
+                                                🚫 {{ $bd->date->format('M d, Y') }}
+                                                @if($bd->reason) — {{ $bd->reason }} @endif
+                                            </span>
+                                        @endforeach
+                                        @if($blockedDates->count() > 10)
+                                            <span class="text-xs text-amber-600 dark:text-amber-400 self-center">+{{ $blockedDates->count() - 10 }} {{ __('messages.more') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('admin.appointments.slots.store') }}" id="slotForm" class="space-y-6">
                         @csrf
-                        
-                        <!-- Creation Mode Selection -->
+
+                        {{-- Step 1: Creation Mode --}}
                         <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
                             <label class="block text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                                </svg>
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-red-600 text-white text-xs font-bold mr-2.5">1</span>
                                 {{ __('messages.create_slot_question') }}
                             </label>
-                            <div class="space-y-3">
-                                <label class="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 border-2 border-transparent has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/20">
-                                    <input type="radio" name="bulk_type" value="single" {{ old('bulk_type', 'single') == 'single' ? 'checked' : '' }} class="creation-mode text-red-600 focus:ring-red-500" data-mode="single">
-                                    <span class="ml-3 text-gray-900 dark:text-gray-100">📌 <strong>{{ __('messages.create_mode_single') }}</strong> - <span class="text-sm text-gray-600 dark:text-gray-400">{{ __('messages.create_mode_single_desc') }}</span></span>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <label class="relative flex items-start p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 border-2 border-transparent has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/20 group">
+                                    <input type="radio" name="bulk_type" value="single" x-model="mode" {{ old('bulk_type', 'single') == 'single' ? 'checked' : '' }} class="mt-1 text-red-600 focus:ring-red-500">
+                                    <div class="ml-3">
+                                        <p class="font-bold text-gray-900 dark:text-gray-100 flex items-center">
+                                            <span class="text-lg mr-1.5">📌</span> {{ __('messages.create_mode_single') }}
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">{{ __('messages.create_mode_single_desc') }}</p>
+                                    </div>
                                 </label>
-                                <label class="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 border-2 border-transparent has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/20">
-                                    <input type="radio" name="bulk_type" value="daily" {{ old('bulk_type') == 'daily' ? 'checked' : '' }} class="creation-mode text-red-600 focus:ring-red-500" data-mode="daily">
-                                    <span class="ml-3 text-gray-900 dark:text-gray-100">📅 <strong>{{ __('messages.create_mode_daily') }}</strong> - <span class="text-sm text-gray-600 dark:text-gray-400">{{ __('messages.create_mode_daily_desc') }}</span></span>
+                                <label class="relative flex items-start p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 border-2 border-transparent has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/20 group">
+                                    <input type="radio" name="bulk_type" value="daily" x-model="mode" {{ old('bulk_type') == 'daily' ? 'checked' : '' }} class="mt-1 text-red-600 focus:ring-red-500">
+                                    <div class="ml-3">
+                                        <p class="font-bold text-gray-900 dark:text-gray-100 flex items-center">
+                                            <span class="text-lg mr-1.5">📅</span> {{ __('messages.create_mode_daily') }}
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">{{ __('messages.create_mode_daily_desc') }}</p>
+                                    </div>
                                 </label>
-                                <label class="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 border-2 border-transparent has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/20">
-                                    <input type="radio" name="bulk_type" value="weekly" {{ old('bulk_type') == 'weekly' ? 'checked' : '' }} class="creation-mode text-red-600 focus:ring-red-500" data-mode="weekly">
-                                    <span class="ml-3 text-gray-900 dark:text-gray-100">🔄 <strong>{{ __('messages.create_mode_weekly') }}</strong> - <span class="text-sm text-gray-600 dark:text-gray-400">{{ __('messages.create_mode_weekly_desc') }}</span></span>
+                                <label class="relative flex items-start p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 border-2 border-transparent has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/20 group">
+                                    <input type="radio" name="bulk_type" value="weekly" x-model="mode" {{ old('bulk_type') == 'weekly' ? 'checked' : '' }} class="mt-1 text-red-600 focus:ring-red-500">
+                                    <div class="ml-3">
+                                        <p class="font-bold text-gray-900 dark:text-gray-100 flex items-center">
+                                            <span class="text-lg mr-1.5">🔄</span> {{ __('messages.create_mode_weekly') }}
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">{{ __('messages.create_mode_weekly_desc') }}</p>
+                                    </div>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- Basic Information (shown for all modes) -->
-                        <div>
-                            <h4 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
-                                </svg>
-                                Basic Information
-                            </h4>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {{-- Step 2: Basic Information --}}
+                        <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                            <label class="block text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-red-600 text-white text-xs font-bold mr-2.5">2</span>
+                                {{ __('messages.slot_basic_info') }}
+                            </label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 <div>
                                     <label for="start_date" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                         {{ __('messages.create_start_date') }} <span class="text-red-600">*</span>
@@ -164,14 +210,21 @@
                                     <input type="date" 
                                            id="start_date" 
                                            name="start_date" 
+                                           x-model="startDate"
                                            value="{{ old('start_date') }}"
                                            min="{{ date('Y-m-d') }}"
-                                           data-min-today
                                            required
                                            class="w-full px-4 py-3 rounded-lg border-2 @error('start_date') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                     @error('start_date')
                                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                     @enderror
+                                    {{-- Blocked date inline warning --}}
+                                    <div x-show="isDateBlocked" x-transition class="mt-2 flex items-center p-2.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-700 rounded-lg">
+                                        <svg class="w-4 h-4 text-amber-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <span class="text-xs font-medium text-amber-800 dark:text-amber-200" x-text="blockedReason"></span>
+                                    </div>
                                 </div>
                                 @php
                                     $oldTime = old('start_time', '09:00');
@@ -179,41 +232,31 @@
                                     $oldHour = $timeParts[0] ?? '09';
                                     $oldMinute = $timeParts[1] ?? '00';
                                 @endphp
-                                <div x-data="{ 
-                                    hour: '{{ $oldHour }}', 
-                                    minute: '{{ $oldMinute }}',
-                                    updateTime() {
-                                        document.getElementById('start_time').value = this.hour + ':' + this.minute;
-                                    }
-                                }" x-init="updateTime()">
+                                <div>
                                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                         {{ __('messages.create_start_time') }} <span class="text-red-600">*</span>
                                     </label>
                                     <div class="flex gap-2">
                                         <div class="flex-1">
-                                            <select x-model="hour" 
-                                                    @change="updateTime()"
+                                            <select x-model="hour" @change="updateHiddenTime()"
                                                     class="w-full px-4 py-3 rounded-lg border-2 @error('start_time') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                                 @for($h = 0; $h < 24; $h++)
-                                                    <option value="{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}">{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}</option>
+                                                    <option value="{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}" {{ $oldHour == str_pad($h, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}</option>
                                                 @endfor
                                             </select>
                                         </div>
-                                        <div class="flex items-center justify-center text-2xl font-bold text-gray-500 dark:text-gray-400">
-                                            :
-                                        </div>
+                                        <div class="flex items-center justify-center text-2xl font-bold text-gray-500 dark:text-gray-400">:</div>
                                         <div class="flex-1">
-                                            <select x-model="minute" 
-                                                    @change="updateTime()"
+                                            <select x-model="minute" @change="updateHiddenTime()"
                                                     class="w-full px-4 py-3 rounded-lg border-2 @error('start_time') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                                                <option value="00">00</option>
-                                                <option value="15">15</option>
-                                                <option value="30">30</option>
-                                                <option value="45">45</option>
+                                                <option value="00" {{ $oldMinute == '00' ? 'selected' : '' }}>00</option>
+                                                <option value="15" {{ $oldMinute == '15' ? 'selected' : '' }}>15</option>
+                                                <option value="30" {{ $oldMinute == '30' ? 'selected' : '' }}>30</option>
+                                                <option value="45" {{ $oldMinute == '45' ? 'selected' : '' }}>45</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <input type="hidden" id="start_time" name="start_time" value="{{ old('start_time', '09:00') }}" required>
+                                    <input type="hidden" id="start_time" name="start_time" :value="hour + ':' + minute" required>
                                     @error('start_time')
                                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                     @enderror
@@ -222,14 +265,12 @@
                                     <label for="duration" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                         {{ __('messages.create_duration') }} <span class="text-red-600">*</span>
                                     </label>
-                                    <select id="duration" 
-                                            name="duration" 
-                                            required
+                                    <select id="duration" name="duration" x-model="duration" required
                                             class="w-full px-4 py-3 rounded-lg border-2 @error('duration') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                                        <option value="30" {{ old('duration') == '30' ? 'selected' : '' }}>30 minutes</option>
-                                        <option value="60" {{ old('duration', '60') == '60' ? 'selected' : '' }}>1 hour</option>
-                                        <option value="90" {{ old('duration') == '90' ? 'selected' : '' }}>1.5 hours</option>
-                                        <option value="120" {{ old('duration') == '120' ? 'selected' : '' }}>2 hours</option>
+                                        <option value="30" {{ old('duration') == '30' ? 'selected' : '' }}>30 {{ __('messages.schedule_template_minutes', ['count' => '']) }}</option>
+                                        <option value="60" {{ old('duration', '60') == '60' ? 'selected' : '' }}>1 {{ trans_choice('messages.schedule_template_hours', 1) }}</option>
+                                        <option value="90" {{ old('duration') == '90' ? 'selected' : '' }}>1h 30m</option>
+                                        <option value="120" {{ old('duration') == '120' ? 'selected' : '' }}>2 {{ trans_choice('messages.schedule_template_hours', 2) }}</option>
                                     </select>
                                     @error('duration')
                                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -238,107 +279,100 @@
                             </div>
                         </div>
 
-                        <!-- Daily/Weekly Specific Fields -->
-                        <div id="bulkOptions" class="space-y-4 hidden">
-                            <!-- Days Selection (for daily/weekly patterns) -->
-                            <div id="daysSelection" class="hidden">
+                        {{-- Step 3: Pattern Settings (daily/weekly only) --}}
+                        <div x-show="mode !== 'single'" x-transition class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                            <label class="block text-base font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                                <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-red-600 text-white text-xs font-bold mr-2.5">3</span>
+                                {{ __('messages.slot_pattern_settings') }}
+                            </label>
+
+                            {{-- Day selection --}}
+                            <div class="mb-5">
                                 <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                                     {{ __('messages.create_select_days') }} <span class="text-red-600">*</span>
                                 </label>
-                                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2 sm:gap-3">
-                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
-                                        <input type="checkbox" name="selected_days[]" value="1" {{ is_array(old('selected_days')) && in_array('1', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_monday') }}</span>
-                                    </label>
-                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
-                                        <input type="checkbox" name="selected_days[]" value="2" {{ is_array(old('selected_days')) && in_array('2', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_tuesday') }}</span>
-                                    </label>
-                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
-                                        <input type="checkbox" name="selected_days[]" value="3" {{ is_array(old('selected_days')) && in_array('3', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_wednesday') }}</span>
-                                    </label>
-                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
-                                        <input type="checkbox" name="selected_days[]" value="4" {{ is_array(old('selected_days')) && in_array('4', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_thursday') }}</span>
-                                    </label>
-                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
-                                        <input type="checkbox" name="selected_days[]" value="5" {{ is_array(old('selected_days')) && in_array('5', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_friday') }}</span>
-                                    </label>
-                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
-                                        <input type="checkbox" name="selected_days[]" value="6" {{ is_array(old('selected_days')) && in_array('6', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_saturday') }}</span>
-                                    </label>
-                                    <label class="flex flex-col items-center p-4 sm:p-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 min-h-[70px] sm:min-h-[60px] active:scale-95">
-                                        <input type="checkbox" name="selected_days[]" value="0" {{ is_array(old('selected_days')) && in_array('0', old('selected_days')) ? 'checked' : '' }} class="mb-2 sm:mb-1 w-5 h-5 sm:w-4 sm:h-4 text-red-600 focus:ring-red-500">
-                                        <span class="text-xs sm:text-xs font-semibold text-center">{{ __('messages.day_sunday') }}</span>
-                                    </label>
+                                <div class="grid grid-cols-4 sm:grid-cols-7 gap-2">
+                                    @php
+                                        $dayKeys = [
+                                            1 => 'day_monday', 2 => 'day_tuesday', 3 => 'day_wednesday',
+                                            4 => 'day_thursday', 5 => 'day_friday', 6 => 'day_saturday', 0 => 'day_sunday'
+                                        ];
+                                    @endphp
+                                    @foreach($dayKeys as $val => $key)
+                                        <label class="flex flex-col items-center p-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200 active:scale-95">
+                                            <input type="checkbox" name="selected_days[]" value="{{ $val }}" {{ is_array(old('selected_days')) && in_array((string)$val, old('selected_days')) ? 'checked' : '' }} class="mb-1.5 w-4 h-4 text-red-600 focus:ring-red-500 rounded">
+                                            <span class="text-xs font-bold text-center text-gray-700 dark:text-gray-300">{{ __('messages.'.$key) }}</span>
+                                        </label>
+                                    @endforeach
                                 </div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Select which days to create slots on</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">{{ __('messages.slot_select_days_help') }}</p>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
                                     <label for="bulk_count" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                        <span id="countLabel">Number of Slots</span> <span class="text-red-600">*</span>
+                                        <span x-text="mode === 'daily' ? '{{ __('messages.slot_count_daily_label') }}' : '{{ __('messages.slot_count_weekly_label') }}'"></span>
+                                        <span class="text-red-600">*</span>
                                     </label>
-                                    <input type="number" 
-                                           id="bulk_count" 
-                                           name="bulk_count" 
+                                    <input type="number" id="bulk_count" name="bulk_count" 
                                            value="{{ old('bulk_count') }}"
-                                           min="1" 
-                                           max="30"
+                                           min="1" max="30" x-bind:required="mode !== 'single'"
                                            class="w-full px-4 py-3 rounded-lg border-2 @error('bulk_count') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
                                            placeholder="e.g., 4">
                                     @error('bulk_count')
                                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                     @enderror
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" id="countHelp"></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5" x-text="mode === 'daily' ? '{{ __('messages.slot_count_daily_help') }}' : '{{ __('messages.slot_count_weekly_help') }}'"></p>
                                 </div>
-                                <div>
+                                <div x-show="mode === 'daily'" x-transition>
                                     <label for="bulk_interval" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                        <span id="intervalLabel">Interval (minutes)</span> <span class="text-red-600">*</span>
+                                        {{ __('messages.slot_interval_label') }} <span class="text-red-600">*</span>
                                     </label>
-                                    <input type="number" 
-                                           id="bulk_interval" 
-                                           name="bulk_interval" 
-                                           value="{{ old('bulk_interval') }}"
-                                           min="0" 
-                                           max="480"
-                                           class="w-full px-4 py-3 rounded-lg border-2 @error('bulk_interval') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                                           placeholder="e.g., 60 (1 hour gap)">
+                                    <select id="bulk_interval" name="bulk_interval"
+                                            class="w-full px-4 py-3 rounded-lg border-2 @error('bulk_interval') border-red-500 dark:border-red-500 @else border-gray-300 dark:border-gray-600 @enderror dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                                        <option value="0" {{ old('bulk_interval') == '0' ? 'selected' : '' }}>{{ __('messages.schedule_template_minutes', ['count' => 0]) }} ({{ __('messages.slot_interval_help') }})</option>
+                                        <option value="15" {{ old('bulk_interval') == '15' ? 'selected' : '' }}>15 {{ __('messages.schedule_template_minutes', ['count' => '']) }}</option>
+                                        <option value="30" {{ old('bulk_interval') == '30' ? 'selected' : '' }}>30 {{ __('messages.schedule_template_minutes', ['count' => '']) }}</option>
+                                        <option value="60" {{ old('bulk_interval', '60') == '60' ? 'selected' : '' }}>1 {{ trans_choice('messages.schedule_template_hours', 1) }}</option>
+                                        <option value="90" {{ old('bulk_interval') == '90' ? 'selected' : '' }}>1h 30m</option>
+                                        <option value="120" {{ old('bulk_interval') == '120' ? 'selected' : '' }}>2 {{ trans_choice('messages.schedule_template_hours', 2) }}</option>
+                                    </select>
                                     @error('bulk_interval')
                                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                     @enderror
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" id="intervalHelp"></p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5">{{ __('messages.slot_interval_help') }}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Preview -->
-                        <div id="previewSection" class="hidden bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/30 rounded-xl p-5">
+                        {{-- Live Preview --}}
+                        <div x-show="previewText" x-transition class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
                             <div class="flex items-start">
-                                <svg class="w-5 h-5 text-red-600 dark:text-red-400 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                                </svg>
-                                <div>
-                                    <p class="text-sm font-bold text-red-900 dark:text-red-300 mb-2">📋 Preview:</p>
-                                    <p id="previewText" class="text-sm text-red-800 dark:text-red-200"></p>
+                                <div class="flex-shrink-0 mt-0.5">
+                                    <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-bold text-blue-800 dark:text-blue-200">{{ __('messages.slot_preview_label') }}</p>
+                                    <p class="text-sm text-blue-700 dark:text-blue-300 mt-1" x-text="previewText"></p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="flex gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        {{-- Submit --}}
+                        <div class="flex gap-4 pt-2">
                             <input type="hidden" name="force_create" id="force_create" value="0">
                             <button type="submit" 
-                                    class="flex-1 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white px-6 py-3 rounded-lg transition-all duration-300 font-bold shadow-sm hover:shadow-md flex items-center justify-center">
+                                    class="flex-1 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white px-6 py-3 rounded-lg transition-all duration-300 font-bold shadow-sm hover:shadow-md flex items-center justify-center"
+                                    :class="{ 'opacity-50 cursor-not-allowed': isDateBlocked && mode === 'single' }"
+                                    :disabled="isDateBlocked && mode === 'single'">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                 </svg>
                                 {{ __('messages.create_submit') }}
                             </button>
-                            <button type="reset" 
+                            <button type="reset" @click="resetForm()"
                                     class="px-8 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-all duration-300 font-semibold">
                                 {{ __('messages.slots_clear') }}
                             </button>
@@ -348,194 +382,182 @@
             </div>
 
             <script>
-                const creationModeRadios = document.querySelectorAll('.creation-mode');
-                const bulkOptions = document.getElementById('bulkOptions');
-                const previewSection = document.getElementById('previewSection');
-                const form = document.getElementById('slotForm');
+                function slotCreator() {
+                    return {
+                        expanded: {{ $errors->any() || old('start_date') ? 'true' : 'false' }},
+                        mode: '{{ old('bulk_type', 'single') }}',
+                        startDate: '{{ old('start_date', '') }}',
+                        hour: '{{ $oldHour }}',
+                        minute: '{{ $oldMinute }}',
+                        duration: '{{ old('duration', '60') }}',
+                        blockedDates: {!! json_encode($blockedDates->mapWithKeys(fn($bd) => [$bd->date->format('Y-m-d') => $bd->reason ?? ''])->toArray()) !!},
+                        isDateBlocked: false,
+                        blockedReason: '',
 
-                // Update UI based on selected mode
-                function updateUI() {
-                    const mode = document.querySelector('.creation-mode:checked').value;
-                    const daysSelection = document.getElementById('daysSelection');
-                    
-                    // Show/hide bulk options
-                    if (mode === 'single') {
-                        bulkOptions.classList.add('hidden');
-                        daysSelection.classList.add('hidden');
-                        previewSection.classList.add('hidden');
-                        document.getElementById('bulk_count').removeAttribute('required');
-                        document.getElementById('bulk_interval').removeAttribute('required');
-                    } else {
-                        bulkOptions.classList.remove('hidden');
-                        daysSelection.classList.remove('hidden');
-                        previewSection.classList.remove('hidden');
-                        document.getElementById('bulk_count').setAttribute('required', 'required');
-                        document.getElementById('bulk_interval').setAttribute('required', 'required');
+                        init() {
+                            this.updateHiddenTime();
+                            this.checkBlockedDate();
 
-                        // Update labels based on mode
-                        if (mode === 'daily') {
-                            document.getElementById('countLabel').textContent = 'Number of Slots (per day)';
-                            document.getElementById('countHelp').textContent = 'How many slots on each selected day';
-                            document.getElementById('intervalLabel').textContent = 'Gap Between Slots (minutes)';
-                            document.getElementById('intervalHelp').textContent = 'Minutes between when one slot ends and the next begins (e.g., 60 = 1-hour gap)';
-                            document.getElementById('bulk_interval').parentElement.style.display = 'block';
-                        } else if (mode === 'weekly') {
-                            document.getElementById('countLabel').textContent = 'Number of Weeks';
-                            document.getElementById('countHelp').textContent = 'How many weeks to repeat this slot';
-                            document.getElementById('bulk_interval').parentElement.style.display = 'none';
-                            document.getElementById('bulk_interval').removeAttribute('required');
-                        }
-                    }
+                            this.$watch('startDate', () => this.checkBlockedDate());
+                            this.$watch('mode', () => this.updatePreview());
+                            this.$watch('hour', () => this.updatePreview());
+                            this.$watch('minute', () => this.updatePreview());
+                            this.$watch('duration', () => this.updatePreview());
 
-                    updatePreview();
-                }
+                            // Form submission with conflict check
+                            const form = document.getElementById('slotForm');
+                            form.addEventListener('submit', async (e) => {
+                                const forceCreate = document.getElementById('force_create').value;
+                                if (forceCreate === '1') return true;
+                                e.preventDefault();
 
-                // Update preview text
-                function updatePreview() {
-                    const mode = document.querySelector('.creation-mode:checked').value;
-                    const date = document.getElementById('start_date').value;
-                    const time = document.getElementById('start_time').value;
-                    const duration = document.getElementById('duration').value;
-                    const count = document.getElementById('bulk_count').value || '?';
-                    const interval = document.getElementById('bulk_interval').value || '?';
-                    
-                    // Get selected days
-                    const selectedDays = Array.from(document.querySelectorAll('input[name="selected_days[]"]:checked'))
-                        .map(cb => {
-                            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                            return dayNames[parseInt(cb.value)];
-                        });
+                                const formData = new FormData(form);
+                                try {
+                                    const response = await fetch('{{ route('admin.slots.check-conflicts') }}', {
+                                        method: 'POST',
+                                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
+                                        body: formData
+                                    });
+                                    const data = await response.json();
 
-                    let preview = '';
-                    if (mode === 'single' && date && time && duration) {
-                        const dateObj = new Date(date);
-                        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                        preview = `Will create 1 slot on ${dateStr} at ${time} for ${duration} minutes`;
-                    } else if (mode === 'daily' && date && time && duration && count && interval && selectedDays.length > 0) {
-                        const dateObj = new Date(date);
-                        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                        const daysStr = selectedDays.join(', ');
-                        preview = `Will create ${count} slots on ${daysStr} starting ${dateStr} at ${time}, spaced ${interval} minutes apart per day`;
-                    } else if (mode === 'weekly' && date && time && duration && count && selectedDays.length > 0) {
-                        const dateObj = new Date(date);
-                        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                        const daysStr = selectedDays.join(', ');
-                        preview = `Will create ${count} recurring slots every ${daysStr} at ${time} for ${duration} minutes, starting ${dateStr}`;
-                    }
+                                    if (data.has_conflicts || data.has_blocked) {
+                                        this.showConflictModal(data);
+                                    } else {
+                                        form.submit();
+                                    }
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                    form.submit();
+                                }
+                            });
+                        },
 
-                    if (preview) {
-                        document.getElementById('previewText').textContent = preview;
-                    }
-                }
+                        updateHiddenTime() {
+                            const el = document.getElementById('start_time');
+                            if (el) el.value = this.hour + ':' + this.minute;
+                        },
 
-                // Event listeners
-                creationModeRadios.forEach(radio => {
-                    radio.addEventListener('change', updateUI);
-                });
+                        checkBlockedDate() {
+                            if (this.startDate && this.blockedDates[this.startDate] !== undefined) {
+                                this.isDateBlocked = true;
+                                const reason = this.blockedDates[this.startDate];
+                                this.blockedReason = '⚠️ {{ __('messages.slot_blocked_badge') }}: ' + (reason || '{{ __('messages.slot_blocked_no_reason') }}');
+                            } else {
+                                this.isDateBlocked = false;
+                                this.blockedReason = '';
+                            }
+                            this.updatePreview();
+                        },
 
-                document.getElementById('start_date').addEventListener('change', updatePreview);
-                document.getElementById('start_time').addEventListener('change', updatePreview);
-                document.getElementById('duration').addEventListener('change', updatePreview);
-                document.getElementById('bulk_count').addEventListener('input', updatePreview);
-                document.getElementById('bulk_interval').addEventListener('input', updatePreview);
-                
-                // Add listeners for day checkboxes
-                document.querySelectorAll('input[name="selected_days[]"]').forEach(checkbox => {
-                    checkbox.addEventListener('change', updatePreview);
-                });
+                        get previewText() {
+                            if (!this.startDate) return '';
+                            const d = new Date(this.startDate + 'T00:00:00');
+                            const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                            const time = this.hour + ':' + this.minute;
 
-                // Initialize UI on page load (in case of validation errors with old values)
-                updateUI();
+                            const selectedDays = Array.from(document.querySelectorAll('input[name="selected_days[]"]:checked'))
+                                .map(cb => ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][parseInt(cb.value)]);
 
-                // Form submission with conflict check
-                form.addEventListener('submit', async function(e) {
-                    const forceCreate = document.getElementById('force_create').value;
-                    
-                    // Skip check if already confirmed
-                    if (forceCreate === '1') {
-                        return true;
-                    }
-                    
-                    e.preventDefault();
-                    
-                    // Gather form data
-                    const formData = new FormData(form);
-                    
-                    // Check for conflicts via AJAX
-                    try {
-                        const response = await fetch('{{ route('admin.slots.check-conflicts') }}', {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Accept': 'application/json',
-                            },
-                            body: formData
-                        });
-                        
-                        const data = await response.json();
-                        
-                        if (data.has_conflicts) {
-                            // Show conflict warning modal
-                            showConflictModal(data.conflicts, data.will_create);
-                        } else {
-                            // No conflicts, submit form
-                            form.submit();
-                        }
-                    } catch (error) {
-                        console.error('Error checking conflicts:', error);
-                        // On error, allow submission
-                        form.submit();
-                    }
-                });
-                
-                function showConflictModal(conflicts, willCreate) {
-                    const modal = document.getElementById('conflictModal');
-                    const conflictList = document.getElementById('conflictList');
-                    const willCreateText = document.getElementById('willCreateText');
-                    
-                    // Build conflict list with modern styling
-                    conflictList.innerHTML = conflicts.map(conflict => `
-                        <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-3 rounded-r-lg hover:shadow-md transition-shadow">
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <div class="h-8 w-8 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center">
-                                        <svg class="h-4 w-4 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="ml-3 flex-1">
-                                    <p class="text-sm font-bold text-red-900 dark:text-red-200">${conflict.date}</p>
-                                    <div class="mt-1 text-xs text-red-700 dark:text-red-300 space-y-1">
+                            if (this.mode === 'single') {
+                                return `1 slot on ${dateStr} at ${time} for ${this.duration} minutes`;
+                            } else if (this.mode === 'daily') {
+                                const count = document.getElementById('bulk_count')?.value || '?';
+                                const interval = document.getElementById('bulk_interval')?.value || '?';
+                                if (selectedDays.length === 0) return '';
+                                return `${count} slots on ${selectedDays.join(', ')} starting ${dateStr} at ${time}, ${interval} min gap`;
+                            } else if (this.mode === 'weekly') {
+                                const count = document.getElementById('bulk_count')?.value || '?';
+                                if (selectedDays.length === 0) return '';
+                                return `1 slot every ${selectedDays.join(', ')} at ${time} for ${this.duration} min, ${count} weeks from ${dateStr}`;
+                            }
+                            return '';
+                        },
+
+                        updatePreview() {
+                            // Reactive trigger — previewText is a computed getter
+                        },
+
+                        resetForm() {
+                            this.mode = 'single';
+                            this.startDate = '';
+                            this.hour = '09';
+                            this.minute = '00';
+                            this.duration = '60';
+                            this.isDateBlocked = false;
+                            this.blockedReason = '';
+                        },
+
+                        showConflictModal(data) {
+                            const modal = document.getElementById('conflictModal');
+                            const conflictList = document.getElementById('conflictList');
+                            const willCreateText = document.getElementById('willCreateText');
+
+                            let html = '';
+
+                            // Show blocked date warnings
+                            if (data.blocked && data.blocked.length > 0) {
+                                html += data.blocked.map(b => `
+                                    <div class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-3 rounded-r-lg">
                                         <div class="flex items-center">
-                                            <span class="font-medium min-w-[80px]">New slot:</span>
-                                            <span>${conflict.new_start} - ${conflict.new_end}</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <span class="font-medium min-w-[80px]">Existing:</span>
-                                            <span>${conflict.existing_start} - ${conflict.existing_end}</span>
+                                            <span class="text-amber-500 mr-2">🚫</span>
+                                            <div>
+                                                <p class="text-sm font-bold text-amber-900 dark:text-amber-200">${b.date}</p>
+                                                <p class="text-xs text-amber-700 dark:text-amber-300">{{ __('messages.slot_blocked_badge') }}: ${b.reason}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                    
-                    willCreateText.textContent = willCreate > 0 
-                        ? `${willCreate} non-conflicting slot(s) can still be created.`
-                        : 'No slots can be created without conflicts.';
-                    
-                    modal.classList.remove('hidden');
-                }
+                                `).join('');
+                            }
 
-                // Initial UI setup
-                updateUI();
+                            // Show time conflicts
+                            if (data.conflicts && data.conflicts.length > 0) {
+                                html += data.conflicts.map(conflict => `
+                                    <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-3 rounded-r-lg">
+                                        <div class="flex items-start">
+                                            <div class="flex-shrink-0">
+                                                <div class="h-8 w-8 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center">
+                                                    <svg class="h-4 w-4 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div class="ml-3 flex-1">
+                                                <p class="text-sm font-bold text-red-900 dark:text-red-200">${conflict.date}</p>
+                                                <div class="mt-1 text-xs text-red-700 dark:text-red-300 space-y-1">
+                                                    <div class="flex items-center">
+                                                        <span class="font-medium min-w-[80px]">{{ __('messages.slot_conflict_new') }}:</span>
+                                                        <span>${conflict.new_start} - ${conflict.new_end}</span>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <span class="font-medium min-w-[80px]">{{ __('messages.slot_conflict_existing') }}:</span>
+                                                        <span>${conflict.existing_start} - ${conflict.existing_end}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('');
+                            }
+
+                            conflictList.innerHTML = html;
+
+                            let summary = '';
+                            if (data.will_create > 0) {
+                                summary = `${data.will_create} non-conflicting slot(s) can still be created.`;
+                            } else {
+                                summary = 'No slots can be created.';
+                            }
+                            willCreateText.textContent = summary;
+                            modal.classList.remove('hidden');
+                        }
+                    }
+                }
             </script>
 
             <!-- Conflict Warning Modal -->
             <div id="conflictModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
                 <div class="relative mx-auto w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all border border-gray-200 dark:border-gray-700">
-                    <!-- Modal Header with Gradient -->
+                    <!-- Modal Header -->
                     <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-t-xl px-6 py-5">
                         <div class="flex items-center space-x-3">
                             <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-white shadow-lg">
@@ -544,54 +566,42 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-white">
-                                    Slot Conflicts Detected
-                                </h3>
-                                <p class="text-amber-100 text-sm mt-0.5">Some time slots overlap with existing ones</p>
+                                <h3 class="text-xl font-bold text-white">{{ __('messages.slot_conflict_detected') }}</h3>
+                                <p class="text-amber-100 text-sm mt-0.5">{{ __('messages.slot_conflict_subtitle') }}</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Modal Body -->
                     <div class="p-6">
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                            The following time slots overlap with existing slots:
-                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{ __('messages.slot_conflict_list_title') }}</p>
                         
-                        <!-- Conflicts List -->
-                        <div id="conflictList" class="space-y-2 mb-5 max-h-80 overflow-y-auto pr-2">
-                            <!-- Conflicts will be inserted here -->
-                        </div>
+                        <div id="conflictList" class="space-y-2 mb-5 max-h-80 overflow-y-auto pr-2"></div>
                         
-                        <!-- Summary Box -->
                         <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg mb-5">
                             <div class="flex items-start">
                                 <svg class="h-5 w-5 text-blue-500 mt-0.5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                                 </svg>
-                                <p id="willCreateText" class="text-sm font-medium text-blue-900 dark:text-blue-200">
-                                    <!-- Summary text -->
-                                </p>
+                                <p id="willCreateText" class="text-sm font-medium text-blue-900 dark:text-blue-200"></p>
                             </div>
                         </div>
                         
-                        <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                            Would you like to proceed and create only the non-conflicting slots?
-                        </p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 font-medium">{{ __('messages.slot_conflict_proceed') }}</p>
                     </div>
 
                     <!-- Modal Footer -->
                     <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 rounded-b-xl flex items-center justify-end gap-3">
                         <button id="cancelConflict" type="button"
                                 class="px-5 py-2.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm">
-                            Cancel
+                            {{ __('messages.cancel') }}
                         </button>
                         <button id="confirmConflict" type="button"
                                 class="px-5 py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            Proceed Anyway
+                            {{ __('messages.proceed_anyway') }}
                         </button>
                     </div>
                 </div>
@@ -627,7 +637,7 @@
             </script>
 
             <!-- Available Slots List -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
+            <div data-tour="slots-list" class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
                 <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
                     <div class="flex items-center justify-between">
                         <h3 class="text-xl font-bold text-white flex items-center">
@@ -643,14 +653,14 @@
                 </div>
 
                 <!-- Filters -->
-                <div class="p-6 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
-                    <form method="GET" action="{{ route('admin.appointments.slots') }}" class="flex flex-wrap gap-4 items-end">
-                        <div class="flex-1 min-w-[200px]">
+                <div data-tour="slots-filters" class="p-4 sm:p-6 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+                    <form method="GET" action="{{ route('admin.appointments.slots') }}" class="flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:items-end">
+                        <div class="w-full sm:flex-1 sm:min-w-[200px]">
                             <label for="filter_date_from" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
                                 <svg class="w-4 h-4 mr-1.5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
                                 </svg>
-                                From Date
+                                {{ __('messages.filter_from_date') }}
                             </label>
                             <input type="date" 
                                    id="filter_date_from" 
@@ -659,12 +669,12 @@
                                    min="{{ date('Y-m-d') }}"
                                    class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-sm">
                         </div>
-                        <div class="flex-1 min-w-[200px]">
+                        <div class="w-full sm:flex-1 sm:min-w-[200px]">
                             <label for="filter_date_to" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
                                 <svg class="w-4 h-4 mr-1.5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
                                 </svg>
-                                To Date
+                                {{ __('messages.filter_to_date') }}
                             </label>
                             <input type="date" 
                                    id="filter_date_to" 
@@ -673,7 +683,7 @@
                                    min="{{ date('Y-m-d') }}"
                                    class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-sm">
                         </div>
-                        <div class="flex-1 min-w-[200px]">
+                        <div class="w-full sm:flex-1 sm:min-w-[200px]">
                             <label for="filter_status" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
                                 <svg class="w-4 h-4 mr-1.5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/>
@@ -689,7 +699,7 @@
                                 <option value="booked" {{ request('filter_status') === 'booked' ? 'selected' : '' }}>{{ __('messages.status_booked') }}</option>
                             </select>
                         </div>
-                        <div class="flex gap-3 items-center">
+                        <div class="flex flex-wrap gap-3 items-center w-full sm:w-auto">
                             <label class="inline-flex items-center cursor-pointer group">
                                 <input type="hidden" name="show_old" value="0">
                                 <input type="checkbox" 
@@ -707,14 +717,14 @@
                             </label>
                             <div class="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
                             <button type="submit" 
-                                    class="px-5 py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white rounded-lg transition-all duration-200 text-sm font-semibold shadow-sm hover:shadow-md flex items-center">
+                                    class="flex-1 sm:flex-none px-5 py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white rounded-lg transition-all duration-200 text-sm font-semibold shadow-sm hover:shadow-md flex items-center justify-center">
                                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
                                 </svg>
                                 {{ __('messages.slots_apply_filters') }}
                             </button>
                             <a href="{{ route('admin.appointments.slots') }}" 
-                               class="px-5 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 text-sm font-semibold shadow-sm flex items-center">
+                               class="flex-1 sm:flex-none px-5 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 text-sm font-semibold shadow-sm flex items-center justify-center">
                                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                 </svg>
@@ -730,8 +740,8 @@
                             <svg class="mx-auto h-16 w-16 text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 font-medium">No time slots created yet.</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-500">Create your first slot using the form above.</p>
+                            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 font-medium">{{ __('messages.slot_empty_title') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('messages.slot_empty_subtitle') }}</p>
                         </div>
                     @else
                         <!-- Bulk Actions Bar -->
@@ -741,7 +751,7 @@
                                     <svg class="w-5 h-5 text-red-600 dark:text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                                     </svg>
-                                    <span class="text-sm font-semibold text-red-900 dark:text-red-100"><span x-text="selectedSlots.length"></span> slot(s) selected</span>
+                                    <span class="text-sm font-semibold text-red-900 dark:text-red-100"><span x-text="selectedSlots.length"></span> {{ __('messages.slot_selected_count') }}</span>
                                 </div>
                                 <form method="POST" action="{{ route('admin.appointments.slots.bulk-delete') }}" onsubmit="return confirm('Are you sure you want to delete the selected slots? This action cannot be undone.')">
                                     @csrf
@@ -751,7 +761,7 @@
                                         <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
                                         </svg>
-                                        Delete Selected
+                                        {{ __('messages.slot_delete_selected') }}
                                     </button>
                                 </form>
                             </div>
@@ -851,6 +861,11 @@
                                                     @endif
                                                     {{ ucfirst($slot->status) }}
                                                 </span>
+                                                @if($slot->source === 'auto')
+                                                    <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400" title="Auto-generated from schedule template">
+                                                        ⚡ Auto
+                                                    </span>
+                                                @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <div class="flex items-center justify-end space-x-3">
@@ -877,7 +892,7 @@
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <span class="text-gray-400 dark:text-gray-600 text-xs italic">No actions available</span>
+                                                        <span class="text-gray-400 dark:text-gray-600 text-xs italic">{{ __('messages.slot_no_actions') }}</span>
                                                     @endif
                                                 </div>
                                             </td>
@@ -1554,4 +1569,51 @@
             </script>
         </div>
     </div>
+    @include('admin.partials.tour', [
+        'tourPage' => 'slots',
+        'tourSteps' => [
+            [
+                'target' => null,
+                'title' => __('messages.tour_slots_welcome_title'),
+                'description' => __('messages.tour_slots_welcome_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>',
+                'position' => 'center',
+            ],
+            [
+                'target' => '[data-tour="slots-header-actions"]',
+                'title' => __('messages.tour_slots_actions_title'),
+                'description' => __('messages.tour_slots_actions_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/></svg>',
+                'position' => 'bottom',
+            ],
+            [
+                'target' => '[data-tour="slots-create-form"]',
+                'title' => __('messages.tour_slots_create_title'),
+                'description' => __('messages.tour_slots_create_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/></svg>',
+                'position' => 'bottom',
+            ],
+            [
+                'target' => '[data-tour="slots-list"]',
+                'title' => __('messages.tour_slots_list_title'),
+                'description' => __('messages.tour_slots_list_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>',
+                'position' => 'top',
+            ],
+            [
+                'target' => '[data-tour="slots-filters"]',
+                'title' => __('messages.tour_slots_filters_title'),
+                'description' => __('messages.tour_slots_filters_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/></svg>',
+                'position' => 'bottom',
+            ],
+            [
+                'target' => null,
+                'title' => __('messages.tour_slots_complete_title'),
+                'description' => __('messages.tour_slots_complete_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
+                'position' => 'center',
+            ],
+        ],
+    ])
 </x-app-layout>

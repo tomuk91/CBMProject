@@ -42,4 +42,27 @@ class ProfileUpdateRequest extends FormRequest
             'vehicle_mileage' => ['nullable', 'integer', 'min:0'],
         ];
     }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => __('messages.validation.name_required'),
+            'name.max' => __('messages.validation.name_max', ['max' => 255]),
+            'email.required' => __('messages.validation.email_required'),
+            'email.email' => __('messages.validation.email_valid'),
+            'email.max' => __('messages.validation.email_max', ['max' => 255]),
+            'email.unique' => __('messages.validation.email_unique'),
+            'phone.max' => __('messages.validation.phone_max', ['max' => 20]),
+            'vehicle_make.max' => __('messages.validation.max_length', ['max' => 255]),
+            'vehicle_model.max' => __('messages.validation.max_length', ['max' => 255]),
+            'vehicle_year.max' => __('messages.validation.vehicle_year_format'),
+            'vehicle_plate.max' => __('messages.validation.vehicle_plate_max', ['max' => 20]),
+            'vehicle_notes.max' => __('messages.validation.notes_max', ['max' => 1000]),
+        ];
+    }
 }

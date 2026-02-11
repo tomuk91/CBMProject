@@ -364,7 +364,7 @@
             <!-- Sidebar Summary -->
             <div class="lg:col-span-1 space-y-6">
                 <!-- Selected Slot Card -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 sticky top-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 lg:sticky lg:top-8">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

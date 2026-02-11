@@ -35,7 +35,7 @@
             </div>
 
             <!-- Quick Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div data-tour="stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Pending Requests -->
                 <div class="group bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
                     <div class="h-2 bg-gradient-to-r from-red-500 to-red-600"></div>
@@ -49,7 +49,7 @@
                         </div>
                         <p class="text-5xl font-bold text-red-600 dark:text-red-400 mb-2">{{ $pendingCount }}</p>
                         <p class="text-gray-600 dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">{{ __('messages.status_pending') }}</p>
-                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">{{ __('messages.admin_pending_approvals') }}</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">{{ __('messages.admin_pending_approvals') }}</p>
                     </div>
                 </div>
 
@@ -66,7 +66,7 @@
                         </div>
                         <p class="text-5xl font-bold text-red-600 dark:text-red-400 mb-2">{{ $availableSlotsCount }}</p>
                         <p class="text-gray-600 dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">{{ __('messages.status_available') }}</p>
-                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">Available Appointments</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Available Appointments</p>
                     </div>
                 </div>
 
@@ -83,7 +83,7 @@
                         </div>
                         <p class="text-5xl font-bold text-red-700 dark:text-red-400 mb-2">{{ $bookedSlotsCount }}</p>
                         <p class="text-gray-600 dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">{{ __('messages.status_booked') }}</p>
-                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">Bookings Confirmed</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Bookings Confirmed</p>
                     </div>
                 </div>
 
@@ -101,7 +101,7 @@
                         </div>
                         <p class="text-5xl font-bold text-gray-700 dark:text-gray-300 mb-2">{{ $todayAppointmentsCount }}</p>
                         <p class="text-gray-600 dark:text-gray-400 text-sm font-semibold uppercase tracking-wider">{{ __('messages.admin_todays_appointments') }}</p>
-                        <p class="text-gray-500 dark:text-gray-500 text-xs mt-1">{{ __('messages.admin_recent_activity') }}</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">{{ __('messages.admin_recent_activity') }}</p>
                     </div>
                 </div>
             </div>
@@ -109,7 +109,7 @@
             <!-- Main Actions -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Quick Actions -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div data-tour="quick-actions" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700">
                     <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-700/30 border-b border-gray-200 dark:border-gray-700">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center">
                             <svg class="w-5 h-5 mr-2 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
@@ -129,6 +129,22 @@
                                 <div>
                                     <p class="font-semibold text-gray-900 dark:text-gray-100">{{ __('messages.slots_create') }}</p>
                                     <p class="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{{ __('messages.admin_manage_slots') }}</p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-red-600 dark:group-hover:text-red-400 transition" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                        <a href="{{ route('admin.schedule-templates.index') }}" class="flex items-center justify-between p-4 bg-gradient-to-r from-red-50 to-red-50/50 dark:from-red-900/20 dark:to-red-900/10 hover:from-red-100 hover:to-red-50 dark:hover:from-red-900/30 dark:hover:to-red-900/20 rounded-xl transition-all duration-300 group border border-red-100 dark:border-red-900/30">
+                            <div class="flex items-center">
+                                <div class="bg-red-600 dark:bg-red-700 rounded-xl p-3 mr-4 group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-900 dark:text-gray-100">{{ __('messages.schedule_templates') }}</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{{ __('messages.schedule_templates_subtitle') }}</p>
                                 </div>
                             </div>
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-red-600 dark:group-hover:text-red-400 transition" fill="currentColor" viewBox="0 0 20 20">
@@ -193,7 +209,7 @@
                 </div>
 
                 <!-- Upcoming Appointments -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div data-tour="upcoming" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700">
                     <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-700/30 border-b border-gray-200 dark:border-gray-700">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center">
                             <svg class="w-5 h-5 mr-2 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
@@ -211,7 +227,7 @@
                                     </svg>
                                 </div>
                                 <p class="text-gray-600 dark:text-gray-400 font-semibold">{{ __('messages.appointments_no_slots') }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">{{ __('messages.admin_pending_approvals') }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">{{ __('messages.admin_pending_approvals') }}</p>
                             </div>
                         @else
                             <div class="space-y-3 max-h-80 overflow-y-auto">
@@ -244,7 +260,7 @@
             </div>
 
             <!-- Navigation Boxes -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div data-tour="nav-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Slots Management -->
                 <div class="group bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700">
                     <div class="h-2 bg-gradient-to-r from-red-600 to-red-700"></div>
@@ -322,4 +338,51 @@
             </div>
         </div>
     </div>
+    @include('admin.partials.tour', [
+        'tourPage' => 'dashboard',
+        'tourSteps' => [
+            [
+                'target' => null,
+                'title' => __('messages.tour_welcome_title'),
+                'description' => __('messages.tour_welcome_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>',
+                'position' => 'center',
+            ],
+            [
+                'target' => '[data-tour="stats"]',
+                'title' => __('messages.tour_stats_title'),
+                'description' => __('messages.tour_stats_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>',
+                'position' => 'bottom',
+            ],
+            [
+                'target' => '[data-tour="quick-actions"]',
+                'title' => __('messages.tour_quick_actions_title'),
+                'description' => __('messages.tour_quick_actions_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>',
+                'position' => 'right',
+            ],
+            [
+                'target' => '[data-tour="upcoming"]',
+                'title' => __('messages.tour_upcoming_title'),
+                'description' => __('messages.tour_upcoming_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>',
+                'position' => 'left',
+            ],
+            [
+                'target' => '[data-tour="nav-cards"]',
+                'title' => __('messages.tour_navigation_title'),
+                'description' => __('messages.tour_navigation_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/></svg>',
+                'position' => 'top',
+            ],
+            [
+                'target' => null,
+                'title' => __('messages.tour_complete_title'),
+                'description' => __('messages.tour_complete_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
+                'position' => 'center',
+            ],
+        ],
+    ])
 </x-app-layout>

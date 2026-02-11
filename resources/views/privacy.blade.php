@@ -139,7 +139,7 @@
                 </section>
 
                 <section class="pt-8 border-t border-gray-200 dark:border-gray-700">
-                    <p class="text-sm text-gray-500 dark:text-gray-500">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
                         {{ __('messages.privacy_changes_text') }}
                     </p>
                 </section>

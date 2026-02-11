@@ -39,11 +39,17 @@ class StoreAppointmentRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Please provide your name.',
-            'email.required' => 'Please provide your email address.',
-            'email.email' => 'Please provide a valid email address.',
-            'phone.required' => 'Please provide your phone number.',
-            'service.required' => 'Please select a service type.',
+            'name.required' => __('messages.validation.name_required'),
+            'name.max' => __('messages.validation.name_max', ['max' => 255]),
+            'email.required' => __('messages.validation.email_required'),
+            'email.email' => __('messages.validation.email_valid'),
+            'email.max' => __('messages.validation.email_max', ['max' => 255]),
+            'phone.required' => __('messages.validation.phone_required'),
+            'phone.max' => __('messages.validation.phone_max', ['max' => 20]),
+            'service.required' => __('messages.validation.service_required'),
+            'service.max' => __('messages.validation.max_length', ['max' => 255]),
+            'notes.max' => __('messages.validation.notes_max', ['max' => 1000]),
+            'vehicle_id.exists' => 'The selected vehicle is invalid.',
         ];
     }
 }

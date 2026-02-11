@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'completed_tours',
         'phone',
         'address',
         'city',
@@ -60,7 +61,36 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'completed_tours' => 'array',
         ];
+    }
+
+    /**
+     * Check if a specific tour page has been completed.
+     */
+    public function hasCompletedTour(string $page): bool
+    {
+        return !empty($this->completed_tours[$page]);
+    }
+
+    /**
+     * Mark a tour page as completed.
+     */
+    public function completeTour(string $page): void
+    {
+        $tours = $this->completed_tours ?? [];
+        $tours[$page] = true;
+        $this->update(['completed_tours' => $tours]);
+    }
+
+    /**
+     * Reset a tour page so it shows again.
+     */
+    public function resetTour(string $page): void
+    {
+        $tours = $this->completed_tours ?? [];
+        unset($tours[$page]);
+        $this->update(['completed_tours' => $tours]);
     }
 
     /**

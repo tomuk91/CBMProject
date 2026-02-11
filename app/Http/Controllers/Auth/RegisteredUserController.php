@@ -45,6 +45,20 @@ class RegisteredUserController extends Controller
                     ->symbols()
                     ->uncompromised(),
             ],
+        ], [
+            'name.required' => __('messages.validation.name_required'),
+            'name.max' => __('messages.validation.name_max', ['max' => 255]),
+            'email.required' => __('messages.validation.email_required'),
+            'email.email' => __('messages.validation.email_valid'),
+            'email.max' => __('messages.validation.email_max', ['max' => 255]),
+            'email.unique' => __('messages.validation.email_unique'),
+            'password.required' => __('messages.validation.required'),
+            'password.confirmed' => __('messages.validation.password_confirmed'),
+            'password.min' => __('messages.validation.password_min', ['min' => 8]),
+            'password.mixed_case' => __('messages.validation.password_mixed_case'),
+            'password.numbers' => __('messages.validation.password_numbers'),
+            'password.symbols' => __('messages.validation.password_symbols'),
+            'password.uncompromised' => __('messages.validation.password_uncompromised'),
         ]);
 
         $user = User::create([

@@ -34,6 +34,17 @@ class NewPasswordController extends Controller
             'token' => ['required'],
             'email' => ['required', 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'token.required' => __('messages.validation.required'),
+            'email.required' => __('messages.validation.email_required'),
+            'email.email' => __('messages.validation.email_valid'),
+            'password.required' => __('messages.validation.required'),
+            'password.confirmed' => __('messages.validation.password_confirmed'),
+            'password.min' => __('messages.validation.password_min', ['min' => 8]),
+            'password.mixed_case' => __('messages.validation.password_mixed_case'),
+            'password.numbers' => __('messages.validation.password_numbers'),
+            'password.symbols' => __('messages.validation.password_symbols'),
+            'password.uncompromised' => __('messages.validation.password_uncompromised'),
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we

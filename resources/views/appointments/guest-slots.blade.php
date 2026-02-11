@@ -13,7 +13,7 @@
 </head>
 <body class="font-sans antialiased bg-white dark:bg-gray-900">
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-sm z-50">
+    <nav class="fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-sm z-50" x-data="{ mobileOpen: false }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
@@ -45,6 +45,40 @@
                         </a>
                     @endauth
                 </div>
+
+                <!-- Mobile Hamburger Button -->
+                <button @click="mobileOpen = !mobileOpen" class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none transition">
+                    <svg x-show="!mobileOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <svg x-show="mobileOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div x-show="mobileOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-1" x-cloak class="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg">
+            <div class="px-4 py-4 space-y-3">
+                <a href="/#about" class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition">{{ __('messages.nav_about') }}</a>
+                <a href="/#services" class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition">{{ __('messages.nav_services') }}</a>
+                <a href="/#contact" class="block px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium transition">{{ __('messages.nav_contact') }}</a>
+                
+                <div class="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-fit">
+                    <a href="{{ route('language.switch', 'en') }}" class="px-3 py-1.5 rounded {{ app()->getLocale() == 'en' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition">EN</a>
+                    <a href="{{ route('language.switch', 'hu') }}" class="px-3 py-1.5 rounded {{ app()->getLocale() == 'hu' ? 'bg-red-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700' }} font-medium text-sm transition">HU</a>
+                </div>
+
+                @auth
+                    <a href="{{ route('dashboard') }}" class="block px-3 py-2.5 bg-gray-800 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-900 dark:hover:bg-gray-600 font-semibold transition text-center">
+                        {{ __('messages.nav_dashboard') }}
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="block px-3 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition shadow-lg text-center">
+                        {{ __('messages.nav_login') }}
+                    </a>
+                @endauth
             </div>
         </div>
     </nav>
@@ -53,7 +87,7 @@
         <div class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header -->
             <div class="text-center mb-8 mt-8">
-                <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-3">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
                     {{ __('messages.select_appointment_slot') }}
                 </h1>
                 <p class="text-lg text-gray-600 dark:text-gray-300">
@@ -81,22 +115,22 @@
 
             <!-- Filters -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mb-6">
-                <form method="GET" action="{{ route('guest.slots') }}" class="flex flex-wrap items-end gap-4">
-                    <div class="flex-1 min-w-[200px]">
+                <form method="GET" action="{{ route('guest.slots') }}" class="flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-4">
+                    <div class="w-full sm:flex-1 sm:min-w-[200px]">
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.date_from') }}
                         </label>
                         <input type="date" id="dateFrom" name="date_from" value="{{ request('date_from', now()->format('Y-m-d')) }}" data-min-today class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
                     </div>
 
-                    <div class="flex-1 min-w-[200px]">
+                    <div class="w-full sm:flex-1 sm:min-w-[200px]">
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.date_to') }}
                         </label>
                         <input type="date" id="dateTo" name="date_to" value="{{ request('date_to', now()->addWeeks(2)->format('Y-m-d')) }}" data-min-today class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
                     </div>
 
-                    <div class="flex-1 min-w-[200px]">
+                    <div class="w-full sm:flex-1 sm:min-w-[200px]">
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.filter_time') }}
                         </label>
@@ -108,8 +142,8 @@
                         </select>
                     </div>
 
-                    <div>
-                        <button type="submit" class="px-8 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition shadow-sm hover:shadow-md">
+                    <div class="w-full sm:w-auto">
+                        <button type="submit" class="w-full sm:w-auto px-8 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition shadow-sm hover:shadow-md">
                             {{ __('messages.apply_filters') }}
                         </button>
                     </div>

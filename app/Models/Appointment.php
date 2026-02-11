@@ -25,6 +25,7 @@ class Appointment extends Model
         'cancellation_requested',
         'cancellation_requested_at',
         'cancellation_reason',
+        'booked_by_admin',
     ];
 
     protected $casts = [
@@ -32,6 +33,7 @@ class Appointment extends Model
         'appointment_end' => 'datetime',
         'cancellation_requested' => 'boolean',
         'cancellation_requested_at' => 'datetime',
+        'booked_by_admin' => 'boolean',
     ];
     
     /**

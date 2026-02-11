@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="{{ __('messages.meta_description') }}">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#dc2626">
     <title>{{ __('messages.hero_title') }} - {{ config('app.name') }}</title>
@@ -253,10 +252,9 @@
                 <!-- Content -->
                 <div class="scroll-animate-right">
                     <p class="text-red-600 font-bold text-lg mb-4" aria-label="{{ __('messages.section_label') }}">{{ __('messages.about_badge') }}</p>
-                    <h2 id="about-heading" class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                    <h3 class="text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                    <h2 id="about-heading" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                         {{ __('messages.about_title') }}
-                    </h3>
+                    </h2>
                     <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8">
                         {{ __('messages.about_description') }}
                     </p>
@@ -276,7 +274,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16 scroll-animate">
                 <h3 class="text-red-600 font-bold text-lg mb-2">{{ __('messages.brands_badge') }}</h3>
-                <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     {{ __('messages.brands_title') }}
                 </h2>
                 <p class="text-gray-600 dark:text-gray-400 text-lg max-w-3xl mx-auto">
@@ -383,7 +381,7 @@
     <section id="services" class="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16 scroll-animate">
-                <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                     {{ __('messages.services_title') }}
                 </h2>
                 <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -540,7 +538,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <!-- Image Side -->
-                <div class="relative order-2 lg:order-1 scroll-animate-left">
+                <div class="relative order-2 lg:order-1 scroll-animate-left overflow-hidden">
                     <div class="absolute -top-6 -left-6 w-72 h-72 bg-red-200 dark:bg-red-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob"></div>
                     <div class="absolute -bottom-6 -right-6 w-72 h-72 bg-blue-200 dark:bg-blue-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
                     <div class="relative">
@@ -560,7 +558,7 @@
                             {{ __('messages.rental_badge') }}
                         </span>
                     </div>
-                    <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                         {{ __('messages.rental_title') }}
                     </h2>
                     <p class="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">

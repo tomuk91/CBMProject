@@ -32,12 +32,25 @@ class CleanupOldSlots extends Command
 
         $this->info("Cleaning up slots and pending appointments older than {$days} days...");
 
-        // Delete old available slots that have passed
-        $oldSlots = AvailableSlot::where('start_time', '<', $cutoffDate)->count();
+        // Delete old available slots that have passed and are not booked/pending
+        // (preserves booked slots for historical records)
+        $oldAvailableSlots = AvailableSlot::where('status', 'available')
+            ->where('start_time', '<', now())
+            ->count();
+        AvailableSlot::where('status', 'available')
+            ->where('start_time', '<', now())
+            ->delete();
+
+        if ($oldAvailableSlots > 0) {
+            $this->info("✓ Deleted {$oldAvailableSlots} expired available slot(s)");
+        }
+
+        // Delete very old slots (booked/pending) past the cutoff for cleanup
+        $veryOldSlots = AvailableSlot::where('start_time', '<', $cutoffDate)->count();
         AvailableSlot::where('start_time', '<', $cutoffDate)->delete();
-        
-        if ($oldSlots > 0) {
-            $this->info("✓ Deleted {$oldSlots} old slot(s)");
+
+        if ($veryOldSlots > 0) {
+            $this->info("✓ Deleted {$veryOldSlots} old slot(s) past {$days}-day cutoff");
         }
 
         // Delete old pending appointments (older than 7 days)

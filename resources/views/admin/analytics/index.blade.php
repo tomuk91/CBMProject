@@ -8,9 +8,9 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Period Selector and Export -->
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
                 <div></div>
-                <div class="flex gap-3">
+                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                     <!-- Period Selector -->
                     <form method="GET" class="inline">
                         <select name="period" onchange="this.form.submit()" class="rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">

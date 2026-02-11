@@ -44,11 +44,15 @@ class UpdatePasswordRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'password.min' => 'Password must be at least 8 characters.',
-            'password.mixed_case' => 'Password must contain both uppercase and lowercase letters.',
-            'password.numbers' => 'Password must contain at least one number.',
-            'password.symbols' => 'Password must contain at least one special character.',
-            'password.uncompromised' => 'This password has appeared in a data breach and cannot be used.',
+            'current_password.required' => __('messages.validation.required'),
+            'current_password.current_password' => 'The current password is incorrect.',
+            'password.required' => __('messages.validation.required'),
+            'password.confirmed' => __('messages.validation.password_confirmed'),
+            'password.min' => __('messages.validation.password_min', ['min' => 8]),
+            'password.mixed_case' => __('messages.validation.password_mixed_case'),
+            'password.numbers' => __('messages.validation.password_numbers'),
+            'password.symbols' => __('messages.validation.password_symbols'),
+            'password.uncompromised' => __('messages.validation.password_uncompromised'),
         ];
     }
 }

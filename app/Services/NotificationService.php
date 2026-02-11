@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Log;
 
 class NotificationService
 {
+    protected BatchEmailService $batchEmailService;
+
+    public function __construct(BatchEmailService $batchEmailService)
+    {
+        $this->batchEmailService = $batchEmailService;
+    }
+
     /**
      * Send appointment reminder email
      */
@@ -35,23 +42,18 @@ class NotificationService
     }
 
     /**
-     * Send bulk reminders for multiple appointments
+     * Send bulk reminders for multiple appointments using Resend batch API.
      */
     public function sendBulkReminders(array $appointments): array
     {
-        $results = [
-            'sent' => 0,
-            'failed' => 0,
-        ];
-
+        $emails = [];
         foreach ($appointments as $appointment) {
-            if ($this->sendAppointmentReminder($appointment)) {
-                $results['sent']++;
-            } else {
-                $results['failed']++;
-            }
+            $emails[] = [
+                'to' => $appointment->email,
+                'mailable' => new AppointmentReminder($appointment),
+            ];
         }
 
-        return $results;
+        return $this->batchEmailService->sendBatch($emails);
     }
 }

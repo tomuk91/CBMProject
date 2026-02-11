@@ -28,6 +28,20 @@ class ContactController extends Controller
             'phone' => 'nullable|string|max:20|regex:/^[+]?[0-9\s\-()]+$/',
             'subject' => 'required|string|in:appointment,service,general,other',
             'message' => 'required|string|max:2000|min:10',
+        ], [
+            'name.required' => __('messages.validation.name_required'),
+            'name.max' => __('messages.validation.name_max', ['max' => 255]),
+            'name.regex' => __('messages.validation.name_regex'),
+            'email.required' => __('messages.validation.email_required'),
+            'email.email' => __('messages.validation.email_valid'),
+            'email.max' => __('messages.validation.email_max', ['max' => 255]),
+            'phone.max' => __('messages.validation.phone_max', ['max' => 20]),
+            'phone.regex' => __('messages.validation.phone_format'),
+            'subject.required' => __('messages.validation.required'),
+            'subject.in' => __('messages.validation.subject_invalid'),
+            'message.required' => __('messages.validation.required'),
+            'message.max' => __('messages.validation.max_length', ['max' => 2000]),
+            'message.min' => __('messages.validation.message_min', ['min' => 10]),
         ]);
 
         // Send email notification to admin

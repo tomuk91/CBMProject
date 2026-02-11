@@ -37,9 +37,16 @@ class VehicleController extends Controller
             'is_primary' => 'sometimes|boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
-            'image.image' => 'The file must be an image (JPEG, PNG, JPG, or GIF).',
-            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
-            'image.max' => 'The image size must not exceed 2MB.',
+            'make.required' => __('messages.validation.vehicle_make_required'),
+            'make.max' => __('messages.validation.max_length', ['max' => 255]),
+            'model.required' => __('messages.validation.vehicle_model_required'),
+            'model.max' => __('messages.validation.max_length', ['max' => 255]),
+            'year.required' => __('messages.validation.vehicle_year_required'),
+            'year.max' => __('messages.validation.vehicle_year_format'),
+            'plate.max' => __('messages.validation.vehicle_plate_max', ['max' => 255]),
+            'image.image' => __('messages.validation.image_type'),
+            'image.mimes' => __('messages.validation.image_format'),
+            'image.max' => __('messages.validation.image_size', ['max' => 2]),
         ]);
 
         // If this is set as primary, unset all other primary vehicles
@@ -105,6 +112,17 @@ class VehicleController extends Controller
             'notes' => 'nullable|string',
             'is_primary' => 'sometimes|boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'make.required' => __('messages.validation.vehicle_make_required'),
+            'make.max' => __('messages.validation.max_length', ['max' => 255]),
+            'model.required' => __('messages.validation.vehicle_model_required'),
+            'model.max' => __('messages.validation.max_length', ['max' => 255]),
+            'year.required' => __('messages.validation.vehicle_year_required'),
+            'year.max' => __('messages.validation.vehicle_year_format'),
+            'plate.max' => __('messages.validation.vehicle_plate_max', ['max' => 255]),
+            'image.image' => __('messages.validation.image_type'),
+            'image.mimes' => __('messages.validation.image_format'),
+            'image.max' => __('messages.validation.image_size', ['max' => 2]),
         ]);
 
         // If this is set as primary, unset all other primary vehicles
