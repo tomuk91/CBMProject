@@ -1463,4 +1463,95 @@ return [
     'slots_modal_slot_info' => ':date at :time',
     'pending_select_at_least_one' => 'Please select at least one request to reject.',
     'pending_confirm_bulk_reject' => 'Are you sure you want to reject :count request(s)? This action cannot be undone.',
+
+    // Admin Sidebar (#40)
+    'sidebar_toggle' => 'Toggle sidebar',
+    'sidebar_admin_navigation' => 'Admin Navigation',
+    'sidebar_admin_panel' => 'Admin Panel',
+    'sidebar_management' => 'Management',
+    'sidebar_dashboard' => 'Dashboard',
+    'sidebar_calendar' => 'Calendar',
+    'sidebar_pending_requests' => 'Pending Requests',
+    'sidebar_slot_management' => 'Slot Management',
+    'sidebar_schedule_templates' => 'Schedule Templates',
+    'sidebar_blocked_dates' => 'Blocked Dates',
+    'sidebar_analytics' => 'Analytics',
+    'sidebar_activity_log' => 'Activity Log',
+
+    // Dashboard hardcoded fixes (#43)
+    'admin_available_appointments' => 'Available Appointments',
+    'admin_bookings_confirmed' => 'Bookings Confirmed',
+
+    // Analytics new keys (#44)
+    'analytics_conversion_rate' => 'Conversion Rate',
+    'analytics_completed_of_total' => 'Completed of total',
+    'analytics_appointments_label' => 'Appointments',
+
+    // Slots hardcoded fixes (#43)
+    'slot_auto_generated_title' => 'Auto-generated from schedule template',
+    'slot_auto_label' => 'Auto',
+    'slot_search_client_placeholder' => 'Type name or email to search...',
+
+    // Sprint 4
+    'bulk_approve' => 'Bulk Approve',
+    'bulk_approve_success' => ':count appointment(s) approved successfully.',
+    'pending_confirm_bulk_approve' => 'Are you sure you want to approve :count request(s)?',
+    'schedule_template_overlap' => 'This template overlaps with an existing active template for the same day.',
+    'blocked_date_range_to' => 'End Date (Optional)',
+    'blocked_dates_range_created' => ':count date(s) blocked successfully.',
+    'blocked_date_has_appointments' => 'Warning: :count confirmed appointment(s) exist on the blocked date(s). They will NOT be automatically cancelled.',
+
+    // Item #52: Customer Management
+    'admin_customers' => 'Customers',
+    'admin_customer_details' => 'Customer Details',
+    'admin_customer_since' => 'Customer Since',
+    'admin_total_bookings' => 'Total Bookings',
+    'admin_customer_vehicles' => 'Vehicles',
+    'admin_customer_history' => 'Appointment History',
+    'admin_no_customers' => 'No customers found',
+
+    // Item #53: Service Type Management
+    'admin_services' => 'Services',
+    'admin_services_subtitle' => 'Available service types offered',
+    'admin_service_duration' => 'Est. Duration',
+    'admin_service_minutes' => ':duration min',
+
+    // Item #54: Print Daily Schedule
+    'admin_print_schedule' => 'Print Schedule',
+    'admin_daily_schedule' => 'Daily Schedule',
+    'admin_schedule_for' => 'Schedule for :date',
+    'admin_no_appointments_for_date' => 'No appointments for this date',
+
+    // Item #55: Notification Center
+    'admin_notifications' => 'Notifications',
+    'admin_notifications_subtitle' => 'Recent events and alerts',
+    'notif_new_booking' => 'New booking request from :name for :service',
+    'notif_cancel_request' => ':name requested to cancel their appointment',
+    'admin_no_notifications' => 'No recent notifications',
+
+    // Item #56: Contact Submissions
+    'admin_contact_submissions' => 'Contact Submissions',
+    'admin_message_preview' => 'Message',
+    'admin_mark_as_read' => 'Mark as Read',
+    'admin_submission_marked_read' => 'Submission marked as read.',
+    'admin_no_submissions' => 'No contact submissions found',
+    'admin_read' => 'Read',
+    'admin_unread' => 'Unread',
+
+    // Item #57: Admin Settings
+    'admin_settings' => 'Settings',
+    'admin_settings_subtitle' => 'Application configuration overview',
+    'admin_settings_app_name' => 'Application Name',
+    'admin_settings_timezone' => 'Timezone',
+    'admin_settings_locale' => 'Default Language',
+    'admin_settings_mail_from' => 'Email From Address',
+    'admin_settings_mail_name' => 'Email From Name',
+    'admin_settings_env_note' => 'These settings are configured via environment variables and cannot be changed from here.',
+
+    // Sidebar new items
+    'sidebar_customers' => 'Customers',
+    'sidebar_services' => 'Services',
+    'sidebar_notifications' => 'Notifications',
+    'sidebar_contact_submissions' => 'Contact Submissions',
+    'sidebar_settings' => 'Settings',
 ];

@@ -496,4 +496,71 @@ class AppointmentController extends Controller
         
         return redirect()->back()->with('success', "Successfully sent {$sentCount} emails.");
     }
+
+    /**
+     * Print daily schedule
+     */
+    public function printSchedule(Request $request)
+    {
+        $date = $request->get('date', today()->toDateString());
+
+        $appointments = Appointment::with(['user', 'vehicle'])
+            ->whereDate('appointment_date', $date)
+            ->whereIn('status', ['confirmed', 'pending'])
+            ->orderBy('appointment_date', 'asc')
+            ->get();
+
+        return view('admin.appointments.print-schedule', compact('appointments', 'date'));
+    }
+
+    /**
+     * Notification center
+     */
+    public function notifications()
+    {
+        $notifications = collect();
+
+        // Pending appointments
+        $pending = PendingAppointment::where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get()
+            ->map(fn($p) => [
+                'type' => 'pending',
+                'message' => __('messages.notif_new_booking', ['name' => $p->name, 'service' => $p->service]),
+                'time' => $p->created_at,
+                'link' => route('admin.appointments.pending'),
+            ]);
+
+        // Cancellation requests
+        $cancellations = Appointment::where('cancellation_requested', true)
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('cancellation_requested_at', 'desc')
+            ->take(10)
+            ->get()
+            ->map(fn($a) => [
+                'type' => 'cancellation',
+                'message' => __('messages.notif_cancel_request', ['name' => $a->name]),
+                'time' => $a->cancellation_requested_at,
+                'link' => route('admin.appointments.pending'),
+            ]);
+
+        // Recent activity
+        $recentActivity = ActivityLog::orderBy('created_at', 'desc')
+            ->take(10)
+            ->get()
+            ->map(fn($a) => [
+                'type' => 'activity',
+                'message' => $a->description,
+                'time' => $a->created_at,
+                'link' => route('admin.appointments.activityLog'),
+            ]);
+
+        $notifications = $pending->concat($cancellations)->concat($recentActivity)
+            ->sortByDesc('time')
+            ->take(20)
+            ->values();
+
+        return view('admin.notifications.index', compact('notifications'));
+    }
 }

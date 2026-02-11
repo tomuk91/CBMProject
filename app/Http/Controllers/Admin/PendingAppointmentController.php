@@ -199,6 +199,89 @@ class PendingAppointmentController extends Controller
     }
 
     /**
+     * Bulk approve pending appointments
+     */
+    public function bulkApprove(Request $request)
+    {
+        $request->validate([
+            'appointment_ids' => 'required|string',
+        ]);
+
+        $appointmentIds = explode(',', $request->appointment_ids);
+        $approvedCount = 0;
+        $failedCount = 0;
+
+        DB::beginTransaction();
+        try {
+            foreach ($appointmentIds as $id) {
+                $pendingAppointment = PendingAppointment::find($id);
+
+                if ($pendingAppointment && $pendingAppointment->status === 'pending') {
+                    try {
+                        $slot = $pendingAppointment->availableSlot;
+
+                        // Determine vehicle information
+                        $vehicleInfo = $pendingAppointment->vehicle;
+                        if ($pendingAppointment->vehicle_id && $pendingAppointment->vehicleDetails) {
+                            $vehicle = $pendingAppointment->vehicleDetails;
+                            $vehicleInfo = "{$vehicle->year} {$vehicle->make} {$vehicle->model} ({$vehicle->plate})";
+                        }
+
+                        // Create the confirmed appointment
+                        $appointment = Appointment::create([
+                            'user_id' => $pendingAppointment->user_id,
+                            'available_slot_id' => $slot->id,
+                            'vehicle_id' => $pendingAppointment->vehicle_id,
+                            'name' => $pendingAppointment->name,
+                            'email' => $pendingAppointment->email,
+                            'phone' => $pendingAppointment->phone,
+                            'vehicle' => $vehicleInfo,
+                            'service' => $pendingAppointment->service,
+                            'notes' => $pendingAppointment->notes,
+                            'admin_notes' => 'Bulk approved by admin',
+                            'appointment_date' => $slot->start_time,
+                            'appointment_end' => $slot->end_time,
+                            'status' => 'confirmed',
+                        ]);
+
+                        // Update slot status to booked
+                        $slot->update(['status' => SlotStatus::Booked]);
+
+                        // Update pending appointment status
+                        $pendingAppointment->update([
+                            'status' => 'approved',
+                            'admin_notes' => 'Bulk approved by admin',
+                        ]);
+
+                        // Log activity
+                        ActivityLog::log(
+                            'approved',
+                            "Bulk approved appointment for {$pendingAppointment->name} - {$pendingAppointment->service}",
+                            $appointment
+                        );
+
+                        // Send approval email
+                        Mail::to($appointment->email)->queue(new AppointmentStatusChanged($appointment, 'pending'));
+
+                        $approvedCount++;
+                    } catch (\Exception $e) {
+                        $failedCount++;
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->back()
+                ->with('success', __('messages.bulk_approve_success', ['count' => $approvedCount]));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error', 'Failed to approve appointments: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Bulk reject pending appointments
      */
     public function bulkReject(Request $request)

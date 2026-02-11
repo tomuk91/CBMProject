@@ -862,8 +862,8 @@
                                                     {{ ucfirst($slot->status->value) }}
                                                 </span>
                                                 @if($slot->source === 'auto')
-                                                    <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400" title="Auto-generated from schedule template">
-                                                        ⚡ Auto
+                                                    <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400" title="{{ __('messages.slot_auto_generated_title') }}">
+                                                        ⚡ {{ __('messages.slot_auto_label') }}
                                                     </span>
                                                 @endif
                                             </td>
@@ -974,7 +974,7 @@
                             <div class="relative">
                                 <input type="text" 
                                        id="client_search" 
-                                       placeholder="Type name or email to search..."
+                                       placeholder="{{ __('messages.slot_search_client_placeholder') }}"
                                        autocomplete="off"
                                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                 <input type="hidden" name="user_id" id="user_id">

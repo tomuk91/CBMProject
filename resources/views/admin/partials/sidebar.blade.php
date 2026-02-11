@@ -133,6 +133,66 @@
                 </svg>
                 {{ __('messages.sidebar_activity_log') }}
             </a>
+
+            {{-- Divider --}}
+            <div class="border-t border-gray-200 dark:border-gray-700 my-3"></div>
+
+            {{-- Customers --}}
+            <a href="{{ route('admin.customers.index') }}"
+               class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
+                      {{ request()->routeIs('admin.customers.*') ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500 pl-2' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-red-600 dark:hover:text-red-400' }}">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                {{ __('messages.sidebar_customers') }}
+            </a>
+
+            {{-- Services --}}
+            <a href="{{ route('admin.services.index') }}"
+               class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
+                      {{ request()->routeIs('admin.services.*') ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500 pl-2' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-red-600 dark:hover:text-red-400' }}">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                {{ __('messages.sidebar_services') }}
+            </a>
+
+            {{-- Contact Submissions --}}
+            <a href="{{ route('admin.contact-submissions.index') }}"
+               class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
+                      {{ request()->routeIs('admin.contact-submissions.*') ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500 pl-2' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-red-600 dark:hover:text-red-400' }}">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                {{ __('messages.sidebar_contact_submissions') }}
+                @php
+                    $unreadSubmissions = \App\Models\ContactSubmission::where('is_read', false)->count();
+                @endphp
+                @if($unreadSubmissions > 0)
+                    <span class="ml-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full">{{ $unreadSubmissions }}</span>
+                @endif
+            </a>
+
+            {{-- Notifications --}}
+            <a href="{{ route('admin.notifications') }}"
+               class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
+                      {{ request()->routeIs('admin.notifications') ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500 pl-2' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-red-600 dark:hover:text-red-400' }}">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+                {{ __('messages.sidebar_notifications') }}
+            </a>
+
+            {{-- Settings --}}
+            <a href="{{ route('admin.settings.index') }}"
+               class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
+                      {{ request()->routeIs('admin.settings.*') ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500 pl-2' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-red-600 dark:hover:text-red-400' }}">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                </svg>
+                {{ __('messages.sidebar_settings') }}
+            </a>
         </div>
     </nav>
 </aside>

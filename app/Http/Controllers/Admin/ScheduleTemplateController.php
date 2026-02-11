@@ -41,6 +41,27 @@ class ScheduleTemplateController extends Controller
     }
 
     /**
+     * Check if a template overlaps with an existing active template for the same day.
+     */
+    private function checkOverlap(array $data, ?int $excludeId = null): bool
+    {
+        $query = ScheduleTemplate::where('day_of_week', $data['day_of_week'])
+            ->where('is_active', true)
+            ->where(function ($q) use ($data) {
+                $q->where(function ($q2) use ($data) {
+                    $q2->where('start_time', '<', $data['end_time'])
+                        ->where('end_time', '>', $data['start_time']);
+                });
+            });
+
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        return $query->exists();
+    }
+
+    /**
      * Store a newly created schedule template.
      */
     public function store(StoreScheduleTemplateRequest $request)
@@ -48,6 +69,12 @@ class ScheduleTemplateController extends Controller
         $validated = $request->validated();
 
         $validated['is_active'] = $request->boolean('is_active');
+
+        if ($validated['is_active'] && $this->checkOverlap($validated)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', __('messages.schedule_template_overlap'));
+        }
 
         $template = ScheduleTemplate::create($validated);
 
@@ -81,6 +108,12 @@ class ScheduleTemplateController extends Controller
         $validated = $request->validated();
 
         $validated['is_active'] = $request->boolean('is_active');
+
+        if ($validated['is_active'] && $this->checkOverlap($validated, $template->id)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', __('messages.schedule_template_overlap'));
+        }
 
         $oldValues = $template->toArray();
         $template->update($validated);
@@ -134,6 +167,13 @@ class ScheduleTemplateController extends Controller
 
         if ($template->is_active) {
             $this->slotService->generateFromTemplate($template);
+        } else {
+            // Remove future auto-generated available slots when deactivating
+            AvailableSlot::where('schedule_template_id', $template->id)
+                ->where('source', 'auto')
+                ->where('status', 'available')
+                ->where('start_time', '>=', now())
+                ->delete();
         }
 
         $status = $template->is_active ? 'activated' : 'deactivated';
@@ -210,6 +250,13 @@ class ScheduleTemplateController extends Controller
             return redirect()->route('admin.schedule-templates.index')
                 ->with('error', 'No templates selected.');
         }
+
+        // Remove future auto-generated available slots for templates being deactivated
+        AvailableSlot::whereIn('schedule_template_id', $ids)
+            ->where('source', 'auto')
+            ->where('status', 'available')
+            ->where('start_time', '>=', now())
+            ->delete();
 
         $count = ScheduleTemplate::whereIn('id', $ids)
             ->where('is_active', true)

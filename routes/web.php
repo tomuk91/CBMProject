@@ -10,6 +10,10 @@ use App\Http\Controllers\Admin\SlotController;
 use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Admin\CancellationController;
 use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\ContactSubmissionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Models\Appointment;
@@ -138,7 +142,27 @@ Route::middleware('auth')->group(function () {
         // Analytics
         Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
         Route::get('/analytics/export', [AnalyticsController::class, 'export'])->name('analytics.export');
-        
+
+        // Customers
+        Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+        Route::get('/customers/{user}', [CustomerController::class, 'show'])->name('customers.show');
+
+        // Services
+        Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+
+        // Settings
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+
+        // Notifications
+        Route::get('/notifications', [AdminAppointmentController::class, 'notifications'])->name('notifications');
+
+        // Contact Submissions
+        Route::get('/contact-submissions', [ContactSubmissionController::class, 'index'])->name('contact-submissions.index');
+        Route::post('/contact-submissions/{submission}/read', [ContactSubmissionController::class, 'markAsRead'])->name('contact-submissions.mark-read');
+
+        // Print Schedule (before dynamic {appointment} routes)
+        Route::get('/appointments/print-schedule', [AdminAppointmentController::class, 'printSchedule'])->name('appointments.print-schedule');
+
         Route::get('/appointments/calendar', [AdminAppointmentController::class, 'index'])->name('appointments.calendar');
         Route::get('/appointments/pending', [PendingAppointmentController::class, 'pending'])->name('appointments.pending');
         Route::get('/appointments/slots', [SlotController::class, 'slots'])->name('appointments.slots');
@@ -152,6 +176,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/appointments/pending/{pendingAppointment}/approve', [PendingAppointmentController::class, 'approve'])->name('appointments.approve');
         Route::post('/appointments/pending/{pendingAppointment}/reject', [PendingAppointmentController::class, 'reject'])->name('appointments.reject');
         Route::post('/appointments/bulk-reject', [PendingAppointmentController::class, 'bulkReject'])->name('appointments.bulk-reject');
+        Route::post('/appointments/bulk-approve', [PendingAppointmentController::class, 'bulkApprove'])->name('appointments.bulk-approve');
         Route::post('/appointments/{appointment}/cancellation/approve', [CancellationController::class, 'approveCancellation'])->name('appointments.cancellation.approve');
         Route::post('/appointments/{appointment}/cancellation/deny', [CancellationController::class, 'denyCancellation'])->name('appointments.cancellation.deny');
         Route::post('/appointments/{appointment}/status', [AdminAppointmentController::class, 'updateStatus'])->name('appointments.status');

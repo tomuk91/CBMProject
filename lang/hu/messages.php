@@ -1445,4 +1445,95 @@ return [
     'slots_modal_slot_info' => ':date :time-kor',
     'pending_select_at_least_one' => 'Kérjük, válasszon ki legalább egy kérelmet az elutasításhoz.',
     'pending_confirm_bulk_reject' => 'Biztosan el szeretné utasítani :count kérelmet? Ez a művelet nem vonható vissza.',
+
+    // Admin oldalsáv (#40)
+    'sidebar_toggle' => 'Oldalsáv váltása',
+    'sidebar_admin_navigation' => 'Admin navigáció',
+    'sidebar_admin_panel' => 'Admin panel',
+    'sidebar_management' => 'Kezelés',
+    'sidebar_dashboard' => 'Irányítópult',
+    'sidebar_calendar' => 'Naptár',
+    'sidebar_pending_requests' => 'Függőben lévő kérelmek',
+    'sidebar_slot_management' => 'Időpont kezelés',
+    'sidebar_schedule_templates' => 'Ütemezési sablonok',
+    'sidebar_blocked_dates' => 'Blokkolt napok',
+    'sidebar_analytics' => 'Elemzések',
+    'sidebar_activity_log' => 'Tevékenységnapló',
+
+    // Irányítópult javítások (#43)
+    'admin_available_appointments' => 'Elérhető időpontok',
+    'admin_bookings_confirmed' => 'Megerősített foglalások',
+
+    // Elemzés új kulcsok (#44)
+    'analytics_conversion_rate' => 'Konverziós arány',
+    'analytics_completed_of_total' => 'Teljesített az összesből',
+    'analytics_appointments_label' => 'Időpontok',
+
+    // Időpont javítások (#43)
+    'slot_auto_generated_title' => 'Automatikusan generált ütemezési sablonból',
+    'slot_auto_label' => 'Auto',
+    'slot_search_client_placeholder' => 'Írjon nevet vagy e-mailt a kereséshez...',
+
+    // Sprint 4
+    'bulk_approve' => 'Tömeges jóváhagyás',
+    'bulk_approve_success' => ':count időpont sikeresen jóváhagyva.',
+    'pending_confirm_bulk_approve' => 'Biztosan jóvá szeretné hagyni :count kérelmet?',
+    'schedule_template_overlap' => 'Ez a sablon átfedésben van egy meglévő aktív sablonnal ugyanazon a napon.',
+    'blocked_date_range_to' => 'Záró dátum (Opcionális)',
+    'blocked_dates_range_created' => ':count nap sikeresen blokkolva.',
+    'blocked_date_has_appointments' => 'Figyelem: :count megerősített időpont található a blokkolt napo(ko)n. Ezek NEM lesznek automatikusan lemondva.',
+
+    // Item #52: Ügyfélkezelés
+    'admin_customers' => 'Ügyfelek',
+    'admin_customer_details' => 'Ügyfél részletei',
+    'admin_customer_since' => 'Ügyfél azóta',
+    'admin_total_bookings' => 'Összes foglalás',
+    'admin_customer_vehicles' => 'Járművek',
+    'admin_customer_history' => 'Időpont előzmények',
+    'admin_no_customers' => 'Nem található ügyfél',
+
+    // Item #53: Szolgáltatás kezelés
+    'admin_services' => 'Szolgáltatások',
+    'admin_services_subtitle' => 'Elérhető szolgáltatás típusok',
+    'admin_service_duration' => 'Becsült időtartam',
+    'admin_service_minutes' => ':duration perc',
+
+    // Item #54: Napi beosztás nyomtatása
+    'admin_print_schedule' => 'Napi beosztás nyomtatása',
+    'admin_daily_schedule' => 'Napi beosztás',
+    'admin_schedule_for' => 'Beosztás: :date',
+    'admin_no_appointments_for_date' => 'Nincs időpont erre a napra',
+
+    // Item #55: Értesítési központ
+    'admin_notifications' => 'Értesítések',
+    'admin_notifications_subtitle' => 'Legutóbbi események és riasztások',
+    'notif_new_booking' => 'Új foglalási kérelem: :name - :service',
+    'notif_cancel_request' => ':name lemondási kérelmet nyújtott be',
+    'admin_no_notifications' => 'Nincsenek friss értesítések',
+
+    // Item #56: Kapcsolatfelvételi beküldések
+    'admin_contact_submissions' => 'Kapcsolatfelvételi üzenetek',
+    'admin_message_preview' => 'Üzenet',
+    'admin_mark_as_read' => 'Megjelölés olvasottként',
+    'admin_submission_marked_read' => 'Beküldés olvasottként megjelölve.',
+    'admin_no_submissions' => 'Nem található kapcsolatfelvételi üzenet',
+    'admin_read' => 'Olvasott',
+    'admin_unread' => 'Olvasatlan',
+
+    // Item #57: Admin beállítások
+    'admin_settings' => 'Beállítások',
+    'admin_settings_subtitle' => 'Alkalmazás beállítások áttekintése',
+    'admin_settings_app_name' => 'Alkalmazás neve',
+    'admin_settings_timezone' => 'Időzóna',
+    'admin_settings_locale' => 'Alapértelmezett nyelv',
+    'admin_settings_mail_from' => 'E-mail feladó cím',
+    'admin_settings_mail_name' => 'E-mail feladó név',
+    'admin_settings_env_note' => 'Ezek a beállítások környezeti változókon keresztül vannak konfigurálva, és innen nem módosíthatók.',
+
+    // Oldalsáv új elemek
+    'sidebar_customers' => 'Ügyfelek',
+    'sidebar_services' => 'Szolgáltatások',
+    'sidebar_notifications' => 'Értesítések',
+    'sidebar_contact_submissions' => 'Kapcsolatfelvételek',
+    'sidebar_settings' => 'Beállítások',
 ];
