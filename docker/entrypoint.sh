@@ -11,7 +11,7 @@ if [ -z "$PORT" ]; then
 fi
 
 echo "Configuring Apache to listen on port ${PORT}"
-sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf
+sed -i "s/Listen 80/Listen 0.0.0.0:${PORT}/g" /etc/apache2/ports.conf
 sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/g" /etc/apache2/sites-enabled/*.conf
 
 # Verify Apache configuration
