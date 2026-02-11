@@ -67,8 +67,7 @@ RUN echo '<IfModule mod_deflate.c>\n\
 </IfModule>' > /etc/apache2/conf-available/performance.conf \
     && a2enconf performance
 
-# Default port (Railway overrides via $PORT env var, entrypoint.sh handles it)
-EXPOSE ${PORT:-80}
+EXPOSE 80
 
 RUN chmod +x docker/entrypoint.sh
 
