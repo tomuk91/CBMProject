@@ -118,11 +118,14 @@ Route::middleware('auth')->group(function () {
     
     // Customer appointment routes
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+    Route::get('/appointments/calendar/view', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
+    Route::get('/appointments/calendar/api', [AppointmentController::class, 'calendarApi'])->name('appointments.calendar.api');
     Route::get('/appointments/{slot}', [AppointmentController::class, 'show'])->name('appointments.show');
     Route::post('/appointments/{slot}/book', [AppointmentController::class, 'store'])
         ->middleware('throttle:30,60')
         ->name('appointments.store');
     Route::get('/appointments/confirmation/success', [AppointmentController::class, 'confirmation'])->name('appointments.confirmation');
+    Route::get('/appointment/{appointment}/details', [AppointmentController::class, 'showDetails'])->name('appointments.details');
     Route::post('/appointments/{appointment}/request-cancellation', [AppointmentController::class, 'requestCancellation'])->name('appointments.requestCancellation');
     Route::get('/api/check-vehicle-availability/{vehicle}', [AppointmentController::class, 'checkVehicleAvailability'])->name('api.check-vehicle-availability');
     

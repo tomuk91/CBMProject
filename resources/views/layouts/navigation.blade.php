@@ -85,7 +85,7 @@
                             {{ __('messages.dashboard_admin') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.analytics')" :active="request()->routeIs('admin.analytics*')">
-                            {{ __('messages.Analytics Dashboard') }}
+                            {{ __('messages.analytics_dashboard') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -196,7 +196,7 @@
                     {{ __('messages.dashboard_admin') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.analytics')" :active="request()->routeIs('admin.analytics*')">
-                    {{ __('messages.Analytics Dashboard') }}
+                    {{ __('messages.analytics_dashboard') }}
                 </x-responsive-nav-link>
             @endif
         </div>

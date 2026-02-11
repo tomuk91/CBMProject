@@ -66,10 +66,10 @@
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 class="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
                 {{ __('messages.contact_title') }}
             </h1>
-            <p class="text-xl text-gray-600 dark:text-gray-300">
+            <p class="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300">
                 {{ __('messages.contact_subtitle') }}
             </p>
         </div>
@@ -104,12 +104,12 @@
                     </svg>
                 </div>
                 <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-2">{{ __('messages.contact_address') }}</h3>
-                <p class="text-gray-600 dark:text-gray-300">Budapest, Hungary</p>
+                <p class="text-gray-600 dark:text-gray-300">{{ __('messages.contact_address_value') }}</p>
             </div>
         </div>
 
         <!-- Contact Form -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 lg:p-12">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-5 sm:p-8 lg:p-12">
             @if (session('success'))
                 <div class="mb-6 p-4 bg-green-100 dark:bg-green-900/30 border-l-4 border-green-500 text-green-700 dark:text-green-400 rounded">
                     <div class="flex items-center">
@@ -242,11 +242,11 @@
                 <div class="grid grid-cols-2 gap-6 text-left">
                     <div>
                         <p class="font-semibold text-gray-900 dark:text-white">{{ __('messages.contact_weekdays') }}</p>
-                        <p class="text-gray-600 dark:text-gray-300">8:00 AM - 6:00 PM</p>
+                        <p class="text-gray-600 dark:text-gray-300">{{ __('messages.contact_hours_weekday') }}</p>
                     </div>
                     <div>
                         <p class="font-semibold text-gray-900 dark:text-white">{{ __('messages.contact_weekend') }}</p>
-                        <p class="text-gray-600 dark:text-gray-300">9:00 AM - 2:00 PM</p>
+                        <p class="text-gray-600 dark:text-gray-300">{{ __('messages.contact_hours_saturday') }}</p>
                     </div>
                 </div>
             </div>

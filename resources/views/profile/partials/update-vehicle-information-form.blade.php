@@ -8,7 +8,7 @@
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <h3 class="text-sm font-semibold text-red-800 dark:text-red-200">Please correct the following errors:</h3>
+                    <h3 class="text-sm font-semibold text-red-800 dark:text-red-200">{{ __('messages.form_errors') }}</h3>
                     <ul class="mt-2 text-sm text-red-700 dark:text-red-300 list-disc list-inside space-y-1">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -34,7 +34,7 @@
                     <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
                     <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
                 </svg>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Basic Vehicle Information</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ __('messages.vehicle_basic_info') }}</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -49,7 +49,7 @@
                         </div>
                         <x-text-input id="vehicle_make" name="vehicle_make" type="text" class="pl-10 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-red-500 focus:ring-red-500 dark:focus:border-red-500 dark:focus:ring-red-500 transition" :value="old('vehicle_make', $user->vehicle_make)" :placeholder="__('messages.vehicle_make_placeholder')" />
                     </div>
-                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">e.g., BMW, Mercedes, Toyota</p>
+                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_make_example') }}</p>
                     <x-input-error class="mt-2" :messages="$errors->get('vehicle_make')" />
                 </div>
 
@@ -63,7 +63,7 @@
                         </div>
                         <x-text-input id="vehicle_model" name="vehicle_model" type="text" class="pl-10 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-red-500 focus:ring-red-500 dark:focus:border-red-500 dark:focus:ring-red-500 transition" :value="old('vehicle_model', $user->vehicle_model)" :placeholder="__('messages.vehicle_model_placeholder')" />
                     </div>
-                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">e.g., 3 Series, E-Class, Camry</p>
+                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_model_example') }}</p>
                     <x-input-error class="mt-2" :messages="$errors->get('vehicle_model')" />
                 </div>
             </div>
@@ -118,7 +118,7 @@
                 <svg class="w-5 h-5 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
                 </svg>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Technical Specifications</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ __('messages.vehicle_technical_specs') }}</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -138,7 +138,7 @@
                             <option value="hybrid" {{ old('vehicle_fuel_type', $user->vehicle_fuel_type) == 'hybrid' ? 'selected' : '' }}>🔋 {{ __('messages.vehicle_fuel_hybrid') }}</option>
                         </select>
                     </div>
-                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Select your vehicle's fuel type</p>
+                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_fuel_type_hint') }}</p>
                     <x-input-error class="mt-2" :messages="$errors->get('vehicle_fuel_type')" />
                 </div>
 
@@ -157,7 +157,7 @@
                             <option value="semi-automatic" {{ old('vehicle_transmission', $user->vehicle_transmission) == 'semi-automatic' ? 'selected' : '' }}>⚙️ {{ __('messages.vehicle_transmission_semi_automatic') }}</option>
                         </select>
                     </div>
-                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Select your transmission type</p>
+                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_transmission_hint') }}</p>
                     <x-input-error class="mt-2" :messages="$errors->get('vehicle_transmission')" />
                 </div>
             </div>
@@ -173,7 +173,7 @@
                         </div>
                         <x-text-input id="vehicle_engine_size" name="vehicle_engine_size" type="text" class="pl-10 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-red-500 focus:ring-red-500 dark:focus:border-red-500 dark:focus:ring-red-500 transition" :value="old('vehicle_engine_size', $user->vehicle_engine_size)" :placeholder="__('messages.vehicle_engine_size_placeholder')" />
                     </div>
-                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Engine displacement (e.g., 2.0L, 1600cc)</p>
+                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_engine_size_hint') }}</p>
                     <x-input-error class="mt-2" :messages="$errors->get('vehicle_engine_size')" />
                 </div>
 
@@ -190,7 +190,7 @@
                             <span class="text-gray-500 sm:text-sm">km</span>
                         </div>
                     </div>
-                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Current odometer reading</p>
+                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_mileage_hint') }}</p>
                     <x-input-error class="mt-2" :messages="$errors->get('vehicle_mileage')" />
                 </div>
             </div>
@@ -203,7 +203,7 @@
                 <svg class="w-5 h-5 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
                 </svg>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Additional Notes</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ __('messages.vehicle_additional_notes') }}</h3>
             </div>
             
             <div>
@@ -222,7 +222,7 @@
                     x-on:input="count = $event.target.value.length"
                 >{{ old('vehicle_notes', $user->vehicle_notes) }}</textarea>
                 <div class="flex justify-between items-center mt-2">
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Any specific concerns, modifications, or information about your vehicle</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_notes_hint') }}</p>
                     <span 
                         class="text-xs font-medium"
                         x-data="{ count: {{ old('vehicle_notes', $user->vehicle_notes) ? strlen(old('vehicle_notes', $user->vehicle_notes)) : 0 }} }"
@@ -248,7 +248,7 @@
                         </div>
                     </div>
                     <div class="ml-5 flex-1">
-                        <h4 class="text-base font-bold text-red-900 dark:text-red-100">Currently Saved Vehicle</h4>
+                        <h4 class="text-base font-bold text-red-900 dark:text-red-100">{{ __('messages.vehicle_currently_saved') }}</h4>
                         <p class="mt-2 text-xl font-bold text-gray-900 dark:text-gray-100">
                             {{ $user->vehicle_year }} {{ $user->vehicle_make }} {{ $user->vehicle_model }}
                         </p>

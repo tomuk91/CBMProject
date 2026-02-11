@@ -23,6 +23,26 @@
                 </div>
             @endif
 
+            <!-- View Toggle -->
+            <div class="flex justify-end mb-4 px-4 sm:px-0">
+                <div class="inline-flex rounded-lg shadow-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                    <a href="{{ route('appointments.index') }}" 
+                       class="px-4 py-2.5 text-sm font-semibold rounded-l-lg transition-all duration-200 flex items-center gap-2 bg-red-600 text-white">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                        </svg>
+                        {{ __('messages.customer_calendar_list_view') }}
+                    </a>
+                    <a href="{{ route('appointments.calendar') }}" 
+                       class="px-4 py-2.5 text-sm font-semibold rounded-r-lg transition-all duration-200 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        {{ __('messages.customer_calendar_calendar_view') }}
+                    </a>
+                </div>
+            </div>
+
             <!-- Filters -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mb-6">
                 <form method="GET" action="{{ route('appointments.index') }}" class="flex flex-wrap items-end gap-3 sm:gap-4">
@@ -61,7 +81,7 @@
             </div>
 
             <!-- Calendar View -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-3 sm:p-6">
                 @if($availableSlots->isEmpty())
                     <div class="py-20 text-center">
                         <svg class="w-20 h-20 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

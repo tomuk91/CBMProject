@@ -14,7 +14,7 @@
                 <svg class="w-5 h-5 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
                 </svg>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Basic Information</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ __('messages.profile_basic_info') }}</h3>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -41,7 +41,7 @@
                         </div>
                         <x-text-input id="phone" name="phone" type="tel" class="pl-10 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-red-500 focus:ring-red-500 dark:focus:border-red-500 dark:focus:ring-red-500 transition" :value="old('phone', $user->phone)" autocomplete="tel" :placeholder="__('messages.phone_placeholder')" />
                     </div>
-                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">We'll use this for appointment reminders</p>
+                    <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.profile_phone_hint') }}</p>
                     <x-input-error class="mt-2" :messages="$errors->get('phone')" />
                 </div>
             </div>
@@ -124,7 +124,7 @@
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                 </svg>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Email Address</h3>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ __('messages.profile_email_address') }}</h3>
             </div>
             
             <div>
@@ -138,7 +138,7 @@
                     </div>
                     <x-text-input id="email" name="email" type="email" class="pl-10 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-red-500 focus:ring-red-500 dark:focus:border-red-500 dark:focus:ring-red-500 transition" :value="old('email', $user->email)" required autocomplete="username" />
                 </div>
-                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Your email is used for login and notifications</p>
+                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.profile_email_hint') }}</p>
                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
                 @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())

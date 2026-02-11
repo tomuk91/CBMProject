@@ -79,7 +79,7 @@
                                 <svg class="w-5 h-5 text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                                 </svg>
-                                <p class="text-red-800 dark:text-red-200 font-semibold">There were some errors with your submission:</p>
+                                <p class="text-red-800 dark:text-red-200 font-semibold">{{ __('messages.admin_form_errors') }}</p>
                             </div>
                             <ul class="list-disc list-inside text-red-700 dark:text-red-300 text-sm space-y-1 ml-8">
                                 @foreach ($errors->all() as $error)
@@ -953,14 +953,14 @@
                                     <input type="radio" name="client_type" value="existing" checked class="text-red-600 focus:ring-red-500 mr-3" onchange="toggleClientFields()">
                                     <div>
                                         <p class="font-semibold text-gray-900 dark:text-gray-100">{{ __('messages.book_existing_client') }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Select from registered users</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ __('messages.admin_select_from_registered') }}</p>
                                     </div>
                                 </label>
                                 <label class="flex items-center p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 dark:has-[:checked]:bg-red-900/30 transition-all duration-200">
                                     <input type="radio" name="client_type" value="new" class="text-red-600 focus:ring-red-500 mr-3" onchange="toggleClientFields()">
                                     <div>
                                         <p class="font-semibold text-gray-900 dark:text-gray-100">{{ __('messages.book_new_client') }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Register over phone</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ __('messages.admin_register_over_phone') }}</p>
                                     </div>
                                 </label>
                             </div>
@@ -1005,30 +1005,30 @@
                             <!-- Vehicle Selection for Existing Client -->
                             <div id="client_vehicles_section" class="hidden mt-4">
                                 <label for="client_vehicle_id" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                    Select Vehicle <span class="text-red-600">*</span>
+                                    {{ __('messages.select_vehicle') }} <span class="text-red-600">*</span>
                                 </label>
                                 <select id="client_vehicle_id" name="vehicle_id" onchange="displayVehicleDetails()" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                                    <option value="">Select a vehicle...</option>
-                                    <option value="add_new">+ Add New Vehicle</option>
+                                    <option value="">{{ __('messages.admin_select_a_vehicle') }}</option>
+                                    <option value="add_new">+ {{ __('messages.admin_add_new_vehicle') }}</option>
                                 </select>
                                 
                                 <!-- Vehicle Details Display -->
                                 <div id="vehicle_details_display" class="hidden mt-3 p-4 bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-lg">
                                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                                         <div>
-                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">Make</p>
+                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">{{ __('messages.book_vehicle_make') }}</p>
                                             <p class="text-sm text-blue-900 dark:text-blue-100" id="detail_make"></p>
                                         </div>
                                         <div>
-                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">Model</p>
+                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">{{ __('messages.book_vehicle_model') }}</p>
                                             <p class="text-sm text-blue-900 dark:text-blue-100" id="detail_model"></p>
                                         </div>
                                         <div>
-                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">Year</p>
+                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">{{ __('messages.book_vehicle_year') }}</p>
                                             <p class="text-sm text-blue-900 dark:text-blue-100" id="detail_year"></p>
                                         </div>
                                         <div>
-                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">Registration</p>
+                                            <p class="text-xs text-blue-700 dark:text-blue-300 font-semibold">{{ __('messages.registration') }}</p>
                                             <p class="text-sm text-blue-900 dark:text-blue-100" id="detail_plate"></p>
                                         </div>
                                     </div>
@@ -1038,7 +1038,7 @@
                             <!-- Add New Vehicle Form (for existing client) -->
                             <div id="add_new_vehicle_form" class="hidden mt-4 p-4 bg-gray-50 dark:bg-gray-700/50 border-2 border-gray-200 dark:border-gray-600 rounded-lg">
                                 <div class="flex items-center justify-between mb-4">
-                                    <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">Add New Vehicle</h4>
+                                    <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100">{{ __('messages.admin_add_new_vehicle') }}</h4>
                                     <button type="button" onclick="cancelAddVehicle()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -1047,56 +1047,56 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Make *</label>
+                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.book_vehicle_make') }} *</label>
                                         <input type="text" id="new_vehicle_make" name="new_vehicle_make" 
                                                class="w-full px-3 py-2 text-sm rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Model *</label>
+                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.book_vehicle_model') }} *</label>
                                         <input type="text" id="new_vehicle_model" name="new_vehicle_model"
                                                class="w-full px-3 py-2 text-sm rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Year *</label>
+                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.book_vehicle_year') }} *</label>
                                         <input type="number" id="new_vehicle_year" name="new_vehicle_year" min="1900" max="2100"
                                                class="w-full px-3 py-2 text-sm rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Registration</label>
+                                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.registration') }}</label>
                                         <input type="text" id="new_vehicle_plate" name="new_vehicle_plate"
                                                class="w-full px-3 py-2 text-sm rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200">
                                     </div>
                                 </div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Vehicle will be saved to the customer's profile</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">{{ __('messages.admin_vehicle_saved_to_profile') }}</p>
                             </div>
 
                             <!-- Manual Vehicle Entry (when no vehicle selected or no vehicles) -->
                             <div id="manual_vehicle_entry" class="hidden mt-4">
                                 <label for="manual_vehicle" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                    Vehicle Information <span class="text-red-600">*</span>
+                                    {{ __('messages.vehicle_information') }} <span class="text-red-600">*</span>
                                 </label>
                                 <input type="text" id="manual_vehicle" name="vehicle"
                                        placeholder="e.g., 2020 Honda Civic (ABC123)"
                                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Enter vehicle details manually or select "Add New Vehicle" to save to customer profile</p>
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.admin_vehicle_manual_hint') }}</p>
                             </div>
 
                             <!-- Service Selection for Existing Client -->
                             <div id="client_service_section" class="hidden mt-4">
                                 <label for="existing_service" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                    Service <span class="text-red-600">*</span>
+                                    {{ __('messages.service') }} <span class="text-red-600">*</span>
                                 </label>
                                 <select id="existing_service" name="service" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                                    <option value="">Select a service...</option>
-                                    <option value="General Inspection">General Inspection</option>
-                                    <option value="Oil Change">Oil Change</option>
-                                    <option value="Brake Service">Brake Service</option>
-                                    <option value="Tire Service">Tire Service</option>
-                                    <option value="Engine Diagnostics">Engine Diagnostics</option>
-                                    <option value="Transmission Service">Transmission Service</option>
-                                    <option value="Air Conditioning">Air Conditioning</option>
-                                    <option value="Battery Service">Battery Service</option>
-                                    <option value="Other">Other</option>
+                                    <option value="">{{ __('messages.admin_select_a_service') }}</option>
+                                    <option value="General Inspection">{{ __('messages.service_inspection') }}</option>
+                                    <option value="Oil Change">{{ __('messages.service_oil_change') }}</option>
+                                    <option value="Brake Service">{{ __('messages.service_brake') }}</option>
+                                    <option value="Tire Service">{{ __('messages.service_tire_service') }}</option>
+                                    <option value="Engine Diagnostics">{{ __('messages.service_diagnostics') }}</option>
+                                    <option value="Transmission Service">{{ __('messages.service_transmission_service') }}</option>
+                                    <option value="Air Conditioning">{{ __('messages.service_air_conditioning') }}</option>
+                                    <option value="Battery Service">{{ __('messages.service_battery_service') }}</option>
+                                    <option value="Other">{{ __('messages.service_other') }}</option>
                                 </select>
                             </div>
                         </div>
@@ -1133,7 +1133,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                         <p class="text-sm text-blue-700 dark:text-blue-300">
-                                            A secure password will be auto-generated and the client will receive an email with a link to set their own password.
+                                            {{ __('messages.admin_password_auto_generated') }}
                                         </p>
                                     </div>
                                 </div>
@@ -1142,32 +1142,32 @@
 
                         <!-- Vehicle and Service Information for New Clients -->
                         <div class="hidden border-t border-gray-200 dark:border-gray-700 pt-6" id="new_client_vehicle_service">
-                            <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-4">Vehicle Information</h4>
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-gray-100 mb-4">{{ __('messages.vehicle_information') }}</h4>
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label for="new_client_vehicle_make" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                        Make <span class="text-red-600">*</span>
+                                        {{ __('messages.book_vehicle_make') }} <span class="text-red-600">*</span>
                                     </label>
                                     <input type="text" id="new_client_vehicle_make" name="new_vehicle_make"
                                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                 </div>
                                 <div>
                                     <label for="new_client_vehicle_model" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                        Model <span class="text-red-600">*</span>
+                                        {{ __('messages.book_vehicle_model') }} <span class="text-red-600">*</span>
                                     </label>
                                     <input type="text" id="new_client_vehicle_model" name="new_vehicle_model"
                                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                 </div>
                                 <div>
                                     <label for="new_client_vehicle_year" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                        Year <span class="text-red-600">*</span>
+                                        {{ __('messages.book_vehicle_year') }} <span class="text-red-600">*</span>
                                     </label>
                                     <input type="number" id="new_client_vehicle_year" name="new_vehicle_year" min="1900" max="2100"
                                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                 </div>
                                 <div>
                                     <label for="new_client_vehicle_plate" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                        Registration
+                                        {{ __('messages.registration') }}
                                     </label>
                                     <input type="text" id="new_client_vehicle_plate" name="new_vehicle_plate"
                                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
@@ -1176,20 +1176,20 @@
                             
                             <div class="mt-4">
                                 <label for="new_service" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                    Service <span class="text-red-600">*</span>
+                                    {{ __('messages.service') }} <span class="text-red-600">*</span>
                                 </label>
                                 <select id="new_service" name="service" disabled
                                         class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                                    <option value="">Select a service...</option>
-                                    <option value="General Inspection">General Inspection</option>
-                                    <option value="Oil Change">Oil Change</option>
-                                    <option value="Brake Service">Brake Service</option>
-                                    <option value="Tire Service">Tire Service</option>
-                                    <option value="Engine Diagnostics">Engine Diagnostics</option>
-                                    <option value="Transmission Service">Transmission Service</option>
-                                    <option value="Air Conditioning">Air Conditioning</option>
-                                    <option value="Battery Service">Battery Service</option>
-                                    <option value="Other">Other</option>
+                                    <option value="">{{ __('messages.admin_select_a_service') }}</option>
+                                    <option value="General Inspection">{{ __('messages.service_inspection') }}</option>
+                                    <option value="Oil Change">{{ __('messages.service_oil_change') }}</option>
+                                    <option value="Brake Service">{{ __('messages.service_brake') }}</option>
+                                    <option value="Tire Service">{{ __('messages.service_tire_service') }}</option>
+                                    <option value="Engine Diagnostics">{{ __('messages.service_diagnostics') }}</option>
+                                    <option value="Transmission Service">{{ __('messages.service_transmission_service') }}</option>
+                                    <option value="Air Conditioning">{{ __('messages.service_air_conditioning') }}</option>
+                                    <option value="Battery Service">{{ __('messages.service_battery_service') }}</option>
+                                    <option value="Other">{{ __('messages.service_other') }}</option>
                                 </select>
                             </div>
                         </div>
@@ -1197,11 +1197,11 @@
                         <!-- Notes -->
                         <div>
                             <label for="notes" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                Notes (Optional)
+                                {{ __('messages.admin_notes_optional') }}
                             </label>
                             <textarea id="notes" name="notes" rows="3"
                                       class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                                      placeholder="Any specific notes or requirements..."></textarea>
+                                      placeholder="{{ __('messages.admin_notes_placeholder') }}"></textarea>
                         </div>
 
                         <!-- Modal Footer -->
@@ -1330,7 +1330,7 @@
                     ).slice(0, 10); // Limit to 10 results
 
                     if (filtered.length === 0) {
-                        resultsList.innerHTML = '<div class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">No clients found</div>';
+                        resultsList.innerHTML = '<div class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ __('messages.admin_no_clients_found') }}</div>';
                         clientResults.classList.remove('hidden');
                         return;
                     }
@@ -1508,7 +1508,7 @@
                     
                     // Hide vehicle selection section
                     document.getElementById('client_vehicles_section').classList.add('hidden');
-                    document.getElementById('client_vehicle_id').innerHTML = '<option value="">Select a vehicle...</option><option value="add_new">+ Add New Vehicle</option>';
+                    document.getElementById('client_vehicle_id').innerHTML = '<option value="">{{ __('messages.admin_select_a_vehicle') }}</option><option value="add_new">+ {{ __('messages.admin_add_new_vehicle') }}</option>';
                     document.getElementById('client_vehicle_id').removeAttribute('required');
                     
                     // Hide vehicle details and forms

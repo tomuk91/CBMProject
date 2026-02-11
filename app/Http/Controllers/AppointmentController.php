@@ -54,6 +54,44 @@ class AppointmentController extends Controller
     }
 
     /**
+     * Display the calendar view of available slots
+     */
+    public function calendar()
+    {
+        return view('appointments.calendar');
+    }
+
+    /**
+     * Return available slots as JSON for the customer calendar
+     */
+    public function calendarApi(Request $request)
+    {
+        $query = AvailableSlot::available();
+
+        if ($request->filled('start')) {
+            $query->where('start_time', '>=', $request->start);
+        }
+        if ($request->filled('end')) {
+            $query->where('start_time', '<=', $request->end);
+        }
+
+        $slots = $query->orderBy('start_time', 'asc')->get();
+
+        return response()->json($slots->map(function ($slot) {
+            return [
+                'id' => $slot->id,
+                'title' => __('messages.available'),
+                'start' => $slot->start_time->toIso8601String(),
+                'end' => $slot->end_time->toIso8601String(),
+                'url' => route('appointments.show', $slot->id),
+                'backgroundColor' => '#16a34a',
+                'borderColor' => '#15803d',
+                'textColor' => '#ffffff',
+            ];
+        }));
+    }
+
+    /**
      * Show booking form for a specific slot
      */
     public function show(AvailableSlot $slot)
@@ -273,6 +311,21 @@ class AppointmentController extends Controller
         return redirect()->route('login')
             ->with('info', 'Please login or register to complete your booking for ' . 
                    \Carbon\Carbon::parse($slot->start_time)->format('l, F j \a\t H:i'));
+    }
+
+    /**
+     * Display appointment details for the customer
+     */
+    public function showDetails(Appointment $appointment)
+    {
+        // Ensure user owns this appointment
+        if ($appointment->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $linkedVehicle = $appointment->vehicle_id ? \App\Models\Vehicle::find($appointment->vehicle_id) : null;
+
+        return view('appointments.show', compact('appointment', 'linkedVehicle'));
     }
 
     /**

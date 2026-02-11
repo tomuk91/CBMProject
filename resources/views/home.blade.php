@@ -245,7 +245,7 @@
                 <div class="relative scroll-animate-left">
                     <img src="{{ asset('images/hero-mechanic.jpg') }}" 
                          alt="{{ __('messages.about_image_alt') }}" 
-                         class="rounded-2xl shadow-2xl w-full h-[500px] object-cover"
+                         class="rounded-2xl shadow-2xl w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover"
                          loading="lazy">
                 </div>
                 
@@ -291,9 +291,9 @@
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     </div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                        <h3 class="text-2xl font-bold">BMW</h3>
-                        <p class="text-sm text-gray-200 mt-1">German Engineering</p>
+                    <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-6 text-white">
+                        <h3 class="text-lg sm:text-2xl font-bold">BMW</h3>
+                        <p class="text-xs sm:text-sm text-gray-200 mt-1">{{ __('messages.brand_tagline_german_engineering') }}</p>
                     </div>
                 </div>
                 
@@ -305,9 +305,9 @@
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     </div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                        <h3 class="text-2xl font-bold">Mercedes</h3>
-                        <p class="text-sm text-gray-200 mt-1">Luxury Performance</p>
+                    <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-6 text-white">
+                        <h3 class="text-lg sm:text-2xl font-bold">Mercedes</h3>
+                        <p class="text-xs sm:text-sm text-gray-200 mt-1">{{ __('messages.brand_tagline_luxury_performance') }}</p>
                     </div>
                 </div>
                 
@@ -319,9 +319,9 @@
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     </div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                        <h3 class="text-2xl font-bold">Audi</h3>
-                        <p class="text-sm text-gray-200 mt-1">Innovation & Style</p>
+                    <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-6 text-white">
+                        <h3 class="text-lg sm:text-2xl font-bold">Audi</h3>
+                        <p class="text-xs sm:text-sm text-gray-200 mt-1">{{ __('messages.brand_tagline_innovation_style') }}</p>
                     </div>
                 </div>
                 
@@ -333,9 +333,9 @@
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     </div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                        <h3 class="text-2xl font-bold">Ford</h3>
-                        <p class="text-sm text-gray-200 mt-1">Built Tough</p>
+                    <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-6 text-white">
+                        <h3 class="text-lg sm:text-2xl font-bold">Ford</h3>
+                        <p class="text-xs sm:text-sm text-gray-200 mt-1">{{ __('messages.brand_tagline_built_tough') }}</p>
                     </div>
                 </div>
                 
@@ -347,9 +347,9 @@
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     </div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                        <h3 class="text-2xl font-bold">Toyota</h3>
-                        <p class="text-sm text-gray-200 mt-1">Reliability First</p>
+                    <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-6 text-white">
+                        <h3 class="text-lg sm:text-2xl font-bold">Toyota</h3>
+                        <p class="text-xs sm:text-sm text-gray-200 mt-1">{{ __('messages.brand_tagline_reliability_first') }}</p>
                     </div>
                 </div>
             </div>
@@ -357,7 +357,7 @@
             <!-- Plus More Badge -->
             <div class="text-center mb-8">
                 <div class="inline-flex items-center gap-2 bg-white dark:bg-gray-900 px-8 py-4 rounded-full shadow-lg">
-                    <span class="text-gray-600 dark:text-gray-400 font-medium">And many more brands...</span>
+                    <span class="text-gray-600 dark:text-gray-400 font-medium">{{ __('messages.brands_and_more') }}</span>
                     <div class="flex -space-x-2">
                         <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white text-xs font-bold">VW</div>
                         <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">H</div>
@@ -394,7 +394,7 @@
                 <div class="group relative overflow-hidden bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 scroll-animate stagger-item">
                     <div class="h-48 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=800&auto=format&fit=crop" 
-                             alt="Oil Change Service" 
+                             alt="{{ __('messages.alt_oil_change_service') }}" 
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full">
@@ -417,7 +417,7 @@
                 <div class="group relative overflow-hidden bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 scroll-animate stagger-item">
                     <div class="h-48 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?q=80&w=800&auto=format&fit=crop" 
-                             alt="Brake Service" 
+                             alt="{{ __('messages.alt_brake_service') }}" 
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full">
@@ -440,7 +440,7 @@
                 <div class="group relative overflow-hidden bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 scroll-animate stagger-item">
                     <div class="h-48 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=800&auto=format&fit=crop" 
-                             alt="Engine Diagnostics" 
+                             alt="{{ __('messages.alt_engine_diagnostics') }}" 
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full">
@@ -464,7 +464,7 @@
                 <div class="group relative overflow-hidden bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 scroll-animate stagger-item">
                     <div class="h-48 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1607860108855-64acf2078ed9?q=80&w=800&auto=format&fit=crop" 
-                             alt="Tire Service" 
+                             alt="{{ __('messages.alt_tire_service') }}" 
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full">
@@ -488,7 +488,7 @@
                 <div class="group relative overflow-hidden bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 scroll-animate stagger-item">
                     <div class="h-48 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800&auto=format&fit=crop" 
-                             alt="AC Service" 
+                             alt="{{ __('messages.alt_ac_service') }}" 
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full">
@@ -511,7 +511,7 @@
                 <div class="group relative overflow-hidden bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 scroll-animate stagger-item">
                     <div class="h-48 overflow-hidden relative">
                         <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=800&auto=format&fit=crop" 
-                             alt="Transmission Service" 
+                             alt="{{ __('messages.alt_transmission_service') }}" 
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full">
@@ -543,7 +543,7 @@
                     <div class="absolute -bottom-6 -right-6 w-72 h-72 bg-blue-200 dark:bg-blue-900/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
                     <div class="relative">
                         <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1000&auto=format&fit=crop" 
-                             alt="Luxury Car Rental" 
+                             alt="{{ __('messages.alt_luxury_car_rental') }}" 
                              class="rounded-2xl shadow-2xl w-full h-auto object-cover">
                         <div class="absolute top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-full font-bold text-sm shadow-lg transform rotate-3 hover:rotate-0 transition">
                             {{ __('messages.rental_coming_soon') }}
@@ -637,9 +637,9 @@
                 <div>
                     <h4 class="font-bold text-lg mb-4">{{ __('messages.footer_contact') }}</h4>
                     <ul class="space-y-3 text-gray-400">
-                        <li>Email: info@cbmauto.com</li>
-                        <li>Phone: +36 1 234 5678</li>
-                        <li>Address: Budapest, Hungary</li>
+                        <li>{{ __('messages.footer_email_label') }} info@cbmauto.com</li>
+                        <li>{{ __('messages.footer_phone_label') }} +36 1 234 5678</li>
+                        <li>{{ __('messages.footer_address_label') }}</li>
                     </ul>
                 </div>
             </div>

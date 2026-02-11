@@ -110,7 +110,7 @@
                                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                 </svg>
-                                Clear Filters
+                                {{ __('messages.action_clear_filters') }}
                             </a>
                         @endif
                     </div>
@@ -184,14 +184,14 @@
                             </div>
                             @if(request()->hasAny(['search', 'service', 'date_from', 'date_to']))
                                 <p class="text-gray-600 dark:text-gray-400 font-semibold text-lg">
-                                    No results found
+                                    {{ __('messages.msg_no_results') }}
                                 </p>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">Try adjusting your filters or search term</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">{{ __('messages.admin_try_adjusting_filters') }}</p>
                             @else
                                 <p class="text-gray-600 dark:text-gray-400 font-semibold text-lg">
                                     {{ __('messages.appointments_no_slots') }}
                                 </p>
-                                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">All appointments have been reviewed</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">{{ __('messages.admin_all_reviewed') }}</p>
                             @endif
                         </div>
                     @else
@@ -343,7 +343,7 @@
                                                     @elseif($appointment->vehicle)
                                                         <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $appointment->vehicle }}</p>
                                                     @else
-                                                        <p class="text-sm text-gray-500 dark:text-gray-400 italic">No vehicle selected</p>
+                                                        <p class="text-sm text-gray-500 dark:text-gray-400 italic">{{ __('messages.admin_no_vehicle_selected') }}</p>
                                                     @endif
                                                 </div>
                                             </div>

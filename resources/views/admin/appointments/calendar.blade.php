@@ -84,17 +84,17 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <!-- Search -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Search') }}</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_search') }}</label>
                             <input type="text" name="search" value="{{ request('search') }}" 
-                                   placeholder="{{ __('Name, email, phone, service...') }}"
+                                   placeholder="{{ __('messages.calendar_search_placeholder') }}"
                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
 
                         <!-- Status Filter -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Status') }}</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_filter_status') }}</label>
                             <select name="status" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="all">{{ __('All Statuses') }}</option>
+                                <option value="all">{{ __('messages.calendar_all_statuses') }}</option>
                                 @foreach($statuses as $status)
                                     <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
                                         {{ ucfirst($status) }}
@@ -105,9 +105,9 @@
 
                         <!-- Service Filter -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Service') }}</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_filter_service') }}</label>
                             <select name="service" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="all">{{ __('All Services') }}</option>
+                                <option value="all">{{ __('messages.calendar_all_services') }}</option>
                                 @foreach($services as $service)
                                     <option value="{{ $service }}" {{ request('service') == $service ? 'selected' : '' }}>
                                         {{ $service }}
@@ -118,12 +118,12 @@
 
                         <!-- Sort -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Sort By') }}</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_sort_by') }}</label>
                             <select name="sort" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="appointment_date" {{ request('sort') == 'appointment_date' ? 'selected' : '' }}>{{ __('Date') }}</option>
-                                <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>{{ __('Created') }}</option>
-                                <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>{{ __('Name') }}</option>
-                                <option value="status" {{ request('sort') == 'status' ? 'selected' : '' }}>{{ __('Status') }}</option>
+                                <option value="appointment_date" {{ request('sort') == 'appointment_date' ? 'selected' : '' }}>{{ __('messages.calendar_sort_date') }}</option>
+                                <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>{{ __('messages.calendar_sort_created') }}</option>
+                                <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>{{ __('messages.calendar_sort_name') }}</option>
+                                <option value="status" {{ request('sort') == 'status' ? 'selected' : '' }}>{{ __('messages.calendar_sort_status') }}</option>
                             </select>
                         </div>
                     </div>
@@ -131,14 +131,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- Date From -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Date From') }}</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_date_from') }}</label>
                             <input type="date" name="date_from" value="{{ request('date_from') }}" 
                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
 
                         <!-- Date To -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Date To') }}</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_date_to') }}</label>
                             <input type="date" name="date_to" value="{{ request('date_to') }}" 
                                    class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
@@ -149,10 +149,10 @@
                                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
-                                {{ __('Filter') }}
+                                {{ __('messages.calendar_filter_btn') }}
                             </button>
                             <a href="{{ route('admin.appointments.calendar') }}" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors text-center">
-                                {{ __('Clear') }}
+                                {{ __('messages.calendar_clear_btn') }}
                             </a>
                         </div>
                     </div>
@@ -197,7 +197,7 @@
                             <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                             </svg>
-                            Cancel Appointment
+                            {{ __('messages.calendar_cancel_appointment') }}
                         </button>
                     </div>
                     <button onclick="closeModal()" class="px-4 py-3 bg-gray-200 hover:bg-gray-300 active:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200 text-sm rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md order-1 sm:order-2 min-h-[44px]">
@@ -221,14 +221,14 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-bold text-white">
-                            Confirm Reschedule
+                            {{ __('messages.calendar_confirm_reschedule') }}
                         </h3>
                     </div>
                 </div>
                 
                 <!-- Modal Body -->
                 <div class="p-6 space-y-5">
-                    <p class="text-base text-gray-700 dark:text-gray-300">Are you sure you want to reschedule this appointment?</p>
+                    <p class="text-base text-gray-700 dark:text-gray-300">{{ __('messages.calendar_reschedule_confirm_text') }}</p>
                     <div id="rescheduleDetails" class="space-y-3 text-sm">
                         <!-- Details will be inserted here -->
                     </div>
@@ -240,7 +240,7 @@
                         type="button"
                         onclick="cancelReschedule()" 
                         class="px-5 py-2.5 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm min-h-[44px]">
-                        Cancel
+                        {{ __('messages.cancel') }}
                     </button>
                     <button 
                         type="button"
@@ -249,7 +249,7 @@
                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                         </svg>
-                        Confirm Reschedule
+                        {{ __('messages.calendar_confirm_reschedule') }}
                     </button>
                 </div>
             </div>
@@ -544,13 +544,13 @@
             
             const detailsHtml = `
                 <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mb-3">
-                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Customer</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">{{ __('messages.customer') }}</p>
                     <p class="font-semibold text-gray-900 dark:text-gray-100">${props.customer}</p>
                     <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">${props.service}</p>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-lg p-3">
-                        <p class="text-xs text-red-600 dark:text-red-400 uppercase tracking-wide mb-2 font-semibold">Old Date & Time</p>
+                        <p class="text-xs text-red-600 dark:text-red-400 uppercase tracking-wide mb-2 font-semibold">{{ __('messages.calendar_old_date_time') }}</p>
                         <p class="text-sm font-medium text-gray-900 dark:text-gray-100">${oldStart.toLocaleString('{{ app()->getLocale() }}', {
                             weekday: 'short',
                             year: 'numeric',
@@ -563,7 +563,7 @@
                         })}</p>
                     </div>
                     <div class="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-lg p-3">
-                        <p class="text-xs text-green-600 dark:text-green-400 uppercase tracking-wide mb-2 font-semibold">New Date & Time</p>
+                        <p class="text-xs text-green-600 dark:text-green-400 uppercase tracking-wide mb-2 font-semibold">{{ __('messages.calendar_new_date_time') }}</p>
                         <p class="text-sm font-medium text-gray-900 dark:text-gray-100">${newStart.toLocaleString('{{ app()->getLocale() }}', {
                             weekday: 'short',
                             year: 'numeric',
@@ -622,15 +622,15 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showToast('Appointment updated successfully', 'success');
+                    showToast('{{ __('messages.calendar_appointment_updated') }}', 'success');
                 } else {
-                    showToast(data.message || 'Failed to update appointment', 'error');
+                    showToast(data.message || '{{ __('messages.calendar_update_failed') }}', 'error');
                     calendar.refetchEvents();
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('Failed to update appointment', 'error');
+                showToast('{{ __('messages.calendar_update_failed') }}', 'error');
                 calendar.refetchEvents();
             });
         }
@@ -668,7 +668,7 @@
                             <p class="text-sm font-medium">${props.vehicle ? props.vehicle.replace(/\s*\([^)]*\)\s*$/, '') : 'N/A'}</p>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Registration</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">{{ __('messages.calendar_registration') }}</p>
                             <p class="text-sm font-bold text-red-600 dark:text-red-400">${props.vehicle && props.vehicle.match(/\(([^)]+)\)/) ? props.vehicle.match(/\(([^)]+)\)/)[1] : 'N/A'}</p>
                         </div>
                     </div>
@@ -699,7 +699,7 @@
                     ` : ''}
                     ${props.admin_notes ? `
                     <div class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-3 rounded">
-                        <p class="text-xs text-amber-700 dark:text-amber-400 font-semibold mb-1 uppercase tracking-wide">Admin Notes</p>
+                        <p class="text-xs text-amber-700 dark:text-amber-400 font-semibold mb-1 uppercase tracking-wide">{{ __('messages.admin_notes') }}</p>
                         <p class="text-sm text-amber-900 dark:text-amber-200">${props.admin_notes}</p>
                     </div>
                     ` : ''}
@@ -758,7 +758,7 @@
         function cancelAppointment() {
             if (!currentAppointmentId) return;
             
-            if (!confirm('Are you sure you want to cancel this appointment? This action cannot be undone.')) return;
+            if (!confirm('{{ __('messages.calendar_cancel_confirm') }}')) return;
             
             fetch(`/admin/appointments/${currentAppointmentId}`, {
                 method: 'DELETE',
@@ -776,19 +776,19 @@
             })
             .then(data => {
                 if (data.success) {
-                    showToast('Appointment cancelled successfully', 'success');
+                    showToast('{{ __('messages.calendar_appointment_cancelled') }}', 'success');
                     closeModal();
                     // Reload page after short delay to show toast
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);
                 } else {
-                    showToast(data.message || 'Failed to cancel appointment', 'error');
+                    showToast(data.message || '{{ __('messages.calendar_cancel_failed') }}', 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('Failed to cancel appointment: ' + error.message, 'error');
+                showToast('{{ __('messages.calendar_cancel_failed') }}', 'error');
             });
         }
 

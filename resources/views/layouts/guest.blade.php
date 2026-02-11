@@ -15,6 +15,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
+        <!-- Toast Notifications -->
+        <x-toast-notification />
+
         <div class="min-h-screen flex">
             <!-- Left Side - Branding -->
             <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">

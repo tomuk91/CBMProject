@@ -15,7 +15,7 @@
                                 {{ __('messages.dashboard_welcome') }}, {{ Auth::user()->name }}!
                             </h1>
                             <p class="text-red-100 mt-1 text-sm sm:text-base lg:text-lg">
-                                Here's what's happening with your account
+                                {{ __('messages.dashboard_subtitle') }}
                             </p>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-xl transition duration-300">
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-red-50 dark:bg-red-900/20 rounded-xl p-3">
                                 <svg class="h-7 w-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-xl transition duration-300">
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-red-50 dark:bg-red-900/20 rounded-xl p-3">
                                 <svg class="h-7 w-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
@@ -96,70 +96,122 @@
                         @if($appointments->count() > 0)
                             <div class="space-y-4">
                                 @foreach($appointments as $appointment)
-                                    <div class="flex items-start p-5 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:shadow-lg transition">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-12 w-12 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-                                                <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="ml-4 flex-1">
-                                            <div class="flex items-center justify-between">
-                                                <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">
+                                    <div class="group relative bg-white dark:bg-gray-700/40 rounded-xl border border-gray-200 dark:border-gray-600 hover:border-red-300 dark:hover:border-red-700 hover:shadow-lg transition-all duration-300 overflow-hidden">
+                                        {{-- Status accent bar --}}
+                                        <div class="absolute top-0 left-0 right-0 h-1
+                                            @if($appointment->status->value === 'confirmed') bg-green-500
+                                            @elseif($appointment->status->value === 'pending') bg-amber-500
+                                            @elseif($appointment->status->value === 'completed') bg-blue-500
+                                            @elseif($appointment->status->value === 'cancelled') bg-red-500
+                                            @elseif($appointment->status->value === 'no-show') bg-gray-400
+                                            @else bg-gray-300
+                                            @endif"></div>
+
+                                        <div class="p-5 pt-6">
+                                            {{-- Header: Service name + status badge --}}
+                                            <div class="flex items-start justify-between gap-3">
+                                                <h4 class="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">
                                                     {{ $appointment->service }}
                                                 </h4>
-                                                <span class="px-3 py-1 text-xs font-bold rounded-full
-                                                    @if($appointment->status->value === 'confirmed') bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400
-                                                    @elseif($appointment->status->value === 'completed') bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400
+                                                <span class="flex-shrink-0 inline-flex items-center px-2.5 py-1 text-xs font-bold rounded-full
+                                                    @if($appointment->status->value === 'confirmed') bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400
+                                                    @elseif($appointment->status->value === 'pending') bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400
+                                                    @elseif($appointment->status->value === 'completed') bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400
+                                                    @elseif($appointment->status->value === 'cancelled') bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400
+                                                    @elseif($appointment->status->value === 'no-show') bg-gray-100 text-gray-600 dark:bg-gray-600 dark:text-gray-300
                                                     @else bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300
                                                     @endif">
-                                                    {{ ucfirst($appointment->status->value) }}
+                                                    {{ ucfirst(str_replace('-', ' ', $appointment->status->value)) }}
                                                 </span>
                                             </div>
-                                            <p class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                                                {{ $appointment->appointment_date->format('F j, Y \a\t g:i A') }}
-                                            </p>
-                                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                                {{ __('messages.vehicle_information') }}: {{ $appointment->vehicle }}
-                                            </p>
+
+                                            {{-- Date/time and vehicle info --}}
+                                            <div class="mt-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                                <span class="inline-flex items-center">
+                                                    <svg class="w-4 h-4 mr-1.5 text-red-500 dark:text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                    </svg>
+                                                    <span class="font-medium">{{ $appointment->appointment_date->format('M j, Y') }}</span>
+                                                </span>
+                                                <span class="inline-flex items-center">
+                                                    <svg class="w-4 h-4 mr-1.5 text-red-500 dark:text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                    </svg>
+                                                    <span class="font-medium">{{ $appointment->appointment_date->format('g:i A') }}</span>
+                                                </span>
+                                                @if($appointment->vehicle)
+                                                    <span class="inline-flex items-center">
+                                                        <svg class="w-4 h-4 mr-1.5 text-red-500 dark:text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                        </svg>
+                                                        <span class="font-medium">{{ $appointment->vehicle }}</span>
+                                                    </span>
+                                                @endif
+                                            </div>
+
                                             @if($appointment->notes)
-                                                <div class="mt-2 text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 p-2 rounded">
-                                                    {{ $appointment->notes }}
+                                                <div class="mt-3 text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-2.5 rounded-lg border border-gray-100 dark:border-gray-700">
+                                                    {{ Str::limit($appointment->notes, 120) }}
                                                 </div>
                                             @endif
+
+                                            {{-- View Details link --}}
+                                            <div class="mt-3">
+                                                <a href="{{ route('appointments.details', $appointment) }}" class="inline-flex items-center text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition">
+                                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                                    </svg>
+                                                    {{ __('messages.appointment_view_details') }}
+                                                </a>
+                                            </div>
+
+                                            {{-- Cancellation warning --}}
                                             @if($appointment->cancellation_requested)
-                                                <div class="mt-3 flex items-center text-xs text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20 p-2 rounded">
-                                                    <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <div class="mt-3 flex items-center text-xs text-yellow-700 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20 p-2.5 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                                                    <svg class="h-4 w-4 mr-1.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                                                     </svg>
                                                     {{ __('messages.cancellation_requested_on') }} {{ $appointment->cancellation_requested_at->format('M j, Y') }}
                                                 </div>
-                                            @elseif($appointment->status->value === 'confirmed' && $appointment->appointment_date > now()->addHours(24))
-                                                <div class="mt-3">
-                                                    <button onclick="showCancellationModal({{ $appointment->id }})" class="text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
-                                                        {{ __('messages.request_cancellation') }}
-                                                    </button>
+                                            @endif
+
+                                            {{-- Action buttons --}}
+                                            @if(!$appointment->cancellation_requested && in_array($appointment->status->value, ['confirmed', 'pending']))
+                                                <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-600 flex flex-wrap items-center gap-3">
+                                                    @if($appointment->status->value === 'confirmed' && $appointment->appointment_date > now()->addHours(24))
+                                                        <button onclick="showCancellationModal({{ $appointment->id }})" class="inline-flex items-center text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition">
+                                                            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                            </svg>
+                                                            {{ __('messages.request_cancellation') }}
+                                                        </button>
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
-                            
+
                             <!-- Pagination -->
                             <div class="mt-6">
                                 {{ $appointments->links() }}
                             </div>
                         @else
                             <div class="text-center py-16">
-                                <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                                <h3 class="mt-4 text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('messages.no_appointments_yet') }}</h3>
-                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ __('messages.appointments_book_first') }}</p>
+                                <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-red-50 dark:bg-red-900/20">
+                                    <svg class="h-10 w-10 text-red-400 dark:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="mt-5 text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('messages.dashboard_no_upcoming') }}</h3>
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-xs mx-auto">{{ __('messages.dashboard_no_upcoming_desc') }}</p>
                                 <div class="mt-6">
-                                    <a href="{{ route('appointments.index') }}" class="inline-flex items-center justify-center px-8 py-3 bg-red-600 border border-transparent rounded-lg font-semibold text-sm text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition ease-in-out duration-150 shadow-lg">
+                                    <a href="{{ route('appointments.index') }}" class="inline-flex items-center justify-center px-6 py-3 bg-red-600 border border-transparent rounded-xl font-semibold text-sm text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition ease-in-out duration-150 shadow-lg hover:shadow-xl">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                        </svg>
                                         {{ __('messages.appointments_book') }}
                                     </a>
                                 </div>

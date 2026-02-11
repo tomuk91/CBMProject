@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Data - {{ config('app.name') }}</title>
+    <title>{{ __('messages.export_page_title') }} - {{ config('app.name') }}</title>
     <style>
         * {
             margin: 0;
@@ -199,48 +199,48 @@
     </style>
 </head>
 <body>
-    <button class="print-button" onclick="window.print()">🖨️ Print or Save as PDF</button>
+    <button class="print-button" onclick="window.print()">🖨️ {{ __('messages.export_print_button') }}</button>
     
     <div class="header">
-        <h1>📄 My Personal Data</h1>
-        <p>Exported on {{ now()->format('F j, Y \a\t g:i A') }}</p>
-        <p>From {{ config('app.name') }}</p>
+        <h1>📄 {{ __('messages.export_my_personal_data') }}</h1>
+        <p>{{ __('messages.export_exported_on') }} {{ now()->format('F j, Y \a\t g:i A') }}</p>
+        <p>{{ __('messages.export_from') }} {{ config('app.name') }}</p>
     </div>
 
     <!-- Personal Information -->
     <div class="section">
-        <h2>👤 Personal Information</h2>
+        <h2>👤 {{ __('messages.export_personal_information') }}</h2>
         <div class="info-grid">
             <div class="info-item">
-                <div class="info-label">Full Name</div>
+                <div class="info-label">{{ __('messages.export_full_name') }}</div>
                 <div class="info-value">{{ $user->name }}</div>
             </div>
             <div class="info-item">
-                <div class="info-label">Email Address</div>
+                <div class="info-label">{{ __('messages.export_email_address') }}</div>
                 <div class="info-value">{{ $user->email }}</div>
             </div>
             <div class="info-item">
-                <div class="info-label">Phone Number</div>
-                <div class="info-value">{{ $user->phone ?? 'Not provided' }}</div>
+                <div class="info-label">{{ __('messages.export_phone_number') }}</div>
+                <div class="info-value">{{ $user->phone ?? __('messages.export_not_provided') }}</div>
             </div>
             <div class="info-item">
-                <div class="info-label">Address</div>
-                <div class="info-value">{{ $user->address ?? 'Not provided' }}</div>
+                <div class="info-label">{{ __('messages.export_address') }}</div>
+                <div class="info-value">{{ $user->address ?? __('messages.export_not_provided') }}</div>
             </div>
             <div class="info-item">
-                <div class="info-label">City</div>
-                <div class="info-value">{{ $user->city ?? 'Not provided' }}</div>
+                <div class="info-label">{{ __('messages.export_city') }}</div>
+                <div class="info-value">{{ $user->city ?? __('messages.export_not_provided') }}</div>
             </div>
             <div class="info-item">
-                <div class="info-label">Postal Code</div>
-                <div class="info-value">{{ $user->postal_code ?? 'Not provided' }}</div>
+                <div class="info-label">{{ __('messages.export_postal_code') }}</div>
+                <div class="info-value">{{ $user->postal_code ?? __('messages.export_not_provided') }}</div>
             </div>
             <div class="info-item">
-                <div class="info-label">Country</div>
-                <div class="info-value">{{ $user->country ?? 'Not provided' }}</div>
+                <div class="info-label">{{ __('messages.export_country') }}</div>
+                <div class="info-value">{{ $user->country ?? __('messages.export_not_provided') }}</div>
             </div>
             <div class="info-item">
-                <div class="info-label">Account Created</div>
+                <div class="info-label">{{ __('messages.export_account_created') }}</div>
                 <div class="info-value">{{ $user->created_at->format('F j, Y') }}</div>
             </div>
         </div>
@@ -248,31 +248,31 @@
 
     <!-- Vehicles -->
     <div class="section">
-        <h2>🚗 My Vehicles</h2>
+        <h2>🚗 {{ __('messages.export_my_vehicles') }}</h2>
         @if($user->vehicles->count() > 0)
             @foreach($user->vehicles as $vehicle)
                 <div class="card">
                     <h3>{{ $vehicle->make }} {{ $vehicle->model }} ({{ $vehicle->year }})</h3>
                     <div class="info-grid">
                         <div class="info-item">
-                            <div class="info-label">License Plate</div>
+                            <div class="info-label">{{ __('messages.export_license_plate') }}</div>
                             <div class="info-value">{{ $vehicle->plate }}</div>
                         </div>
                         @if($vehicle->vin)
                         <div class="info-item">
-                            <div class="info-label">VIN</div>
+                            <div class="info-label">{{ __('messages.export_vin') }}</div>
                             <div class="info-value">{{ $vehicle->vin }}</div>
                         </div>
                         @endif
                         @if($vehicle->color)
                         <div class="info-item">
-                            <div class="info-label">Color</div>
+                            <div class="info-label">{{ __('messages.export_color') }}</div>
                             <div class="info-value">{{ $vehicle->color }}</div>
                         </div>
                         @endif
                         @if($vehicle->mileage)
                         <div class="info-item">
-                            <div class="info-label">Mileage</div>
+                            <div class="info-label">{{ __('messages.export_mileage') }}</div>
                             <div class="info-value">{{ number_format($vehicle->mileage) }} km</div>
                         </div>
                         @endif
@@ -280,13 +280,13 @@
                 </div>
             @endforeach
         @else
-            <p class="info-value empty">No vehicles registered</p>
+            <p class="info-value empty">{{ __('messages.export_no_vehicles') }}</p>
         @endif
     </div>
 
     <!-- Appointments -->
     <div class="section">
-        <h2>📅 Appointment History</h2>
+        <h2>📅 {{ __('messages.export_appointment_history') }}</h2>
         @if($user->appointments->count() > 0)
             @foreach($user->appointments->sortByDesc('appointment_date') as $appointment)
                 <div class="card">
@@ -296,26 +296,26 @@
                     </h3>
                     <div class="info-grid">
                         <div class="info-item">
-                            <div class="info-label">Service Type</div>
-                            <div class="info-value">{{ $appointment->service ?? 'General Service' }}</div>
+                            <div class="info-label">{{ __('messages.export_service_type') }}</div>
+                            <div class="info-value">{{ $appointment->service ?? __('messages.export_general_service') }}</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Date & Time</div>
+                            <div class="info-label">{{ __('messages.export_date_time') }}</div>
                             <div class="info-value">
                                 {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y \a\t g:i A') }}
                             </div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Vehicle</div>
-                            <div class="info-value">{{ $appointment->vehicle ?? 'Not specified' }}</div>
+                            <div class="info-label">{{ __('messages.export_vehicle') }}</div>
+                            <div class="info-value">{{ $appointment->vehicle ?? __('messages.export_not_specified') }}</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Status</div>
+                            <div class="info-label">{{ __('messages.export_status') }}</div>
                             <div class="info-value">{{ ucfirst($appointment->status->value) }}</div>
                         </div>
                         @if($appointment->notes)
                         <div class="info-item" style="grid-column: 1 / -1;">
-                            <div class="info-label">Notes</div>
+                            <div class="info-label">{{ __('messages.export_notes') }}</div>
                             <div class="info-value">{{ $appointment->notes }}</div>
                         </div>
                         @endif
@@ -323,31 +323,30 @@
                 </div>
             @endforeach
         @else
-            <p class="info-value empty">No appointment history</p>
+            <p class="info-value empty">{{ __('messages.export_no_appointments') }}</p>
         @endif
     </div>
 
     <!-- Data Rights Information -->
     <div class="section">
-        <h2>ℹ️ Your Data Rights</h2>
+        <h2>ℹ️ {{ __('messages.export_data_rights_title') }}</h2>
         <p style="color: #6b7280; line-height: 1.8;">
-            This document contains all personal data we have stored about you in accordance with GDPR regulations. 
-            You have the right to:
+            {{ __('messages.export_gdpr_intro') }}
         </p>
         <ul style="margin-top: 15px; margin-left: 20px; color: #6b7280; line-height: 2;">
-            <li>Request corrections to any inaccurate data</li>
-            <li>Request deletion of your personal data</li>
-            <li>Withdraw consent for data processing</li>
-            <li>Request data portability to another service</li>
+            <li>{{ __('messages.export_right_corrections') }}</li>
+            <li>{{ __('messages.export_right_deletion') }}</li>
+            <li>{{ __('messages.export_right_withdraw') }}</li>
+            <li>{{ __('messages.export_right_portability') }}</li>
         </ul>
         <p style="margin-top: 15px; color: #6b7280;">
-            For any questions or requests regarding your data, please contact us at 
+            {{ __('messages.export_data_contact') }}
             <strong>{{ config('services.business.email') }}</strong>
         </p>
     </div>
 
     <div class="footer">
-        <p>This data export was generated automatically by {{ config('app.name') }}</p>
+        <p>{{ __('messages.export_generated_by') }} {{ config('app.name') }}</p>
         <p style="margin-top: 10px;">{{ now()->format('F j, Y \a\t g:i A') }}</p>
     </div>
 </body>

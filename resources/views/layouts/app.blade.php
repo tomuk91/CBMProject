@@ -83,6 +83,9 @@
     <body class="font-sans antialiased">
         <!-- Skip Link for Keyboard Navigation -->
         <a href="#main-content" class="skip-link">{{ __('messages.skip_to_content') }}</a>
+
+        <!-- Toast Notifications -->
+        <x-toast-notification />
         
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')

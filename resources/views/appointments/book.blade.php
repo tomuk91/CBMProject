@@ -71,8 +71,8 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Contact Information</h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">How we'll reach you</p>
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ __('messages.booking_contact_information') }}</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('messages.booking_contact_subtitle') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                                             </svg>
-                                            This information is from your profile and cannot be changed here
+                                            {{ __('messages.booking_profile_readonly_notice') }}
                                         </p>
                                     @endif
                                     @error('name')
@@ -135,7 +135,7 @@
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                                             </svg>
-                                            This information is from your profile and cannot be changed here
+                                            {{ __('messages.booking_profile_readonly_notice') }}
                                         </p>
                                     @endif
                                     @error('email')
@@ -170,7 +170,7 @@
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                                             </svg>
-                                            This information is from your profile and cannot be changed here
+                                            {{ __('messages.booking_profile_readonly_notice') }}
                                         </p>
                                     @endif
                                     @error('phone')
@@ -196,49 +196,127 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Vehicle & Service Details</h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">What you need serviced</p>
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ __('messages.booking_service_details') }}</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('messages.booking_service_subtitle') }}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="p-6 space-y-5">
-                            <!-- Vehicle -->
+                            <!-- Vehicle Selection -->
                             @if(Auth::user()->vehicles->count() > 0)
-                            <div>
-                                <label for="vehicle_id" class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            <div x-data="{
+                                selectedVehicle: {{ old('vehicle_id', (Auth::user()->vehicles->count() === 1 ? Auth::user()->vehicles->first()->id : 'null')) }},
+                                selectVehicle(id) {
+                                    this.selectedVehicle = id;
+                                    document.getElementById('vehicle_id').value = id;
+                                    checkVehicleAvailability(id);
+                                }
+                            }" x-init="if (selectedVehicle) { document.getElementById('vehicle_id').value = selectedVehicle; }">
+                                <label class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                                     <svg class="w-4 h-4 mr-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
                                         <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
                                     </svg>
-                                    {{ __('messages.select_vehicle') }} <span class="text-red-500 ml-1">*</span>
+                                    {{ __('messages.booking_select_your_vehicle') }} <span class="text-red-500 ml-1">*</span>
                                 </label>
-                                <select id="vehicle_id" 
-                                        name="vehicle_id" 
-                                        required
-                                        onchange="checkVehicleAvailability(this.value)"
-                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
-                                    <option value="">{{ __('messages.select_vehicle_for_appointment') }}</option>
+
+                                <!-- Hidden input for form submission -->
+                                <input type="hidden" id="vehicle_id" name="vehicle_id" :value="selectedVehicle">
+
+                                @if(Auth::user()->vehicles->count() === 1)
+                                <p class="mb-3 text-xs text-emerald-600 dark:text-emerald-400 flex items-center">
+                                    <svg class="w-3.5 h-3.5 mr-1.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ __('messages.booking_vehicle_auto_selected') }}
+                                </p>
+                                @endif
+
+                                <!-- Vehicle Cards Grid -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     @foreach(Auth::user()->vehicles as $vehicle)
-                                        <option value="{{ $vehicle->id }}" 
-                                                {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }}>
-                                            {{ $vehicle->full_name }}
-                                            @if($vehicle->is_primary) ({{ __('messages.primary') }}) @endif
-                                            @if($vehicle->plate) - {{ $vehicle->plate }} @endif
-                                        </option>
+                                    <div @click="selectVehicle({{ $vehicle->id }})"
+                                         :class="selectedVehicle == {{ $vehicle->id }}
+                                            ? 'border-red-500 ring-2 ring-red-200 dark:ring-red-500/20 bg-red-50/50 dark:bg-red-900/10'
+                                            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:shadow-md'"
+                                         class="relative cursor-pointer rounded-xl border-2 p-4 transition-all duration-200 bg-white dark:bg-gray-700/50 group">
+
+                                        <!-- Selected checkmark -->
+                                        <div x-show="selectedVehicle == {{ $vehicle->id }}"
+                                             x-transition:enter="transition ease-out duration-200"
+                                             x-transition:enter-start="opacity-0 scale-75"
+                                             x-transition:enter-end="opacity-100 scale-100"
+                                             class="absolute top-3 right-3">
+                                            <span class="inline-flex items-center justify-center w-6 h-6 bg-red-500 rounded-full shadow-sm">
+                                                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                                </svg>
+                                            </span>
+                                        </div>
+
+                                        <div class="flex items-start gap-3">
+                                            <!-- Car SVG Icon -->
+                                            <div :class="selectedVehicle == {{ $vehicle->id }}
+                                                    ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
+                                                    : 'bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 group-hover:bg-gray-200 dark:group-hover:bg-gray-500'"
+                                                 class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200">
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/>
+                                                    <circle cx="7.5" cy="14.5" r="1.5"/>
+                                                    <circle cx="16.5" cy="14.5" r="1.5"/>
+                                                </svg>
+                                            </div>
+
+                                            <div class="flex-1 min-w-0">
+                                                <!-- Make / Model / Year -->
+                                                <div class="flex items-center gap-2 flex-wrap">
+                                                    <h4 class="text-sm font-bold text-gray-900 dark:text-white truncate">
+                                                        {{ $vehicle->year }} {{ $vehicle->make }} {{ $vehicle->model }}
+                                                    </h4>
+                                                    @if($vehicle->is_primary)
+                                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">
+                                                        {{ __('messages.primary') }}
+                                                    </span>
+                                                    @endif
+                                                </div>
+
+                                                <!-- License plate -->
+                                                @if($vehicle->plate)
+                                                <p class="mt-1 text-xs font-mono font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-600 inline-block px-2 py-0.5 rounded">
+                                                    {{ $vehicle->plate }}
+                                                </p>
+                                                @endif
+
+                                                <!-- Color indicator -->
+                                                @if($vehicle->color)
+                                                <div class="mt-1.5 flex items-center gap-1.5">
+                                                    <span class="w-3 h-3 rounded-full border border-gray-300 dark:border-gray-500 flex-shrink-0"
+                                                          style="background-color: {{ $vehicle->color }}"></span>
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400 capitalize">{{ $vehicle->color }}</span>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
                                     @endforeach
-                                </select>
-                                <div id="vehicle-error" class="hidden mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center">
-                                    <svg class="w-4 h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                </div>
+
+                                <!-- Vehicle availability error -->
+                                <div id="vehicle-error" class="hidden mt-3 text-sm text-red-600 dark:text-red-400 flex items-center bg-red-50 dark:bg-red-900/10 p-3 rounded-lg border border-red-200 dark:border-red-800">
+                                    <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                                     </svg>
                                     <span id="vehicle-error-message"></span>
                                 </div>
-                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    Don't see your vehicle? 
-                                    <button type="button" onclick="openAddVehicleModal()" class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-semibold">
+
+                                <!-- Add vehicle link -->
+                                <div class="mt-3 flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                                    <span>{{ __('messages.booking_vehicle_not_listed') }}</span>
+                                    <button type="button" onclick="openAddVehicleModal()" class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-semibold hover:underline transition">
                                         {{ __('messages.add_vehicle') }}
                                     </button>
-                                </p>
+                                </div>
+
                                 @error('vehicle_id')
                                     <p class="mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center">
                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -250,29 +328,37 @@
                             </div>
                             @else
                             <div>
-                                <label class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                <label class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                                     <svg class="w-4 h-4 mr-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
                                         <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
                                     </svg>
-                                    {{ __('messages.vehicle_information') }} <span class="text-red-500 ml-1">*</span>
+                                    {{ __('messages.select_vehicle') }} <span class="text-red-500 ml-1">*</span>
                                 </label>
-                                <div class="p-5 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border border-amber-300 dark:border-amber-800 rounded-xl shadow-sm">
-                                    <div class="flex items-start gap-3">
-                                        <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                        </svg>
-                                        <div>
-                                            <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-2">
-                                                {{ __('messages.no_vehicles') }}
-                                            </p>
-                                            <button type="button" onclick="openAddVehicleModal()" class="inline-flex items-center text-sm font-bold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition">
-                                                <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
-                                                </svg>
-                                                {{ __('messages.add_your_first_vehicle') }}
-                                            </button>
+                                <div class="p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl text-center bg-gray-50/50 dark:bg-gray-700/30">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-2xl flex items-center justify-center mb-4">
+                                            <svg class="w-8 h-8 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z"/>
+                                                <circle cx="7.5" cy="14.5" r="1.5"/>
+                                                <circle cx="16.5" cy="14.5" r="1.5"/>
+                                            </svg>
                                         </div>
+                                        <h4 class="text-base font-bold text-gray-900 dark:text-white mb-1">
+                                            {{ __('messages.booking_no_vehicles_title') }}
+                                        </h4>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 max-w-xs">
+                                            {{ __('messages.booking_no_vehicles_description') }}
+                                        </p>
+                                        <button type="button" onclick="openAddVehicleModal()" class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-sm font-bold rounded-lg shadow-md hover:shadow-lg transition-all active:scale-95">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
+                                            </svg>
+                                            {{ __('messages.booking_add_vehicle_cta') }}
+                                        </button>
+                                        <a href="{{ route('vehicles.index') }}" class="mt-3 text-xs text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition underline">
+                                            {{ __('messages.booking_or_manage_vehicles') }}
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -316,14 +402,14 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
                                     </svg>
                                     {{ __('messages.appointments_notes') }}
-                                    <span class="ml-2 text-xs text-gray-500 font-normal">(Optional)</span>
+                                    <span class="ml-2 text-xs text-gray-500 font-normal">({{ __('messages.optional') }})</span>
                                 </label>
                                 <textarea id="notes" 
                                           name="notes" 
                                           rows="4"
                                           placeholder="{{ __('messages.appointments_notes_placeholder') }}"
                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500">{{ old('notes') }}</textarea>
-                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Let us know about any specific concerns or requests</p>
+                                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.booking_notes_hint') }}</p>
                                 @error('notes')
                                     <p class="mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center">
                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -372,8 +458,8 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Your Appointment</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">Selected time slot</p>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ __('messages.booking_your_appointment') }}</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('messages.booking_selected_time_slot') }}</p>
                         </div>
                     </div>
                     
@@ -383,7 +469,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                             <div>
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Date</p>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('messages.date') }}</p>
                                 <p class="text-lg font-bold text-gray-900 dark:text-white">{{ $slot->start_time->format('l, F j, Y') }}</p>
                             </div>
                         </div>
@@ -395,7 +481,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                             <div>
-                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Time</p>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('messages.time') }}</p>
                                 <p class="text-lg font-bold text-gray-900 dark:text-white">{{ $slot->start_time->format('g:i A') }} - {{ $slot->end_time->format('g:i A') }}</p>
                             </div>
                         </div>
@@ -407,7 +493,7 @@
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                             </svg>
                             <p class="text-sm text-blue-900 dark:text-blue-200">
-                                Fill out the form to confirm your booking. You'll receive a confirmation email once submitted.
+                                {{ __('messages.booking_confirm_instructions') }}
                             </p>
                         </div>
                     </div>
@@ -418,9 +504,9 @@
                                 <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                             </svg>
                             <div>
-                                <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-1">Pending Approval</p>
+                                <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-1">{{ __('messages.booking_pending_approval') }}</p>
                                 <p class="text-sm text-amber-800 dark:text-amber-300">
-                                    All bookings require admin approval before confirmation. You will be notified once your appointment is approved.
+                                    {{ __('messages.booking_pending_approval_description') }}
                                 </p>
                             </div>
                         </div>
@@ -436,9 +522,9 @@
                             </svg>
                         </div>
                         <div>
-                            <h4 class="font-bold text-gray-900 dark:text-white mb-2">Need Help?</h4>
+                            <h4 class="font-bold text-gray-900 dark:text-white mb-2">{{ __('messages.booking_need_help') }}</h4>
                             <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                                If you have questions or need to speak with us, feel free to reach out.
+                                {{ __('messages.booking_need_help_description') }}
                             </p>
                             <div class="space-y-2 text-sm">
                                 <a href="tel:+3612345678" class="flex items-center gap-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">

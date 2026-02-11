@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Enums\AppointmentStatus;
 use App\Models\Appointment;
 use App\Models\PendingAppointment;
 use App\Models\User;
@@ -30,8 +31,8 @@ class AnalyticsController extends Controller
             
             'total_appointments' => Appointment::count(),
             'pending_appointments' => PendingAppointment::where('status', 'pending')->count(),
-            'approved_appointments' => Appointment::where('status', 'approved')->count(),
-            'completed_appointments' => Appointment::where('status', 'completed')->count(),
+            'confirmed_appointments' => Appointment::where('status', AppointmentStatus::Confirmed)->count(),
+            'completed_appointments' => Appointment::where('status', AppointmentStatus::Completed)->count(),
             'cancelled_appointments' => Appointment::onlyTrashed()->count(),
             
             'appointments_period' => Appointment::where('created_at', '>=', $startDate)->count(),
@@ -47,7 +48,9 @@ class AnalyticsController extends Controller
         $appointmentsByStatus = Appointment::select('status', DB::raw('count(*) as count'))
             ->groupBy('status')
             ->get()
-            ->pluck('count', 'status');
+            ->mapWithKeys(function ($item) {
+                return [($item->status instanceof \App\Enums\AppointmentStatus ? $item->status->value : (string) $item->status) => $item->count];
+            });
 
         // Appointments Over Time (for line chart)
         $appointmentsOverTime = Appointment::where('created_at', '>=', $startDate)
