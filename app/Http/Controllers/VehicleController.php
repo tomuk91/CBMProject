@@ -121,9 +121,17 @@ class VehicleController extends Controller
     {
         $this->authorize('delete', $vehicle);
 
-        // Don't allow deletion if there are appointments linked to this vehicle
-        if ($vehicle->appointments()->count() > 0) {
-            return redirect()->back()->with('error', __('messages.vehicle_has_appointments'));
+        // Only block deletion if there are active (pending/confirmed) appointments
+        $activeAppointments = $vehicle->appointments()
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->count();
+
+        $activePending = $vehicle->pendingAppointments()
+            ->where('status', 'pending')
+            ->count();
+
+        if ($activeAppointments > 0 || $activePending > 0) {
+            return redirect()->back()->with('error', __('messages.vehicle_has_active_appointments'));
         }
 
         $wasPrimary = $vehicle->is_primary;

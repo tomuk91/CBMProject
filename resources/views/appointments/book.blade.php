@@ -365,7 +365,17 @@
                             @endif
 
                             <!-- Service -->
-                            <div>
+                            <div x-data="{
+                                selectedService: '{{ old('service', '') }}',
+                                services: {
+                                    'Oil Change': { duration: '30-45 min', desc: '{{ __('messages.service_oil_change_desc') }}' },
+                                    'Brake Service': { duration: '1-2 hrs', desc: '{{ __('messages.service_brake_desc') }}' },
+                                    'Tire Rotation': { duration: '30-60 min', desc: '{{ __('messages.service_tire_desc') }}' },
+                                    'General Inspection': { duration: '1-2 hrs', desc: '{{ __('messages.service_diagnostic_desc') }}' },
+                                    'Engine Diagnostics': { duration: '1-2 hrs', desc: '{{ __('messages.service_diagnostic_desc') }}' },
+                                    'Other': { duration: '', desc: '{{ __('messages.service_other_desc') }}' }
+                                }
+                            }">
                                 <label for="service" class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                     <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
@@ -376,6 +386,7 @@
                                 <select id="service" 
                                         name="service" 
                                         required
+                                        x-model="selectedService"
                                         class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
                                     <option value="">{{ __('messages.service_select') }}</option>
                                     <option value="Oil Change" {{ old('service') == 'Oil Change' ? 'selected' : '' }}>🛢️ {{ __('messages.service_oil_change') }}</option>
@@ -385,6 +396,12 @@
                                     <option value="Engine Diagnostics" {{ old('service') == 'Engine Diagnostics' ? 'selected' : '' }}>💻 {{ __('messages.service_diagnostics') }}</option>
                                     <option value="Other" {{ old('service') == 'Other' ? 'selected' : '' }}>➕ {{ __('messages.service_other') }}</option>
                                 </select>
+                                <div x-show="selectedService && services[selectedService]" x-transition class="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm text-blue-700 dark:text-blue-300" x-text="services[selectedService]?.desc"></p>
+                                        <span x-show="services[selectedService]?.duration" class="ml-3 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/40 px-2 py-1 rounded-full whitespace-nowrap" x-text="'⏱ ' + services[selectedService]?.duration"></span>
+                                    </div>
+                                </div>
                                 @error('service')
                                     <p class="mt-1.5 text-sm text-red-600 dark:text-red-400 flex items-center">
                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">

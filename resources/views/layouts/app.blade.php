@@ -87,7 +87,7 @@
         <!-- Toast Notifications -->
         <x-toast-notification />
         
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -100,9 +100,23 @@
             @endisset
 
             <!-- Page Content -->
-            <main id="main-content" role="main" aria-label="{{ __('messages.main_content') }}">
+            <main id="main-content" role="main" aria-label="{{ __('messages.main_content') }}" class="flex-1">
                 {{ $slot }}
             </main>
+
+            <!-- Footer -->
+            <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                        <p>&copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('messages.all_rights_reserved') }}</p>
+                        <div class="flex gap-4">
+                            <a href="{{ route('privacy') }}" class="hover:text-red-600 dark:hover:text-red-400 transition">{{ __('messages.privacy_policy') }}</a>
+                            <a href="{{ route('terms') }}" class="hover:text-red-600 dark:hover:text-red-400 transition">{{ __('messages.terms_of_service') }}</a>
+                            <a href="{{ route('contact.show') }}" class="hover:text-red-600 dark:hover:text-red-400 transition">{{ __('messages.footer_contact') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
 
         <!-- Flatpickr JS -->

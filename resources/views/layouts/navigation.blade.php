@@ -93,6 +93,41 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6 sm:gap-4">
+                <!-- Notification Bell -->
+                @auth
+                @if(!Auth::user()->is_admin)
+                <a href="{{ route('dashboard') }}" class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    @php
+                        $recentUpdates = Auth::user()->appointments()
+                            ->where('updated_at', '>=', now()->subDays(7))
+                            ->whereIn('status', ['confirmed', 'cancelled', 'completed'])
+                            ->whereColumn('updated_at', '!=', 'created_at')
+                            ->count();
+                    @endphp
+                    @if($recentUpdates > 0)
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{{ $recentUpdates }}</span>
+                    @endif
+                </a>
+                @else
+                <a href="{{ route('admin.appointments.pending') }}" class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    @php
+                        $pendingCount = \App\Models\PendingAppointment::where('status', 'pending')->count();
+                        $cancellationCount = \App\Models\Appointment::where('cancellation_requested', true)->count();
+                        $totalNotifications = $pendingCount + $cancellationCount;
+                    @endphp
+                    @if($totalNotifications > 0)
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{{ $totalNotifications }}</span>
+                    @endif
+                </a>
+                @endif
+                @endauth
+
                 <!-- Language Toggle -->
                 <div class="lang-toggle">
                     <a href="{{ route('language.switch', 'hu') }}" class="{{ app()->getLocale() == 'hu' ? 'active' : '' }}">
@@ -209,6 +244,35 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <!-- Notification Bell Mobile -->
+                @if(!Auth::user()->is_admin)
+                <x-responsive-nav-link :href="route('dashboard')" class="flex items-center justify-between">
+                    <span>{{ __('messages.notifications') }}</span>
+                    @php
+                        $recentUpdatesMobile = Auth::user()->appointments()
+                            ->where('updated_at', '>=', now()->subDays(7))
+                            ->whereIn('status', ['confirmed', 'cancelled', 'completed'])
+                            ->whereColumn('updated_at', '!=', 'created_at')
+                            ->count();
+                    @endphp
+                    @if($recentUpdatesMobile > 0)
+                        <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold text-white bg-red-600 rounded-full">{{ $recentUpdatesMobile }}</span>
+                    @endif
+                </x-responsive-nav-link>
+                @else
+                <x-responsive-nav-link :href="route('admin.appointments.pending')" class="flex items-center justify-between">
+                    <span>{{ __('messages.notifications') }}</span>
+                    @php
+                        $pendingCountMobile = \App\Models\PendingAppointment::where('status', 'pending')->count();
+                        $cancellationCountMobile = \App\Models\Appointment::where('cancellation_requested', true)->count();
+                        $totalNotificationsMobile = $pendingCountMobile + $cancellationCountMobile;
+                    @endphp
+                    @if($totalNotificationsMobile > 0)
+                        <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold text-white bg-red-600 rounded-full">{{ $totalNotificationsMobile }}</span>
+                    @endif
+                </x-responsive-nav-link>
+                @endif
+
                 <!-- Language Toggle Mobile -->
                 <div class="px-4 py-2">
                     <div class="lang-toggle">

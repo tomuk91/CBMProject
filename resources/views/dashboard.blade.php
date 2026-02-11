@@ -22,6 +22,43 @@
                 </div>
             </div>
 
+            {{-- Next Appointment Countdown --}}
+            @php
+                $nextAppointment = $appointments->first(function($apt) {
+                    return $apt->appointment_date > now() && in_array($apt->status->value ?? $apt->status, ['confirmed', 'pending']);
+                });
+            @endphp
+
+            @if($nextAppointment)
+            <div class="mb-6 bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border-l-4 border-red-600"
+                 x-data="countdown('{{ $nextAppointment->appointment_date }}')"
+                 x-init="startCountdown()">
+                <div class="p-4 sm:p-6">
+                    <div class="flex items-center justify-between flex-wrap gap-4">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('messages.next_appointment') }}</h3>
+                            <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">{{ $nextAppointment->service }}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ \Carbon\Carbon::parse($nextAppointment->appointment_date)->translatedFormat('l, F j \a\t H:i') }}</p>
+                        </div>
+                        <div class="flex gap-3 text-center">
+                            <div class="bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2 min-w-[60px]">
+                                <span class="text-2xl font-bold text-red-600 dark:text-red-400" x-text="days">0</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('messages.days') }}</p>
+                            </div>
+                            <div class="bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2 min-w-[60px]">
+                                <span class="text-2xl font-bold text-red-600 dark:text-red-400" x-text="hours">0</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('messages.hours') }}</p>
+                            </div>
+                            <div class="bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2 min-w-[60px]">
+                                <span class="text-2xl font-bold text-red-600 dark:text-red-400" x-text="minutes">0</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('messages.minutes') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 <!-- Quick Stats -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transform hover:shadow-xl transition duration-300 active:scale-95">
@@ -570,5 +607,24 @@
                 closeCancellationModal();
             }
         });
+    </script>
+
+    <script>
+        function countdown(targetDate) {
+            return {
+                days: 0, hours: 0, minutes: 0, interval: null,
+                startCountdown() {
+                    this.update();
+                    this.interval = setInterval(() => this.update(), 60000);
+                },
+                update() {
+                    const diff = new Date(targetDate) - new Date();
+                    if (diff <= 0) { this.days = 0; this.hours = 0; this.minutes = 0; clearInterval(this.interval); return; }
+                    this.days = Math.floor(diff / 86400000);
+                    this.hours = Math.floor((diff % 86400000) / 3600000);
+                    this.minutes = Math.floor((diff % 3600000) / 60000);
+                }
+            }
+        }
     </script>
 </x-app-layout>

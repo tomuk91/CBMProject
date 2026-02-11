@@ -82,13 +82,32 @@ class ProfileController extends Controller
     }
 
     /**
-     * Export user's personal data (GDPR compliance).
+     * Export user's personal data as downloadable JSON (GDPR compliance).
      */
     public function exportData(Request $request)
     {
         $user = $request->user()->load(['appointments', 'vehicles']);
 
-        return view('profile.export-data', compact('user'));
+        $data = [
+            'personal_info' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'created_at' => $user->created_at?->toIso8601String(),
+            ],
+            'vehicles' => $user->vehicles->map(fn($v) => $v->only(['make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size', 'mileage']))->toArray(),
+            'appointments' => $user->appointments->map(fn($a) => [
+                'service' => $a->service,
+                'status' => $a->status->value ?? $a->status,
+                'appointment_date' => $a->appointment_date,
+                'notes' => $a->notes,
+            ])->toArray(),
+            'exported_at' => now()->toIso8601String(),
+        ];
+
+        return response()->json($data)
+            ->header('Content-Disposition', 'attachment; filename="my-data-export-' . now()->format('Y-m-d') . '.json"')
+            ->header('Content-Type', 'application/json');
     }
 
     /**

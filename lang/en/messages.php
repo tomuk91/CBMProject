@@ -1355,4 +1355,37 @@ return [
     'add_to_calendar' => 'Add to Calendar',
     'download_ical' => 'Download iCal (.ics)',
     'show_more_dates' => 'Show More Dates',
+
+    // Dashboard Countdown
+    'next_appointment' => 'Next Appointment',
+    'days' => 'days',
+    'hours' => 'hours',
+    'minutes' => 'minutes',
+
+    // Footer & Notifications
+    'all_rights_reserved' => 'All rights reserved.',
+    'notifications' => 'Notifications',
+
+    // Vehicle Active Appointments
+    'vehicle_has_active_appointments' => 'Cannot delete vehicle with active (pending or confirmed) appointments.',
+
+    // Service Descriptions (Booking Page)
+    'service_oil_change_desc' => 'Complete oil and filter replacement for optimal engine performance.',
+    'service_brake_desc' => 'Inspection, pad replacement, and brake system check.',
+    'service_tire_desc' => 'Tire rotation, balancing, or replacement.',
+    'service_diagnostic_desc' => 'Computer-aided engine diagnostics and fault code reading.',
+    'service_full_service_desc' => 'Comprehensive vehicle inspection and maintenance.',
+    'service_ac_desc' => 'Air conditioning system check, regas, and repair.',
+    'service_bodywork_desc' => 'Dent repair, painting, and body panel work.',
+    'service_other_desc' => 'Describe your needs in the notes field below.',
+
+    // Customer Reschedule
+    'request_reschedule' => 'Reschedule',
+    'reschedule_appointment' => 'Reschedule Appointment',
+    'reschedule_select_new_slot' => 'Select a new time slot for your appointment',
+    'current_appointment' => 'Current Appointment',
+    'back_to_details' => 'Back to Details',
+    'confirm_reschedule_slot' => 'Are you sure you want to reschedule to this time?',
+    'appointment_rescheduled_success' => 'Your appointment has been rescheduled successfully!',
+    'slot_no_longer_available' => 'This slot is no longer available. Please select another.',
 ];

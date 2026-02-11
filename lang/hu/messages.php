@@ -1337,4 +1337,37 @@ return [
     'add_to_calendar' => 'Hozzáadás a naptárhoz',
     'download_ical' => 'iCal letöltése (.ics)',
     'show_more_dates' => 'További dátumok mutatása',
+
+    // Dashboard visszaszámláló
+    'next_appointment' => 'Következő időpont',
+    'days' => 'nap',
+    'hours' => 'óra',
+    'minutes' => 'perc',
+
+    // Lábléc & Értesítések
+    'all_rights_reserved' => 'Minden jog fenntartva.',
+    'notifications' => 'Értesítések',
+
+    // Jármű aktív időpontok
+    'vehicle_has_active_appointments' => 'Nem törölhető olyan jármű, amelyhez aktív (függőben lévő vagy megerősített) időpontok tartoznak.',
+
+    // Szolgáltatás leírások (Foglalási oldal)
+    'service_oil_change_desc' => 'Teljes olaj- és szűrőcsere az optimális motorteljesítményért.',
+    'service_brake_desc' => 'Fékbetét csere, féktárcsa ellenőrzés és fékrendszer vizsgálat.',
+    'service_tire_desc' => 'Gumiabroncs csere, centírozás vagy kiegyensúlyozás.',
+    'service_diagnostic_desc' => 'Számítógépes motordiagnosztika és hibakód olvasás.',
+    'service_full_service_desc' => 'Átfogó járműátvizsgálás és karbantartás.',
+    'service_ac_desc' => 'Klímarendszer ellenőrzés, töltés és javítás.',
+    'service_bodywork_desc' => 'Horpadás javítás, fényezés és karosszéria munka.',
+    'service_other_desc' => 'Írja le igényeit az alábbi megjegyzés mezőben.',
+
+    // Ügyfél átütemezés
+    'request_reschedule' => 'Átütemezés',
+    'reschedule_appointment' => 'Időpont átütemezése',
+    'reschedule_select_new_slot' => 'Válasszon új időpontot a foglalásához',
+    'current_appointment' => 'Jelenlegi időpont',
+    'back_to_details' => 'Vissza a részletekhez',
+    'confirm_reschedule_slot' => 'Biztosan erre az időpontra szeretné átütemezni?',
+    'appointment_rescheduled_success' => 'Az időpont sikeresen átütemezve!',
+    'slot_no_longer_available' => 'Ez az időpont már nem elérhető. Kérjük, válasszon másikat.',
 ];

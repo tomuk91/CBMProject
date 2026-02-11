@@ -336,6 +336,13 @@
                 </a>
 
                 @if(!$appointment->cancellation_requested && in_array($appointment->status->value, ['confirmed', 'pending']))
+                    <a href="{{ route('appointments.reschedule', $appointment) }}" 
+                       class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        {{ __('messages.request_reschedule') }}
+                    </a>
                     @if($appointment->status->value === 'confirmed' && $appointment->appointment_date > now()->addHours(24))
                         <button onclick="showCancellationModal({{ $appointment->id }})" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white font-semibold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

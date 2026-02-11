@@ -385,6 +385,73 @@ class AppointmentController extends Controller
     }
 
     /**
+     * Show reschedule form for a customer appointment
+     */
+    public function reschedule(Appointment $appointment)
+    {
+        if ($appointment->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $availableSlots = AvailableSlot::available()
+            ->where('start_time', '>', now())
+            ->orderBy('start_time', 'asc')
+            ->take(50)
+            ->get();
+
+        return view('appointments.reschedule', compact('appointment', 'availableSlots'));
+    }
+
+    /**
+     * Process customer reschedule request
+     */
+    public function processReschedule(Request $request, Appointment $appointment)
+    {
+        if ($appointment->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'slot_id' => 'required|exists:available_slots,id',
+        ]);
+
+        $newSlot = AvailableSlot::findOrFail($request->slot_id);
+
+        if ($newSlot->status !== SlotStatus::Available) {
+            return redirect()->back()->with('error', __('messages.slot_no_longer_available'));
+        }
+
+        DB::transaction(function () use ($appointment, $newSlot) {
+            // Release old slot if it exists
+            if ($appointment->available_slot_id) {
+                AvailableSlot::where('id', $appointment->available_slot_id)
+                    ->update(['status' => SlotStatus::Available]);
+            }
+
+            // Book the new slot
+            $newSlot->update(['status' => SlotStatus::Booked]);
+
+            // Update appointment
+            $appointment->update([
+                'appointment_date' => $newSlot->start_time,
+                'appointment_end' => $newSlot->end_time,
+                'available_slot_id' => $newSlot->id,
+            ]);
+
+            // Log
+            ActivityLog::log(
+                action: 'appointment_rescheduled',
+                description: 'Customer rescheduled appointment',
+                model: $appointment,
+                changes: ['new_slot' => $newSlot->start_time]
+            );
+        });
+
+        return redirect()->route('appointments.details', $appointment)
+            ->with('success', __('messages.appointment_rescheduled_success'));
+    }
+
+    /**
      * Get available slots based on request filters (shared by index and guestSlots)
      */
     private function getAvailableSlots(Request $request): \Illuminate\Database\Eloquent\Collection

@@ -14,7 +14,9 @@ sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/g" /etc/apache2/sites-enab
 echo "=== Apache ports.conf ==="
 grep "Listen" /etc/apache2/ports.conf || true
 echo "=== VirtualHost configuration ==="
-grep "VirtualHost" /etc/apache2/sites-enabled/*.conf || true
+cat /etc/apache2/sites-enabled/*.conf || true
+echo "=== Testing Apache config ==="
+apache2ctl -t || true
 echo "=========================="
 
 # Fix Apache MPM conflict

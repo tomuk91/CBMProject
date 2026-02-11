@@ -127,6 +127,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/appointments/confirmation/success', [AppointmentController::class, 'confirmation'])->name('appointments.confirmation');
     Route::get('/appointment/{appointment}/details', [AppointmentController::class, 'showDetails'])->name('appointments.details');
     Route::post('/appointments/{appointment}/request-cancellation', [AppointmentController::class, 'requestCancellation'])->name('appointments.requestCancellation');
+    Route::get('/appointment/{appointment}/reschedule', [AppointmentController::class, 'reschedule'])->name('appointments.reschedule');
+    Route::post('/appointment/{appointment}/reschedule', [AppointmentController::class, 'processReschedule'])->name('appointments.processReschedule');
     Route::get('/api/check-vehicle-availability/{vehicle}', [AppointmentController::class, 'checkVehicleAvailability'])->name('api.check-vehicle-availability');
     
     // Admin appointment routes
