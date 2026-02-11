@@ -1388,4 +1388,15 @@ return [
     'confirm_reschedule_slot' => 'Are you sure you want to reschedule to this time?',
     'appointment_rescheduled_success' => 'Your appointment has been rescheduled successfully!',
     'slot_no_longer_available' => 'This slot is no longer available. Please select another.',
+
+    // Admin JS Translations
+    'calendar_not_available' => 'N/A',
+    'slots_preview_single' => '1 slot on :date at :time for :duration minutes',
+    'slots_preview_daily' => ':count slots on :days starting :date at :time, :interval min gap',
+    'slots_preview_weekly' => '1 slot every :days at :time for :duration min, :count weeks from :date',
+    'slots_will_create' => ':count non-conflicting slot(s) can still be created.',
+    'slots_none_can_be_created' => 'No slots can be created.',
+    'slots_modal_slot_info' => ':date at :time',
+    'pending_select_at_least_one' => 'Please select at least one request to reject.',
+    'pending_confirm_bulk_reject' => 'Are you sure you want to reject :count request(s)? This action cannot be undone.',
 ];

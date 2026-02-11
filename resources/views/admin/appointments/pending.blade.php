@@ -563,11 +563,11 @@
             const selectedRequests = Alpine.raw(document.querySelector('[x-data]').__x.$data.selectedRequests);
             
             if (selectedRequests.length === 0) {
-                alert('Please select at least one request to reject.');
+                alert('{{ __('messages.pending_select_at_least_one') }}');
                 return;
             }
 
-            if (!confirm(`Are you sure you want to reject ${selectedRequests.length} request(s)? This action cannot be undone.`)) {
+            if (!confirm('{{ __('messages.pending_confirm_bulk_reject') }}'.replace(':count', selectedRequests.length))) {
                 return;
             }
 

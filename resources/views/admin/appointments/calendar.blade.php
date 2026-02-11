@@ -665,11 +665,11 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">{{ __('messages.vehicle_information') }}</p>
-                            <p class="text-sm font-medium">${props.vehicle ? props.vehicle.replace(/\s*\([^)]*\)\s*$/, '') : 'N/A'}</p>
+                            <p class="text-sm font-medium">${props.vehicle ? props.vehicle.replace(/\s*\([^)]*\)\s*$/, '') : '{{ __('messages.calendar_not_available') }}'}</p>
                         </div>
                         <div>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">{{ __('messages.calendar_registration') }}</p>
-                            <p class="text-sm font-bold text-red-600 dark:text-red-400">${props.vehicle && props.vehicle.match(/\(([^)]+)\)/) ? props.vehicle.match(/\(([^)]+)\)/)[1] : 'N/A'}</p>
+                            <p class="text-sm font-bold text-red-600 dark:text-red-400">${props.vehicle && props.vehicle.match(/\(([^)]+)\)/) ? props.vehicle.match(/\(([^)]+)\)/)[1] : '{{ __('messages.calendar_not_available') }}'}</p>
                         </div>
                     </div>
                     <div>

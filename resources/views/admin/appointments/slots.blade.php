@@ -452,23 +452,23 @@
                         get previewText() {
                             if (!this.startDate) return '';
                             const d = new Date(this.startDate + 'T00:00:00');
-                            const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                            const dateStr = d.toLocaleDateString('{{ app()->getLocale() }}', { month: 'short', day: 'numeric', year: 'numeric' });
                             const time = this.hour + ':' + this.minute;
 
                             const selectedDays = Array.from(document.querySelectorAll('input[name="selected_days[]"]:checked'))
-                                .map(cb => ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][parseInt(cb.value)]);
+                                .map(cb => ['{{ __("messages.day_sun") }}','{{ __("messages.day_mon") }}','{{ __("messages.day_tue") }}','{{ __("messages.day_wed") }}','{{ __("messages.day_thu") }}','{{ __("messages.day_fri") }}','{{ __("messages.day_sat") }}'][parseInt(cb.value)]);
 
                             if (this.mode === 'single') {
-                                return `1 slot on ${dateStr} at ${time} for ${this.duration} minutes`;
+                                return '{{ __("messages.slots_preview_single") }}'.replace(':date', dateStr).replace(':time', time).replace(':duration', this.duration);
                             } else if (this.mode === 'daily') {
                                 const count = document.getElementById('bulk_count')?.value || '?';
                                 const interval = document.getElementById('bulk_interval')?.value || '?';
                                 if (selectedDays.length === 0) return '';
-                                return `${count} slots on ${selectedDays.join(', ')} starting ${dateStr} at ${time}, ${interval} min gap`;
+                                return '{{ __("messages.slots_preview_daily") }}'.replace(':count', count).replace(':days', selectedDays.join(', ')).replace(':date', dateStr).replace(':time', time).replace(':interval', interval);
                             } else if (this.mode === 'weekly') {
                                 const count = document.getElementById('bulk_count')?.value || '?';
                                 if (selectedDays.length === 0) return '';
-                                return `1 slot every ${selectedDays.join(', ')} at ${time} for ${this.duration} min, ${count} weeks from ${dateStr}`;
+                                return '{{ __("messages.slots_preview_weekly") }}'.replace(':days', selectedDays.join(', ')).replace(':time', time).replace(':duration', this.duration).replace(':count', count).replace(':date', dateStr);
                             }
                             return '';
                         },
@@ -543,9 +543,9 @@
 
                             let summary = '';
                             if (data.will_create > 0) {
-                                summary = `${data.will_create} non-conflicting slot(s) can still be created.`;
+                                summary = '{{ __('messages.slots_will_create') }}'.replace(':count', data.will_create);
                             } else {
-                                summary = 'No slots can be created.';
+                                summary = '{{ __('messages.slots_none_can_be_created') }}';
                             }
                             willCreateText.textContent = summary;
                             modal.classList.remove('hidden');
@@ -1226,7 +1226,7 @@
                 function openBookingModal(slotId, date, time) {
                     document.getElementById('bookingModal').classList.remove('hidden');
                     document.getElementById('booking_slot_id').value = slotId;
-                    document.getElementById('modalSlotInfo').textContent = `${date} at ${time}`;
+                    document.getElementById('modalSlotInfo').textContent = '{{ __('messages.slots_modal_slot_info') }}'.replace(':date', date).replace(':time', time);
                     document.getElementById('bookingForm').action = `/admin/appointments/slots/${slotId}/book`;
                 }
 
@@ -1391,7 +1391,7 @@
                         const manualVehicleInput = document.getElementById('manual_vehicle');
                         
                         // Clear existing options except first two
-                        vehicleSelect.innerHTML = '<option value="">Select a vehicle...</option><option value="add_new">+ Add New Vehicle</option>';
+                        vehicleSelect.innerHTML = '<option value="">{{ __('messages.admin_select_a_vehicle') }}</option><option value="add_new">+ {{ __('messages.admin_add_new_vehicle') }}</option>';
                         
                         if (vehicles.length > 0) {
                             // Populate vehicle dropdown

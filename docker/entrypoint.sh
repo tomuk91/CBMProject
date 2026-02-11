@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
 set -e
 
+# Fix Apache MPM conflict BEFORE configuring ports
+a2dismod mpm_event mpm_worker 2>/dev/null || true
+a2enmod mpm_prefork 2>/dev/null || true
+
 # Configure Apache to use Railway's PORT (default to 80)
 if [ -z "$PORT" ]; then
   export PORT=80
@@ -18,10 +22,6 @@ cat /etc/apache2/sites-enabled/*.conf || true
 echo "=== Testing Apache config ==="
 apache2ctl -t || true
 echo "=========================="
-
-# Fix Apache MPM conflict
-a2dismod mpm_event mpm_worker 2>/dev/null || true
-a2enmod mpm_prefork 2>/dev/null || true
 
 if [ "${DB_CONNECTION}" = "sqlite" ]; then
   if [ -z "${DB_DATABASE}" ]; then

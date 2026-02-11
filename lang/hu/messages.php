@@ -1370,4 +1370,15 @@ return [
     'confirm_reschedule_slot' => 'Biztosan erre az időpontra szeretné átütemezni?',
     'appointment_rescheduled_success' => 'Az időpont sikeresen átütemezve!',
     'slot_no_longer_available' => 'Ez az időpont már nem elérhető. Kérjük, válasszon másikat.',
+
+    // Admin JS fordítások
+    'calendar_not_available' => 'N/A',
+    'slots_preview_single' => '1 időpont :date napon :time-kor, :duration perc',
+    'slots_preview_daily' => ':count időpont :days napokon :date-tól :time-kor, :interval perc közzel',
+    'slots_preview_weekly' => '1 időpont minden :days napon :time-kor :duration percig, :count héten :date-tól',
+    'slots_will_create' => ':count nem ütköző időpont még létrehozható.',
+    'slots_none_can_be_created' => 'Nem hozható létre időpont.',
+    'slots_modal_slot_info' => ':date :time-kor',
+    'pending_select_at_least_one' => 'Kérjük, válasszon ki legalább egy kérelmet az elutasításhoz.',
+    'pending_confirm_bulk_reject' => 'Biztosan el szeretné utasítani :count kérelmet? Ez a művelet nem vonható vissza.',
 ];
