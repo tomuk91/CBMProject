@@ -7,8 +7,8 @@
         </div>
     </x-slot>
 
-    <div class="py-4">
-            <div class="max-w-7xl mx-auto sm:px-4 lg:px-6 space-y-6">
+    <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 space-y-6">
                 {{-- Search --}}
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
                     <form method="GET" action="{{ route('admin.customers.index') }}" class="flex flex-col sm:flex-row gap-4">
