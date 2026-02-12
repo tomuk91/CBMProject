@@ -44,8 +44,8 @@
         </div>
     </x-slot>
 
-    <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 space-y-4">
+    <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen" x-data="{ fullWidth: localStorage.getItem('calendarFullWidth') === 'true' }" x-init="$watch('fullWidth', val => localStorage.setItem('calendarFullWidth', val))">
+        <div class="space-y-4 transition-all duration-300 px-2 sm:px-4" :class="fullWidth ? 'max-w-full' : 'max-w-7xl mx-auto lg:px-6'">
             @if (session('success'))
                 <div x-data="{ show: true }" x-show="show" x-transition class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
                     <div class="flex items-center justify-between">
@@ -108,8 +108,18 @@
                             @endif
                         </div>
                         
-                        {{-- Right: Show Cancelled Toggle --}}
+                        {{-- Right: Full Width Toggle & Show Cancelled Toggle --}}
                         <div class="flex items-center gap-4">
+                            {{-- Full Width Toggle --}}
+                            <button @click="fullWidth = !fullWidth; $nextTick(() => window.dispatchEvent(new Event('fullwidth-toggled')))" type="button" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors" :class="fullWidth ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'" :title="fullWidth ? '{{ __('messages.calendar_compact_view') }}' : '{{ __('messages.calendar_full_width') }}'">
+                                <svg x-show="!fullWidth" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+                                </svg>
+                                <svg x-show="fullWidth" x-cloak class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.5 3.5M9 15v4.5M9 15H4.5M9 15l-5.5 5.5M15 9h4.5M15 9V4.5M15 9l5.5-5.5M15 15h4.5M15 15v4.5m0-4.5l5.5 5.5"/>
+                                </svg>
+                            </button>
+                            
                             <label for="showCancelledToggle" class="flex items-center cursor-pointer">
                                 <span class="mr-2 text-sm text-gray-600 dark:text-gray-400">{{ __('messages.calendar_show_cancelled') }}</span>
                                 <div class="relative">
@@ -191,8 +201,8 @@
                 </div>
 
                 {{-- Calendar --}}
-                <div class="p-2 sm:p-4 md:p-6">
-                    <div id="calendar"></div>
+                <div class="p-2 sm:p-4 md:p-6 transition-all duration-300">
+                    <div id="calendar" class="transition-all duration-300" :class="fullWidth ? 'expanded-calendar' : ''"></div>
                 </div>
             </div>
         </div>
@@ -292,6 +302,31 @@
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales/hu.global.min.js"></script>
 
     <style>
+        /* Expanded calendar height - force rows to stretch */
+        .expanded-calendar {
+            height: 700px;
+        }
+        
+        .expanded-calendar .fc {
+            height: 100% !important;
+        }
+        
+        .expanded-calendar .fc-view-harness {
+            height: calc(100% - 60px) !important;
+        }
+        
+        .expanded-calendar .fc-daygrid-body {
+            height: 100% !important;
+        }
+        
+        .expanded-calendar .fc-scrollgrid-sync-table {
+            height: 100% !important;
+        }
+        
+        .expanded-calendar .fc-daygrid-body-balanced .fc-daygrid-day-events {
+            min-height: 80px;
+        }
+        
         /* Modern Calendar Styling with Red Theme */
         .fc {
             font-family: inherit;
@@ -664,6 +699,24 @@
             document.getElementById('showCancelledToggle').addEventListener('change', function() {
                 calendar.refetchEvents();
             });
+            
+            // Handle full width toggle - update calendar size and height
+            window.addEventListener('fullwidth-toggled', function() {
+                setTimeout(function() {
+                    const isFullWidth = localStorage.getItem('calendarFullWidth') === 'true';
+                    if (isFullWidth) {
+                        calendar.setOption('height', 750);
+                    } else {
+                        calendar.setOption('height', 'auto');
+                    }
+                    calendar.updateSize();
+                }, 350); // Wait for CSS transition to complete
+            });
+            
+            // Apply saved full width setting on load
+            if (localStorage.getItem('calendarFullWidth') === 'true') {
+                calendar.setOption('height', 750);
+            }
             
             // Handle window resize
             let resizeTimer;

@@ -1391,6 +1391,8 @@ return [
     'calendar_filter_btn' => 'Filter',
     'calendar_clear_btn' => 'Clear',
     'calendar_show_cancelled' => 'Show Cancelled',
+    'calendar_full_width' => 'Expand to full width',
+    'calendar_compact_view' => 'Compact view',
     'actions' => 'Actions',
     'filters' => 'Filters',
     'pending' => 'Pending',

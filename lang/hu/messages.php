@@ -1373,6 +1373,8 @@ return [
     'calendar_filter_btn' => 'Szűrés',
     'calendar_clear_btn' => 'Törlés',
     'calendar_show_cancelled' => 'Lemondottak mutatása',
+    'calendar_full_width' => 'Teljes szélesség',
+    'calendar_compact_view' => 'Kompakt nézet',
     'actions' => 'Műveletek',
     'filters' => 'Szűrők',
     'pending' => 'Függőben',
