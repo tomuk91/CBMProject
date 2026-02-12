@@ -133,7 +133,7 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
-                                            {{ $appointment->vehicle }}
+                                            {{ $appointment->vehicle_description }}
                                         </td>
                                     </tr>
                                 @empty

@@ -41,7 +41,7 @@ class AppointmentService
                 'name' => $pendingAppointment->name,
                 'email' => $pendingAppointment->email,
                 'phone' => $pendingAppointment->phone,
-                'vehicle' => $vehicleInfo,
+                'vehicle_description' => $vehicleInfo,
                 'service' => $pendingAppointment->service,
                 'notes' => strip_tags(clean($pendingAppointment->notes)), // Sanitize notes
                 'admin_notes' => $adminNotes ? strip_tags(clean($adminNotes)) : null,
@@ -77,10 +77,12 @@ class AppointmentService
     public function cancelAppointment(Appointment $appointment, ?string $reason = null): void
     {
         DB::transaction(function () use ($appointment, $reason) {
-            // Find and free the slot
-            $slot = AvailableSlot::where('start_time', $appointment->appointment_date)
-                ->where('end_time', $appointment->appointment_end)
-                ->first();
+            // Find and free the slot via FK (fall back to time match for legacy data)
+            $slot = $appointment->available_slot_id
+                ? AvailableSlot::find($appointment->available_slot_id)
+                : AvailableSlot::where('start_time', $appointment->appointment_date)
+                    ->where('end_time', $appointment->appointment_end)
+                    ->first();
 
             if ($slot) {
                 $slot->update(['status' => SlotStatus::Available]);

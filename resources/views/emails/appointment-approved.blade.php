@@ -13,7 +13,7 @@
 
 **{{ __('messages.email_duration_label') }}:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->diffInMinutes(\Carbon\Carbon::parse($appointment->appointment_end)) }} {{ __('messages.email_minutes') }}
 
-**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle }}
+**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle_description }}
 
 **{{ __('messages.email_phone_label') }}:** {{ $appointment->phone }}
 

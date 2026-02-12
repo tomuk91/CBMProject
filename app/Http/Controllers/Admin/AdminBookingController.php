@@ -111,7 +111,7 @@ class AdminBookingController extends Controller
                 'name' => $clientType === 'new' ? $request->new_name : $user->name,
                 'email' => $clientType === 'new' ? $request->new_email : $user->email,
                 'phone' => $clientType === 'new' ? ($request->new_phone ?? 'Not provided') : ($user->phone ?? 'Not provided'),
-                'vehicle' => $vehicleString,
+                'vehicle_description' => $vehicleString,
                 'service' => $request->service,
                 'notes' => $request->notes ? strip_tags(clean($request->notes)) : null,
                 'admin_notes' => $request->admin_notes ? strip_tags(clean($request->admin_notes)) : null,

@@ -30,7 +30,7 @@ class AppointmentCancellationDenied extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Cancellation Request Update - CBM Auto',
+            subject: __('messages.email_cancellation_denied_subject', ['app' => config('app.name')]),
         );
     }
 

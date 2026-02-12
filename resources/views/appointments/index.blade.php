@@ -168,6 +168,13 @@
                         {{ __('messages.show_more_dates') }}
                     </a>
                 </div>
+
+                {{-- Pagination --}}
+                @if($availableSlots->hasPages())
+                    <div class="mt-6">
+                        {{ $availableSlots->links() }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>

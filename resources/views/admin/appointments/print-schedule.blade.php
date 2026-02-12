@@ -70,7 +70,7 @@
                         <td>{{ $appointment->appointment_date->format('H:i') }} - {{ $appointment->appointment_end->format('H:i') }}</td>
                         <td>{{ $appointment->name }}</td>
                         <td>{{ $appointment->service }}</td>
-                        <td>{{ $appointment->vehicle }}</td>
+                        <td>{{ $appointment->vehicle_description }}</td>
                         <td>{{ $appointment->phone ?? '—' }}</td>
                         <td>
                             @php $statusVal = $appointment->status instanceof \App\Enums\AppointmentStatus ? $appointment->status->value : $appointment->status; @endphp

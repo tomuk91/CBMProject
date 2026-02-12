@@ -21,8 +21,7 @@ class AppointmentReminder24Hours extends Mailable implements ShouldQueue
         public Appointment $appointment
     )
     {
-        // Force Hungarian locale for customer emails
-        app()->setLocale('hu');
+        $this->locale = config('app.locale', 'hu');
     }
 
     /**

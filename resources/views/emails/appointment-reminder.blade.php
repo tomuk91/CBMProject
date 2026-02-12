@@ -59,13 +59,13 @@
                                                     {{ $appointment->service }}
                                                 </td>
                                             </tr>
-                                            @if($appointment->vehicle)
+                                            @if($appointment->vehicle_description)
                                             <tr>
                                                 <td style="padding: 8px 0; font-size: 14px; color: #6b7280;">
                                                     <strong style="color: #374151;">🚗 {{ __('messages.vehicle') }}:</strong>
                                                 </td>
                                                 <td style="padding: 8px 0; font-size: 14px; color: #1f2937; text-align: right;">
-                                                    {{ $appointment->vehicle }}
+                                                    {{ $appointment->vehicle_description }}
                                                 </td>
                                             </tr>
                                             @endif

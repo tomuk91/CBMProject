@@ -21,8 +21,7 @@ class AppointmentConfirmation extends Mailable implements ShouldQueue
         public object $appointment
     )
     {
-        // Force Hungarian locale for customer emails
-        app()->setLocale('hu');
+        $this->locale = config('app.locale', 'hu');
     }
 
     /**

@@ -22,8 +22,7 @@ class AppointmentStatusChanged extends Mailable implements ShouldQueue
         public string $oldStatus
     )
     {
-        // Force Hungarian locale for customer emails
-        app()->setLocale('hu');
+        $this->locale = config('app.locale', 'hu');
     }
 
     /**

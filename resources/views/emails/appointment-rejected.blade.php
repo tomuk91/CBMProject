@@ -17,7 +17,7 @@
 
 **{{ __('messages.email_requested_time_label') }}:** {{ $appointment->availableSlot ? $appointment->availableSlot->start_time->format('F j, Y \\a\\t g:i A') : 'N/A' }}
 
-**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle }}
+**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle_description }}
 
 {{ __('messages.email_rejected_alternative') }}
 

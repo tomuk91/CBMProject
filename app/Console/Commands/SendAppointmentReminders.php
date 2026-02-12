@@ -33,9 +33,10 @@ class SendAppointmentReminders extends Command
 
         $this->info("Looking for appointments around " . $targetTime->format('Y-m-d H:i'));
 
-        // Get appointments within 30-minute window
+        // Get appointments within 30-minute window that haven't been reminded yet
         $appointments = Appointment::with(['user', 'vehicle'])
             ->where('status', 'confirmed')
+            ->whereNull('reminder_sent_at')
             ->whereBetween('appointment_date', [
                 $targetTime->copy()->subMinutes(30),
                 $targetTime->copy()->addMinutes(30)
@@ -61,6 +62,10 @@ class SendAppointmentReminders extends Command
         // Send all reminders via Resend batch API (up to 100 per request)
         $this->info('Sending reminders via batch API...');
         $result = $batchEmailService->sendBatch($emails);
+
+        // Mark reminders as sent to prevent duplicates
+        Appointment::whereIn('id', $appointments->pluck('id'))
+            ->update(['reminder_sent_at' => now()]);
 
         $this->info("✓ Sent: {$result['sent']}");
         if ($result['failed'] > 0) {

@@ -1088,15 +1088,9 @@
                                 </label>
                                 <select id="existing_service" name="service" class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                     <option value="">{{ __('messages.admin_select_a_service') }}</option>
-                                    <option value="General Inspection">{{ __('messages.service_inspection') }}</option>
-                                    <option value="Oil Change">{{ __('messages.service_oil_change') }}</option>
-                                    <option value="Brake Service">{{ __('messages.service_brake') }}</option>
-                                    <option value="Tire Service">{{ __('messages.service_tire_service') }}</option>
-                                    <option value="Engine Diagnostics">{{ __('messages.service_diagnostics') }}</option>
-                                    <option value="Transmission Service">{{ __('messages.service_transmission_service') }}</option>
-                                    <option value="Air Conditioning">{{ __('messages.service_air_conditioning') }}</option>
-                                    <option value="Battery Service">{{ __('messages.service_battery_service') }}</option>
-                                    <option value="Other">{{ __('messages.service_other') }}</option>
+                                    @foreach($serviceTypes as $st)
+                                        <option value="{{ $st->name }}">{{ $st->icon }} {{ $st->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -1181,15 +1175,9 @@
                                 <select id="new_service" name="service" disabled
                                         class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                                     <option value="">{{ __('messages.admin_select_a_service') }}</option>
-                                    <option value="General Inspection">{{ __('messages.service_inspection') }}</option>
-                                    <option value="Oil Change">{{ __('messages.service_oil_change') }}</option>
-                                    <option value="Brake Service">{{ __('messages.service_brake') }}</option>
-                                    <option value="Tire Service">{{ __('messages.service_tire_service') }}</option>
-                                    <option value="Engine Diagnostics">{{ __('messages.service_diagnostics') }}</option>
-                                    <option value="Transmission Service">{{ __('messages.service_transmission_service') }}</option>
-                                    <option value="Air Conditioning">{{ __('messages.service_air_conditioning') }}</option>
-                                    <option value="Battery Service">{{ __('messages.service_battery_service') }}</option>
-                                    <option value="Other">{{ __('messages.service_other') }}</option>
+                                    @foreach($serviceTypes as $st)
+                                        <option value="{{ $st->name }}">{{ $st->icon }} {{ $st->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

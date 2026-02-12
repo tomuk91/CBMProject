@@ -307,7 +307,7 @@
                         </div>
                         <div class="info-item">
                             <div class="info-label">{{ __('messages.export_vehicle') }}</div>
-                            <div class="info-value">{{ $appointment->vehicle ?? __('messages.export_not_specified') }}</div>
+                            <div class="info-value">{{ $appointment->vehicle_description ?? __('messages.export_not_specified') }}</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">{{ __('messages.export_status') }}</div>

@@ -346,8 +346,8 @@
                                                     <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide font-semibold">{{ __('messages.vehicle_information') }}</p>
                                                     @if($appointment->vehicle_id && $appointment->vehicleDetails)
                                                         <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $appointment->vehicleDetails->full_name }}</p>
-                                                    @elseif($appointment->vehicle)
-                                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $appointment->vehicle }}</p>
+                                                    @elseif($appointment->vehicle_description)
+                                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $appointment->vehicle_description }}</p>
                                                     @else
                                                         <p class="text-sm text-gray-500 dark:text-gray-400 italic">{{ __('messages.admin_no_vehicle_selected') }}</p>
                                                     @endif

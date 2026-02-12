@@ -14,7 +14,7 @@ class PendingAppointment extends Model
         'name',
         'email',
         'phone',
-        'vehicle',
+        'vehicle_description',
         'service',
         'notes',
         'status',

@@ -37,7 +37,7 @@ class PendingAppointmentController extends Controller
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
                   ->orWhere('phone', 'like', "%{$search}%")
-                  ->orWhere('vehicle', 'like', "%{$search}%");
+                  ->orWhere('vehicle_description', 'like', "%{$search}%");
             });
         }
 
@@ -124,7 +124,7 @@ class PendingAppointmentController extends Controller
                 'name' => $pendingAppointment->name,
                 'email' => $pendingAppointment->email,
                 'phone' => $pendingAppointment->phone,
-                'vehicle' => $vehicleInfo,
+                'vehicle_description' => $vehicleInfo,
                 'service' => $pendingAppointment->service,
                 'notes' => $pendingAppointment->notes ? strip_tags(clean($pendingAppointment->notes)) : null,
                 'admin_notes' => $sanitizedAdminNotes,
@@ -241,7 +241,7 @@ class PendingAppointmentController extends Controller
                             'name' => $pendingAppointment->name,
                             'email' => $pendingAppointment->email,
                             'phone' => $pendingAppointment->phone,
-                            'vehicle' => $vehicleInfo,
+                            'vehicle_description' => $vehicleInfo,
                             'service' => $pendingAppointment->service,
                             'notes' => $pendingAppointment->notes ? strip_tags(clean($pendingAppointment->notes)) : null,
                             'admin_notes' => 'Bulk approved by admin',

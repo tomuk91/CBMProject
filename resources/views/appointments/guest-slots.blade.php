@@ -230,6 +230,13 @@
                         @endforeach
                     </div>
                 @endif
+
+                {{-- Pagination --}}
+                @if($availableSlots->hasPages())
+                    <div class="mt-6">
+                        {{ $availableSlots->links() }}
+                    </div>
+                @endif
             </div>
             </div>
         </div>

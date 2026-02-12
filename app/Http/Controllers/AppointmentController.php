@@ -6,10 +6,12 @@ use App\Models\Appointment;
 use App\Models\PendingAppointment;
 use App\Models\AvailableSlot;
 use App\Models\ActivityLog;
+use App\Models\ServiceType;
 use App\Models\User;
 use App\Enums\AppointmentStatus;
 use App\Enums\SlotStatus;
 use App\Mail\AppointmentConfirmation;
+use App\Mail\AppointmentRescheduled;
 use App\Mail\NewAppointmentAdmin;
 use App\Mail\CancellationRequested;
 use Illuminate\Http\Request;
@@ -78,7 +80,9 @@ class AppointmentController extends Controller
                 ->with('error', __('messages.flash_slot_unavailable'));
         }
 
-        return view('appointments.book', compact('slot'));
+        $serviceTypes = ServiceType::active()->ordered()->get();
+
+        return view('appointments.book', compact('slot', 'serviceTypes'));
     }
 
     /**
@@ -199,6 +203,7 @@ class AppointmentController extends Controller
                     'appointment_end' => $lockedSlot->end_time,
                     'vehicle_id' => $pendingAppointment->vehicle_id,
                     'vehicle' => $pendingAppointment->vehicleDetails ?? null,
+                    'vehicle_description' => $pendingAppointment->vehicle_description,
                     'status' => 'pending',
                 ];
 
@@ -368,7 +373,7 @@ class AppointmentController extends Controller
         $existingAppointment = Appointment::where('user_id', Auth::id())
             ->where(function($query) use ($vehicleId, $vehicle) {
                 $query->where('vehicle_id', $vehicleId)
-                      ->orWhere('vehicle', 'like', '%' . $vehicle->plate . '%');
+                      ->orWhere('vehicle_description', 'like', '%' . $vehicle->plate . '%');
             })
             ->whereIn('status', ['pending', 'confirmed'])
             ->exists();
@@ -471,6 +476,9 @@ class AppointmentController extends Controller
             );
         });
 
+        // Send rescheduled notification email
+        Mail::to($appointment->email)->queue(new AppointmentRescheduled($appointment->fresh()));
+
         return redirect()->route('appointments.details', $appointment)
             ->with('success', __('messages.appointment_rescheduled_success'));
     }
@@ -478,7 +486,7 @@ class AppointmentController extends Controller
     /**
      * Get available slots based on request filters (shared by index and guestSlots)
      */
-    private function getAvailableSlots(Request $request): \Illuminate\Database\Eloquent\Collection
+    private function getAvailableSlots(Request $request)
     {
         $request->validate([
             'date_from' => 'nullable|date',
@@ -500,7 +508,7 @@ class AppointmentController extends Controller
             $query->timeOfDay($request->time_period);
         }
 
-        return $query->orderBy('start_time', 'asc')->get();
+        return $query->orderBy('start_time', 'asc')->paginate(20)->withQueryString();
     }
 }
 

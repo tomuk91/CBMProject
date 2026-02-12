@@ -11,7 +11,7 @@
 
 **{{ __('messages.email_scheduled_date_time') }}:** {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F j, Y \\a\\t g:i A') }}
 
-**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle }}
+**{{ __('messages.email_vehicle_label') }}:** {{ $appointment->vehicle_description }}
 
 @if($reason)
 <x-mail::panel>

@@ -16,3 +16,12 @@ Schedule::command('appointments:send-reminders --hours=24')->hourly()->withoutOv
 
 // Auto-generate slots from schedule templates daily at 1:00 AM
 Schedule::command('slots:generate')->dailyAt('01:00')->withoutOverlapping();
+
+// Backup database daily at 2:00 AM
+Schedule::command('db:backup')->dailyAt('02:00')->withoutOverlapping();
+
+// Auto-complete past confirmed appointments daily at 3:00 AM
+Schedule::command('appointments:complete-passed')->dailyAt('03:00')->withoutOverlapping();
+
+// Prune activity logs older than 90 days weekly on Sundays at 4:00 AM
+Schedule::command('logs:prune --days=90')->weeklyOn(0, '04:00')->withoutOverlapping();

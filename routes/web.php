@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\CancellationController;
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ContactSubmissionController;
+use App\Http\Controllers\Admin\ServiceTypeController;
+use App\Http\Controllers\Admin\AdminSettingsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Models\Appointment;
@@ -202,6 +204,18 @@ Route::middleware('auth')->group(function () {
         Route::post('/schedule-templates/bulk-deactivate', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'bulkDeactivate'])->name('schedule-templates.bulk-deactivate');
         Route::delete('/schedule-templates/bulk-delete', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'bulkDestroy'])->name('schedule-templates.bulk-delete');
         
+        // Service Type routes
+        Route::get('/service-types', [ServiceTypeController::class, 'index'])->name('service-types.index');
+        Route::get('/service-types/create', [ServiceTypeController::class, 'create'])->name('service-types.create');
+        Route::post('/service-types', [ServiceTypeController::class, 'store'])->name('service-types.store');
+        Route::get('/service-types/{serviceType}/edit', [ServiceTypeController::class, 'edit'])->name('service-types.edit');
+        Route::put('/service-types/{serviceType}', [ServiceTypeController::class, 'update'])->name('service-types.update');
+        Route::delete('/service-types/{serviceType}', [ServiceTypeController::class, 'destroy'])->name('service-types.destroy');
+        Route::post('/service-types/{serviceType}/toggle', [ServiceTypeController::class, 'toggleActive'])->name('service-types.toggle');
+
+        // Admin Settings
+        Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings');
+
         // Blocked Dates routes
         Route::get('/blocked-dates', [\App\Http\Controllers\Admin\BlockedDateController::class, 'index'])->name('blocked-dates.index');
         Route::post('/blocked-dates', [\App\Http\Controllers\Admin\BlockedDateController::class, 'store'])->name('blocked-dates.store');

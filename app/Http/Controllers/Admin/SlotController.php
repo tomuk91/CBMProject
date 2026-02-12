@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AvailableSlot;
 use App\Models\ActivityLog;
 use App\Models\BlockedDate;
+use App\Models\ServiceType;
 use App\Models\User;
 use App\Enums\SlotStatus;
 use Illuminate\Http\Request;
@@ -17,11 +18,6 @@ class SlotController extends Controller
      */
     public function slots(Request $request)
     {
-        // Automatically cleanup old unbooked slots
-        AvailableSlot::where('status', 'available')
-            ->where('start_time', '<', now())
-            ->delete();
-
         $query = AvailableSlot::query();
 
         // Hide old and booked slots by default unless toggle is checked
@@ -75,7 +71,10 @@ class SlotController extends Controller
             ->orderBy('date')
             ->get();
 
-        return view('admin.appointments.slots', compact('slots', 'users', 'blockedDates'));
+        // Get active service types for booking dropdowns
+        $serviceTypes = ServiceType::active()->ordered()->get();
+
+        return view('admin.appointments.slots', compact('slots', 'users', 'blockedDates', 'serviceTypes'));
     }
 
     /**

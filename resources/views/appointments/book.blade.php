@@ -368,12 +368,9 @@
                             <div x-data="{
                                 selectedService: '{{ old('service', '') }}',
                                 services: {
-                                    'Oil Change': { duration: '30-45 min', desc: '{{ __('messages.service_oil_change_desc') }}' },
-                                    'Brake Service': { duration: '1-2 hrs', desc: '{{ __('messages.service_brake_desc') }}' },
-                                    'Tire Rotation': { duration: '30-60 min', desc: '{{ __('messages.service_tire_desc') }}' },
-                                    'General Inspection': { duration: '1-2 hrs', desc: '{{ __('messages.service_diagnostic_desc') }}' },
-                                    'Engine Diagnostics': { duration: '1-2 hrs', desc: '{{ __('messages.service_diagnostic_desc') }}' },
-                                    'Other': { duration: '', desc: '{{ __('messages.service_other_desc') }}' }
+                                    @foreach($serviceTypes as $st)
+                                    '{{ $st->name }}': { duration: '{{ $st->estimated_duration ?? '' }}', desc: '{{ addslashes($st->description ?? '') }}' },
+                                    @endforeach
                                 }
                             }">
                                 <label for="service" class="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
@@ -389,12 +386,9 @@
                                         x-model="selectedService"
                                         class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500">
                                     <option value="">{{ __('messages.service_select') }}</option>
-                                    <option value="Oil Change" {{ old('service') == 'Oil Change' ? 'selected' : '' }}>🛢️ {{ __('messages.service_oil_change') }}</option>
-                                    <option value="Brake Service" {{ old('service') == 'Brake Service' ? 'selected' : '' }}>🔧 {{ __('messages.service_brake') }}</option>
-                                    <option value="Tire Rotation" {{ old('service') == 'Tire Rotation' ? 'selected' : '' }}>🔄 {{ __('messages.service_tire') }}</option>
-                                    <option value="General Inspection" {{ old('service') == 'General Inspection' ? 'selected' : '' }}>🔍 {{ __('messages.service_inspection') }}</option>
-                                    <option value="Engine Diagnostics" {{ old('service') == 'Engine Diagnostics' ? 'selected' : '' }}>💻 {{ __('messages.service_diagnostics') }}</option>
-                                    <option value="Other" {{ old('service') == 'Other' ? 'selected' : '' }}>➕ {{ __('messages.service_other') }}</option>
+                                    @foreach($serviceTypes as $st)
+                                        <option value="{{ $st->name }}" {{ old('service') == $st->name ? 'selected' : '' }}>{{ $st->icon }} {{ $st->name }}</option>
+                                    @endforeach
                                 </select>
                                 <div x-show="selectedService && services[selectedService]" x-transition class="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
                                     <div class="flex items-center justify-between">

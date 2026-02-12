@@ -4,46 +4,50 @@
             <h2 class="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('messages.calendar_title') }}
             </h2>
-            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
-                <!-- Export and Bulk Actions -->
-                <div class="flex gap-2">
-                    <button onclick="document.getElementById('bulkEmailModal').classList.remove('hidden')" 
-                            class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-700 dark:hover:bg-blue-800 text-white text-sm px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center sm:justify-start min-h-[44px]">
-                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+            <div class="flex items-center gap-2 sm:gap-3">
+                {{-- Actions Dropdown --}}
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open" type="button" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm px-4 py-2.5 rounded-lg transition-all duration-200 font-medium flex items-center gap-2 min-h-[44px]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
                         </svg>
-                        <span class="hidden sm:inline">{{ __('messages.bulk_email') }}</span>
+                        {{ __('messages.actions') }}
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
                     </button>
-                    <a href="{{ route('admin.appointments.export') }}" 
-                       class="bg-green-600 hover:bg-green-700 active:bg-green-800 dark:bg-green-700 dark:hover:bg-green-800 text-white text-sm px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center sm:justify-start min-h-[44px]">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                        </svg>
-                        <span class="hidden sm:inline">{{ __('messages.export_appointments') }}</span>
-                    </a>
+                    <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50" x-cloak>
+                        <a href="{{ route('admin.appointments.export') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <svg class="w-4 h-4 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                            {{ __('messages.export_appointments') }}
+                        </a>
+                        <button onclick="document.getElementById('bulkEmailModal').classList.remove('hidden')" class="w-full flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <svg class="w-4 h-4 mr-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                            </svg>
+                            {{ __('messages.bulk_email') }}
+                        </button>
+                    </div>
                 </div>
                 
-                <a href="{{ route('admin.appointments.slots') }}" class="bg-red-600 hover:bg-red-700 active:bg-red-800 dark:bg-red-700 dark:hover:bg-red-800 text-white text-sm px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center sm:justify-start min-h-[44px]">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                {{-- Primary Actions --}}
+                <a href="{{ route('admin.appointments.slots') }}" class="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2.5 rounded-lg transition-all duration-200 font-semibold flex items-center gap-2 min-h-[44px]">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
                     </svg>
-                    {{ __('messages.admin_manage_slots') }}
-                </a>
-                <a href="{{ route('admin.appointments.pending') }}" class="bg-red-700 hover:bg-red-800 active:bg-red-900 dark:bg-red-800 dark:hover:bg-red-900 text-white text-sm px-4 sm:px-5 py-3 sm:py-2.5 rounded-lg transition-all duration-300 font-semibold shadow-sm hover:shadow-md flex items-center justify-center sm:justify-start min-h-[44px]">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                    </svg>
-                    {{ __('messages.admin_pending_requests') }}
+                    <span class="hidden sm:inline">{{ __('messages.admin_manage_slots') }}</span>
                 </a>
             </div>
         </div>
     </x-slot>
 
     <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 space-y-6">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 space-y-4">
             @if (session('success'))
-                <div x-data="{ show: true }" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
+                <div x-data="{ show: true }" x-show="show" x-transition class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -61,7 +65,7 @@
             @endif
 
             @if (session('error'))
-                <div x-data="{ show: true }" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
+                <div x-data="{ show: true }" x-show="show" x-transition class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -78,90 +82,116 @@
                 </div>
             @endif
 
-            <!-- Search and Filters -->
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-100 dark:border-gray-700 p-4">
-                <form method="GET" action="{{ route('admin.appointments.calendar') }}" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <!-- Search -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_search') }}</label>
-                            <input type="text" name="search" value="{{ request('search') }}" 
-                                   placeholder="{{ __('messages.calendar_search_placeholder') }}"
-                                   class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-
-                        <!-- Status Filter -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_filter_status') }}</label>
-                            <select name="status" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="all">{{ __('messages.calendar_all_statuses') }}</option>
-                                @foreach($statuses as $status)
-                                    <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
-                                        {{ ucfirst($status) }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Service Filter -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_filter_service') }}</label>
-                            <select name="service" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="all">{{ __('messages.calendar_all_services') }}</option>
-                                @foreach($services as $service)
-                                    <option value="{{ $service }}" {{ request('service') == $service ? 'selected' : '' }}>
-                                        {{ $service }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Sort -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_sort_by') }}</label>
-                            <select name="sort" class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="appointment_date" {{ request('sort') == 'appointment_date' ? 'selected' : '' }}>{{ __('messages.calendar_sort_date') }}</option>
-                                <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>{{ __('messages.calendar_sort_created') }}</option>
-                                <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>{{ __('messages.calendar_sort_name') }}</option>
-                                <option value="status" {{ request('sort') == 'status' ? 'selected' : '' }}>{{ __('messages.calendar_sort_status') }}</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <!-- Date From -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_date_from') }}</label>
-                            <input type="date" name="date_from" value="{{ request('date_from') }}" 
-                                   class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-
-                        <!-- Date To -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('messages.calendar_date_to') }}</label>
-                            <input type="date" name="date_to" value="{{ request('date_to') }}" 
-                                   class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-
-                        <!-- Buttons -->
-                        <div class="flex items-end gap-2">
-                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors">
-                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                                {{ __('messages.calendar_filter_btn') }}
-                            </button>
-                            <a href="{{ route('admin.appointments.calendar') }}" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition-colors text-center">
-                                {{ __('messages.calendar_clear_btn') }}
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
+            {{-- Calendar Card --}}
             <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-100 dark:border-gray-700">
+                {{-- Toolbar --}}
+                <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        {{-- Left: Filter Toggle & Quick Filters --}}
+                        <div class="flex items-center gap-3">
+                            <button x-data x-on:click="$dispatch('toggle-filters')" type="button" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                                </svg>
+                                {{ __('messages.filters') }}
+                            </button>
+                            
+                            {{-- Pending Badge --}}
+                            @php $pendingCount = \App\Models\PendingAppointment::where('status', 'pending')->count(); @endphp
+                            @if($pendingCount > 0)
+                                <a href="{{ route('admin.appointments.pending') }}" class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/30 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ $pendingCount }} {{ __('messages.pending') }}
+                                </a>
+                            @endif
+                        </div>
+                        
+                        {{-- Right: Show Cancelled Toggle --}}
+                        <div class="flex items-center gap-4">
+                            <label for="showCancelledToggle" class="flex items-center cursor-pointer">
+                                <span class="mr-2 text-sm text-gray-600 dark:text-gray-400">{{ __('messages.calendar_show_cancelled') }}</span>
+                                <div class="relative">
+                                    <input type="checkbox" id="showCancelledToggle" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-500 peer-checked:bg-blue-600"></div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Collapsible Filters --}}
+                @php
+                    $hasActiveFilters = request('search') || (request('status') && request('status') !== 'all') || (request('service') && request('service') !== 'all') || request('date_from') || request('date_to');
+                @endphp
+                <div x-data="{ filtersOpen: {{ $hasActiveFilters ? 'true' : 'false' }} }" x-on:toggle-filters.window="filtersOpen = !filtersOpen">
+                    <div x-show="filtersOpen" x-collapse x-cloak class="px-4 py-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
+                        <form method="GET" action="{{ route('admin.appointments.calendar') }}" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {{-- Search --}}
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('messages.calendar_search') }}</label>
+                                    <input type="text" name="search" value="{{ request('search') }}" 
+                                           placeholder="{{ __('messages.calendar_search_placeholder') }}"
+                                           class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+
+                                {{-- Status --}}
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('messages.calendar_filter_status') }}</label>
+                                    <select name="status" class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="all">{{ __('messages.calendar_all_statuses') }}</option>
+                                        @foreach($statuses as $status)
+                                            <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- Service --}}
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('messages.calendar_filter_service') }}</label>
+                                    <select name="service" class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="all">{{ __('messages.calendar_all_services') }}</option>
+                                        @foreach($services as $service)
+                                            <option value="{{ $service }}" {{ request('service') == $service ? 'selected' : '' }}>{{ $service }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- Date Range --}}
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('messages.calendar_date_from') }}</label>
+                                        <input type="date" name="date_from" value="{{ request('date_from') }}" 
+                                               class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('messages.calendar_date_to') }}</label>
+                                        <input type="date" name="date_to" value="{{ request('date_to') }}" 
+                                               class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Filter Actions --}}
+                            <div class="flex items-center gap-2 pt-2">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                    {{ __('messages.calendar_filter_btn') }}
+                                </button>
+                                <a href="{{ route('admin.appointments.calendar') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-lg transition-colors">
+                                    {{ __('messages.calendar_clear_btn') }}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {{-- Calendar --}}
                 <div class="p-2 sm:p-4 md:p-6">
-                    <!-- Calendar will be rendered here -->
                     <div id="calendar"></div>
                 </div>
             </div>
@@ -478,7 +508,13 @@
                     });
                     fetch(`/admin/appointments/api?${params}`)
                         .then(response => response.json())
-                        .then(data => successCallback(data))
+                        .then(data => {
+                            const showCancelled = document.getElementById('showCancelledToggle').checked;
+                            if (!showCancelled) {
+                                data = data.filter(event => event.extendedProps.status !== 'cancelled');
+                            }
+                            successCallback(data);
+                        })
                         .catch(error => failureCallback(error));
                 },
                 eventClick: function(info) {
@@ -520,6 +556,11 @@
                 }
             });
             calendar.render();
+            
+            // Handle toggle for cancelled appointments
+            document.getElementById('showCancelledToggle').addEventListener('change', function() {
+                calendar.refetchEvents();
+            });
             
             // Handle window resize
             let resizeTimer;
@@ -711,12 +752,12 @@
             const markCompleteBtn = document.getElementById('markCompleteBtn');
             const cancelBtn = document.getElementById('cancelAppointmentBtn');
             
-            if (props.status === 'completed') {
-                // Hide both buttons for completed appointments
+            if (props.status === 'completed' || props.status === 'cancelled') {
+                // Hide both buttons for completed/cancelled appointments
                 markCompleteBtn.style.display = 'none';
                 cancelBtn.style.display = 'none';
             } else {
-                // Show both buttons for non-completed appointments
+                // Show both buttons for active appointments
                 markCompleteBtn.style.display = 'flex';
                 cancelBtn.style.display = 'flex';
             }

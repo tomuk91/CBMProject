@@ -10,6 +10,7 @@ use App\Models\ActivityLog;
 use App\Enums\AppointmentStatus;
 use App\Enums\SlotStatus;
 use Illuminate\Http\Request;
+use App\Mail\AppointmentCompleted;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
@@ -128,7 +129,7 @@ class AppointmentController extends Controller
         $end = $request->query('end');
 
         $query = Appointment::with(['user:id,name,email', 'vehicle:id,make,model,year,plate'])
-            ->select('id', 'user_id', 'vehicle_id', 'name', 'email', 'phone', 'vehicle', 'service', 'notes', 'appointment_date', 'appointment_end', 'status', 'cancellation_requested')
+            ->select('id', 'user_id', 'vehicle_id', 'name', 'email', 'phone', 'vehicle_description', 'service', 'notes', 'appointment_date', 'appointment_end', 'status', 'cancellation_requested')
             ->whereBetween('appointment_date', [$start, $end]);
 
         // Apply search filter
@@ -163,12 +164,12 @@ class AppointmentController extends Controller
                     'start' => $appointment->appointment_date->toIso8601String(),
                     'end' => $appointment->appointment_end->toIso8601String(),
                     'backgroundColor' => $this->getStatusColor($appointment->status),
-                    'editable' => $appointment->status !== AppointmentStatus::Completed, // Prevent dragging completed appointments
+                    'editable' => !in_array($appointment->status, [AppointmentStatus::Completed, AppointmentStatus::Cancelled]), // Prevent dragging completed/cancelled appointments
                     'extendedProps' => [
                         'customer' => $appointment->name,
                         'email' => $appointment->email,
                         'phone' => $appointment->phone,
-                        'vehicle' => $appointment->vehicle,
+                        'vehicle' => $appointment->vehicle_description,
                         'service' => $appointment->service,
                         'notes' => $appointment->notes,
                         'admin_notes' => $appointment->admin_notes,
@@ -234,6 +235,9 @@ class AppointmentController extends Controller
             $appointment
         );
 
+        // Send completion follow-up email
+        Mail::to($appointment->email)->queue(new AppointmentCompleted($appointment));
+
         return response()->json([
             'success' => true,
             'message' => 'Appointment marked as completed.',
@@ -246,10 +250,12 @@ class AppointmentController extends Controller
     public function destroy(Appointment $appointment)
     {
         try {
-            // Find the associated slot by matching start time
-            $slot = AvailableSlot::where('start_time', $appointment->appointment_date)
-                ->where('end_time', $appointment->appointment_end)
-                ->first();
+            // Find the associated slot via FK (fall back to time match for legacy data)
+            $slot = $appointment->available_slot_id
+                ? AvailableSlot::find($appointment->available_slot_id)
+                : AvailableSlot::where('start_time', $appointment->appointment_date)
+                    ->where('end_time', $appointment->appointment_end)
+                    ->first();
 
             // Log activity before deletion
             ActivityLog::log(

@@ -10,18 +10,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AppointmentCancellationApproved extends Mailable implements ShouldQueue
+class AppointmentRescheduled extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-
-    public $appointment;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Appointment $appointment)
+    public function __construct(
+        public Appointment $appointment
+    )
     {
-        $this->appointment = $appointment;
+        $this->locale = config('app.locale', 'hu');
     }
 
     /**
@@ -30,7 +30,7 @@ class AppointmentCancellationApproved extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('messages.email_cancellation_approved_subject', ['app' => config('app.name')]),
+            subject: __('messages.email_rescheduled_subject', ['app' => config('app.name')]),
         );
     }
 
@@ -40,7 +40,7 @@ class AppointmentCancellationApproved extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.cancellation-approved',
+            view: 'emails.appointment-rescheduled',
         );
     }
 

@@ -131,10 +131,10 @@
                             <span class="detail-value">{{ $appointment->vehicle->plate }}</span>
                         </div>
                     @endif
-                @elseif($appointment->vehicle)
+                @elseif($appointment->vehicle_description)
                     <div class="detail-row">
                         <span class="detail-label">{{ __('messages.vehicle') }}:</span>
-                        <span class="detail-value">{{ $appointment->vehicle }}</span>
+                        <span class="detail-value">{{ $appointment->vehicle_description }}</span>
                     </div>
                 @endif
                 @if($appointment->notes)

@@ -18,7 +18,7 @@ class Appointment extends Model
         'name',
         'email',
         'phone',
-        'vehicle',
+        'vehicle_description',
         'service',
         'notes',
         'admin_notes',
@@ -30,6 +30,7 @@ class Appointment extends Model
         'cancellation_reason',
         'booked_by_admin',
         'rescheduled_at',
+        'reminder_sent_at',
     ];
 
     protected $casts = [
@@ -40,6 +41,7 @@ class Appointment extends Model
         'cancellation_requested_at' => 'datetime',
         'booked_by_admin' => 'boolean',
         'rescheduled_at' => 'datetime',
+        'reminder_sent_at' => 'datetime',
     ];
     
     /**

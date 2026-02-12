@@ -111,6 +111,13 @@ class SlotGenerationService
         $startDate = now()->startOfDay();
         $endDate = now()->addWeeks($weeksAhead)->endOfDay();
 
+        // Pre-load all existing slots in the date range to avoid N+1
+        $existingSlots = AvailableSlot::where('start_time', '>=', $startDate)
+            ->where('end_time', '<=', $endDate->copy()->addHour())
+            ->get(['start_time', 'end_time'])
+            ->map(fn ($s) => ['start' => $s->start_time, 'end' => $s->end_time])
+            ->toArray();
+
         $current = $startDate->copy();
 
         while ($current->lte($endDate)) {
@@ -134,10 +141,14 @@ class SlotGenerationService
                 while ($slotStart->copy()->addMinutes($template->slot_duration_minutes)->lte($dayEnd)) {
                     $slotEnd = $slotStart->copy()->addMinutes($template->slot_duration_minutes);
 
-                    // Check for overlap with existing slots
-                    $overlapping = AvailableSlot::where('start_time', '<', $slotEnd)
-                        ->where('end_time', '>', $slotStart)
-                        ->exists();
+                    // Check for overlap against in-memory collection
+                    $overlapping = false;
+                    foreach ($existingSlots as $existing) {
+                        if ($existing['start'] < $slotEnd && $existing['end'] > $slotStart) {
+                            $overlapping = true;
+                            break;
+                        }
+                    }
 
                     if (!$overlapping) {
                         $slots->push([
@@ -197,20 +208,31 @@ class SlotGenerationService
         $dayStart = $date->copy()->setTimeFromTimeString($template->start_time);
         $dayEnd = $date->copy()->setTimeFromTimeString($template->end_time);
 
+        // Pre-load all existing slots for this day to avoid N+1 queries
+        $existingSlots = AvailableSlot::where('start_time', '>=', $dayStart)
+            ->where('end_time', '<=', $dayEnd->copy()->addHour()) // small buffer
+            ->get(['start_time', 'end_time'])
+            ->map(fn ($s) => ['start' => $s->start_time, 'end' => $s->end_time])
+            ->toArray();
+
         $slotStart = $dayStart->copy();
 
         while ($slotStart->copy()->addMinutes($template->slot_duration_minutes)->lte($dayEnd)) {
             $slotEnd = $slotStart->copy()->addMinutes($template->slot_duration_minutes);
 
-            // Check for overlap with existing slots
-            $overlapping = AvailableSlot::where('start_time', '<', $slotEnd)
-                ->where('end_time', '>', $slotStart)
-                ->exists();
+            // Check for overlap against in-memory collection instead of DB query
+            $overlapping = false;
+            foreach ($existingSlots as $existing) {
+                if ($existing['start'] < $slotEnd && $existing['end'] > $slotStart) {
+                    $overlapping = true;
+                    break;
+                }
+            }
 
             if ($overlapping) {
                 $skipped++;
             } else {
-                AvailableSlot::create([
+                $newSlot = AvailableSlot::create([
                     'start_time' => $slotStart,
                     'end_time' => $slotEnd,
                     'status' => SlotStatus::Available,
@@ -218,6 +240,9 @@ class SlotGenerationService
                     'source' => 'auto',
                 ]);
                 $created++;
+
+                // Add to in-memory collection so subsequent slots on same day see it
+                $existingSlots[] = ['start' => $newSlot->start_time, 'end' => $newSlot->end_time];
             }
 
             // Move to next slot: duration + break
