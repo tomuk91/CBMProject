@@ -8,6 +8,7 @@ use App\Models\PendingAppointment;
 use App\Models\AvailableSlot;
 use App\Models\ActivityLog;
 use App\Mail\AppointmentStatusChanged;
+use App\Mail\AppointmentRejected;
 use App\Enums\SlotStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -183,16 +184,7 @@ class PendingAppointmentController extends Controller
         );
 
         // Send rejection email
-        $tempAppointment = (object) [
-            'name' => $pendingAppointment->name,
-            'email' => $pendingAppointment->email,
-            'phone' => $pendingAppointment->phone,
-            'service' => $pendingAppointment->service,
-            'notes' => $pendingAppointment->notes,
-            'appointment_date' => $pendingAppointment->availableSlot->start_time ?? now(),
-            'status' => 'rejected',
-        ];
-        Mail::to($pendingAppointment->email)->queue(new AppointmentStatusChanged($tempAppointment, 'pending'));
+        Mail::to($pendingAppointment->email)->queue(new AppointmentRejected($pendingAppointment, $request->admin_notes ?? ''));
 
         return redirect()->back()
             ->with('success', 'Appointment rejected and slot made available again.');

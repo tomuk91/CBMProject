@@ -31,7 +31,7 @@ class BlockedDate extends Model
      */
     public function scopeForDate($query, $date)
     {
-        return $query->where('date', $date);
+        return $query->whereDate('date', $date);
     }
 
     /**
@@ -39,6 +39,6 @@ class BlockedDate extends Model
      */
     public static function isBlocked(Carbon $date): bool
     {
-        return static::where('date', $date->toDateString())->exists();
+        return static::whereDate('date', $date->toDateString())->exists();
     }
 }
