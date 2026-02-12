@@ -28,6 +28,7 @@
     {{-- Sidebar panel --}}
     <nav :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
          class="fixed lg:sticky top-0 lg:top-16 left-0 z-50 lg:z-10 w-64 h-screen lg:h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto transform transition-transform duration-300 ease-in-out"
+         data-tour="sidebar"
          aria-label="{{ __('messages.sidebar_admin_navigation') }}">
 
         {{-- Sidebar header --}}
@@ -64,7 +65,7 @@
             </a>
 
             {{-- APPOINTMENTS SECTION --}}
-            <div class="px-3 pt-4 pb-1">
+            <div class="px-3 pt-4 pb-1" data-tour="sidebar-appointments">
                 <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">{{ __('messages.sidebar_section_appointments') }}</p>
             </div>
 
@@ -136,7 +137,7 @@
             </a>
 
             {{-- REPORTS SECTION --}}
-            <div class="px-3 pt-4 pb-1">
+            <div class="px-3 pt-4 pb-1" data-tour="sidebar-reports">
                 <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">{{ __('messages.sidebar_section_reports') }}</p>
             </div>
 
@@ -161,7 +162,7 @@
             </a>
 
             {{-- SYSTEM SECTION --}}
-            <div class="px-3 pt-4 pb-1">
+            <div class="px-3 pt-4 pb-1" data-tour="sidebar-system">
                 <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">{{ __('messages.sidebar_section_system') }}</p>
             </div>
 

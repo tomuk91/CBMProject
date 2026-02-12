@@ -169,15 +169,43 @@ document.addEventListener('DOMContentLoaded', function() {
         card.style.left = left + 'px';
     }
 
+    function isSidebarTarget(step) {
+        return step.target && step.target.indexOf('sidebar') !== -1;
+    }
+
+    function ensureSidebarVisible(step) {
+        if (!isSidebarTarget(step)) return;
+        var isMobile = window.innerWidth < 1024;
+        if (isMobile) {
+            // Open sidebar on mobile via Alpine
+            var aside = document.querySelector('aside[x-data]');
+            if (aside && aside.__x) {
+                aside.__x.$data.sidebarOpen = true;
+            }
+        }
+    }
+
     function scrollToTarget(step) {
+        ensureSidebarVisible(step);
         var targetEl = step.target ? document.querySelector(step.target) : null;
         if (targetEl) {
-            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // For sidebar elements, scroll within the sidebar nav
+            var sidebarNav = targetEl.closest('nav');
+            if (sidebarNav && isSidebarTarget(step)) {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
     }
 
     function showStep(stepIndex) {
         var step = tourSteps[stepIndex];
+
+        // Close sidebar on mobile when moving away from sidebar steps
+        if (!isSidebarTarget(step)) {
+            closeSidebarIfMobile();
+        }
 
         titleEl.textContent = step.title;
         descEl.textContent = step.description;
@@ -225,7 +253,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function closeSidebarIfMobile() {
+        var isMobile = window.innerWidth < 1024;
+        if (isMobile) {
+            var aside = document.querySelector('aside[x-data]');
+            if (aside && aside.__x) {
+                aside.__x.$data.sidebarOpen = false;
+            }
+        }
+    }
+
     function endTour() {
+        closeSidebarIfMobile();
         card.style.opacity = '0';
         overlay.style.opacity = '0';
 
