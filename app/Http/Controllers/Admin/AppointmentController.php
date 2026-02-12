@@ -483,13 +483,18 @@ class AppointmentController extends Controller
             
             // Add data rows
             foreach ($slots as $slot) {
+                // Format status as string value
+                $statusValue = $slot->status instanceof \App\Enums\SlotStatus 
+                    ? $slot->status->value 
+                    : (string) $slot->status;
+                
                 fputcsv($file, [
                     $slot->id,
-                    $slot->start_time->format('Y-m-d H:i'),
-                    $slot->end_time->format('Y-m-d H:i'),
-                    $slot->start_time->diffInMinutes($slot->end_time),
-                    $slot->status,
-                    $slot->created_at->format('Y-m-d H:i'),
+                    $slot->start_time?->format('Y-m-d H:i') ?? '',
+                    $slot->end_time?->format('Y-m-d H:i') ?? '',
+                    $slot->start_time && $slot->end_time ? $slot->start_time->diffInMinutes($slot->end_time) : '',
+                    $statusValue,
+                    $slot->created_at?->format('Y-m-d H:i') ?? '',
                 ]);
             }
             
