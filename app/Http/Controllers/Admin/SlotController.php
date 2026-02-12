@@ -289,7 +289,7 @@ class SlotController extends Controller
 
                 if ($conflict) {
                     return redirect()->back()
-                        ->with('error', 'This time slot conflicts with an existing slot. Please choose a different time.');
+                        ->with('error', __('messages.flash_slot_conflict'));
                 }
             }
 
@@ -460,13 +460,13 @@ class SlotController extends Controller
     {
         if ($slot->status !== SlotStatus::Available) {
             return redirect()->back()
-                ->with('error', 'Cannot delete a slot that is booked or pending.');
+                ->with('error', __('messages.flash_slot_cannot_delete'));
         }
 
         $slot->delete();
 
         return redirect()->back()
-            ->with('success', 'Available slot deleted successfully.');
+            ->with('success', __('messages.flash_slot_deleted'));
     }
 
     /**
@@ -487,10 +487,10 @@ class SlotController extends Controller
 
         if ($deletedCount > 0) {
             return redirect()->back()
-                ->with('success', "{$deletedCount} slot(s) deleted successfully.");
+                ->with('success', __('messages.flash_bulk_slots_deleted', ['count' => $deletedCount]));
         }
 
         return redirect()->back()
-            ->with('error', 'No available slots were deleted. Cannot delete booked or pending slots.');
+            ->with('error', __('messages.flash_no_slots_deleted'));
     }
 }

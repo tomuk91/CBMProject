@@ -43,7 +43,7 @@ services:
           type: redis
           name: cbmproject-redis
           property: connectionString
-      - key: CACHE_DRIVER
+      - key: CACHE_STORE
         value: redis
       - key: SESSION_DRIVER
         value: redis

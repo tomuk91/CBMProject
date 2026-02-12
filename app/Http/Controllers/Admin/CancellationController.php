@@ -66,7 +66,8 @@ class CancellationController extends Controller
             return redirect()->back()->with('success', __('messages.cancellation_approved'));
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Error approving cancellation: ' . $e->getMessage());
+            \Log::error('Error approving cancellation: ' . $e->getMessage(), ['exception' => $e]);
+            return redirect()->back()->with('error', __('messages.flash_cancellation_error'));
         }
     }
 

@@ -161,11 +161,12 @@ class PendingAppointmentController extends Controller
             Cache::forget('dashboard_today_count_' . today()->toDateString());
 
             return redirect()->back()
-                ->with('success', 'Appointment approved and added to calendar.');
+                ->with('success', __('messages.flash_appointment_approved'));
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::error('Failed to approve appointment: ' . $e->getMessage(), ['exception' => $e]);
             return redirect()->back()
-                ->with('error', 'Failed to approve appointment: ' . $e->getMessage());
+                ->with('error', __('messages.flash_approve_failed'));
         }
     }
 
@@ -200,7 +201,7 @@ class PendingAppointmentController extends Controller
         Cache::forget('dashboard_available_slots');
 
         return redirect()->back()
-            ->with('success', 'Appointment rejected and slot made available again.');
+            ->with('success', __('messages.flash_appointment_rejected'));
     }
 
     /**
@@ -282,7 +283,7 @@ class PendingAppointmentController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()
-                ->with('error', 'Failed to approve appointments: ' . $e->getMessage());
+                ->with('error', __('messages.flash_bulk_failed'));
         }
     }
 
@@ -341,11 +342,11 @@ class PendingAppointmentController extends Controller
             DB::commit();
 
             return redirect()->back()
-                ->with('success', "{$rejectedCount} appointment(s) rejected successfully.");
+                ->with('success', __('messages.flash_bulk_reject_success', ['count' => $rejectedCount]));
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()
-                ->with('error', 'Failed to reject appointments: ' . $e->getMessage());
+                ->with('error', __('messages.flash_bulk_failed'));
         }
     }
 }

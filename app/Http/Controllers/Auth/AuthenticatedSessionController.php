@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
             
             // Redirect to booking page with the selected slot
             return redirect()->route('appointments.show', $slotId)
-                ->with('success', 'Welcome back! Please complete your booking below.');
+                ->with('success', __('messages.flash_welcome_back_booking'));
         }
 
         return redirect()->intended(route('dashboard', absolute: false));

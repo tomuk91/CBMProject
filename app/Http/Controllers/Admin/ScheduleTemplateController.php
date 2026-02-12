@@ -89,7 +89,7 @@ class ScheduleTemplateController extends Controller
         );
 
         return redirect()->route('admin.schedule-templates.index')
-            ->with('success', 'Schedule template created successfully.');
+            ->with('success', __('messages.flash_template_created'));
     }
 
     /**
@@ -130,7 +130,7 @@ class ScheduleTemplateController extends Controller
         );
 
         return redirect()->route('admin.schedule-templates.index')
-            ->with('success', 'Schedule template updated successfully.');
+            ->with('success', __('messages.flash_template_updated'));
     }
 
     /**
@@ -155,7 +155,7 @@ class ScheduleTemplateController extends Controller
         );
 
         return redirect()->route('admin.schedule-templates.index')
-            ->with('success', 'Schedule template deleted successfully.');
+            ->with('success', __('messages.flash_template_deleted'));
     }
 
     /**
@@ -186,7 +186,7 @@ class ScheduleTemplateController extends Controller
         );
 
         return redirect()->route('admin.schedule-templates.index')
-            ->with('success', "Schedule template {$status} successfully.");
+            ->with('success', __('messages.flash_template_toggled', ['status' => $status]));
     }
 
     /**
@@ -217,7 +217,7 @@ class ScheduleTemplateController extends Controller
         $ids = $request->input('template_ids', []);
         if (empty($ids)) {
             return redirect()->route('admin.schedule-templates.index')
-                ->with('error', 'No templates selected.');
+                ->with('error', __('messages.flash_no_templates_selected'));
         }
 
         $templates = ScheduleTemplate::whereIn('id', $ids)->get();
@@ -248,7 +248,7 @@ class ScheduleTemplateController extends Controller
         $ids = $request->input('template_ids', []);
         if (empty($ids)) {
             return redirect()->route('admin.schedule-templates.index')
-                ->with('error', 'No templates selected.');
+                ->with('error', __('messages.flash_no_templates_selected'));
         }
 
         // Remove future auto-generated available slots for templates being deactivated
@@ -279,7 +279,7 @@ class ScheduleTemplateController extends Controller
         $ids = $request->input('template_ids', []);
         if (empty($ids)) {
             return redirect()->route('admin.schedule-templates.index')
-                ->with('error', 'No templates selected.');
+                ->with('error', __('messages.flash_no_templates_selected'));
         }
 
         // Delete future auto-generated available slots for these templates

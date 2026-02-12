@@ -75,7 +75,7 @@ class AppointmentController extends Controller
     {
         if ($slot->status !== SlotStatus::Available) {
             return redirect()->route('appointments.index')
-                ->with('error', 'This appointment slot is no longer available.');
+                ->with('error', __('messages.flash_slot_unavailable'));
         }
 
         return view('appointments.book', compact('slot'));
@@ -139,7 +139,7 @@ class AppointmentController extends Controller
                 // Check if slot is still available after locking
                 if (!$lockedSlot || $lockedSlot->status !== SlotStatus::Available) {
                     return redirect()->route('appointments.index')
-                        ->with('error', 'This appointment slot is no longer available. Please select another slot.');
+                        ->with('error', __('messages.flash_slot_unavailable_select'));
                 }
 
                 // Update user profile with any new information provided
@@ -215,7 +215,7 @@ class AppointmentController extends Controller
                 }
 
                 return redirect()->route('appointments.confirmation')
-                    ->with('success', 'Your appointment request has been submitted and is pending approval!')
+                    ->with('success', __('messages.flash_booking_submitted'))
                     ->with('booking_details', [
                         'name' => $pendingAppointment->name,
                         'email' => $pendingAppointment->email,
@@ -233,7 +233,7 @@ class AppointmentController extends Controller
                 'request_data' => $request->all()
             ]);
             return redirect()->back()
-                ->with('error', 'An error occurred while submitting your request. Please try again.')
+                ->with('error', __('messages.flash_booking_error'))
                 ->withInput();
         }
     }
@@ -268,7 +268,7 @@ class AppointmentController extends Controller
         
         if ($slot->status !== SlotStatus::Available) {
             return redirect()->route('guest.slots')
-                ->with('error', 'This slot is no longer available. Please select another.');
+                ->with('error', __('messages.flash_slot_taken'));
         }
 
         // Store the selected slot in session

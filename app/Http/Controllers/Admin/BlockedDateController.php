@@ -107,6 +107,6 @@ class BlockedDateController extends Controller
         );
 
         return redirect()->route('admin.blocked-dates.index')
-            ->with('success', 'Blocked date removed successfully.');
+            ->with('success', __('messages.flash_blocked_date_removed'));
     }
 }

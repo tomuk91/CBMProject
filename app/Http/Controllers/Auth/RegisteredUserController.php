@@ -90,7 +90,7 @@ class RegisteredUserController extends Controller
             
             // Redirect to booking page with the selected slot
             return redirect()->route('appointments.show', $slotId)
-                ->with('success', 'Welcome! Please complete your booking below.');
+                ->with('success', __('messages.flash_welcome_booking'));
         }
 
         return redirect(route('dashboard', absolute: false));

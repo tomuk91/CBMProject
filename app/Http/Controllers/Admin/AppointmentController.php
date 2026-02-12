@@ -194,7 +194,7 @@ class AppointmentController extends Controller
         ]);
 
         return redirect()->back()
-            ->with('success', 'Appointment status updated.');
+            ->with('success', __('messages.flash_status_updated'));
     }
 
     /**
@@ -286,7 +286,7 @@ class AppointmentController extends Controller
             }
 
             return redirect()->back()
-                ->with('success', 'Appointment cancelled successfully. Customer has been notified by email.');
+                ->with('success', __('messages.flash_cancelled_success'));
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json([
@@ -296,7 +296,7 @@ class AppointmentController extends Controller
             }
 
             return redirect()->back()
-                ->with('error', 'Failed to cancel appointment.');
+                ->with('error', __('messages.flash_cancel_failed'));
         }
     }
 

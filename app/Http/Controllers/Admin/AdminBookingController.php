@@ -27,7 +27,7 @@ class AdminBookingController extends Controller
     {
         if ($slot->status !== SlotStatus::Available) {
             return redirect()->back()
-                ->with('error', 'This slot is no longer available.');
+                ->with('error', __('messages.flash_admin_slot_unavailable'));
         }
 
         $clientType = $request->input('client_type');

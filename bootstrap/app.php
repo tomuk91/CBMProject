@@ -22,5 +22,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Don't report 404s and validation exceptions
+        $exceptions->dontReport([
+            \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+        ]);
     })->create();
