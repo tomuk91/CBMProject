@@ -374,7 +374,7 @@ class AppointmentController extends Controller
     {
         $status = $request->get('status', 'all');
         
-        $query = Appointment::with('user');
+        $query = Appointment::with(['user', 'vehicle']);
         
         if ($status !== 'all') {
             $query->where('status', $status);
@@ -407,17 +407,37 @@ class AppointmentController extends Controller
             
             // Add data rows
             foreach ($appointments as $appointment) {
+                // Format vehicle info as a readable string
+                $vehicleInfo = '';
+                if ($appointment->vehicle) {
+                    $vehicle = $appointment->vehicle;
+                    $vehicleInfo = trim(sprintf(
+                        '%s %s %s (%s)',
+                        $vehicle->year ?? '',
+                        $vehicle->make ?? '',
+                        $vehicle->model ?? '',
+                        $vehicle->plate ?? ''
+                    ));
+                } elseif ($appointment->vehicle_description) {
+                    $vehicleInfo = $appointment->vehicle_description;
+                }
+                
+                // Format status as string value
+                $statusValue = $appointment->status instanceof \App\Enums\AppointmentStatus 
+                    ? $appointment->status->value 
+                    : (string) $appointment->status;
+                
                 fputcsv($file, [
                     $appointment->id,
                     $appointment->name,
                     $appointment->email,
                     $appointment->phone,
-                    $appointment->vehicle,
+                    $vehicleInfo,
                     $appointment->service,
-                    $appointment->appointment_date->format('Y-m-d H:i'),
-                    $appointment->status,
+                    $appointment->appointment_date?->format('Y-m-d H:i') ?? '',
+                    $statusValue,
                     $appointment->notes,
-                    $appointment->created_at->format('Y-m-d H:i'),
+                    $appointment->created_at?->format('Y-m-d H:i') ?? '',
                 ]);
             }
             

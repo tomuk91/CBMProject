@@ -1697,4 +1697,7 @@ return [
     'service_type_created' => 'Service type created successfully.',
     'service_type_updated' => 'Service type updated successfully.',
     'service_type_deleted' => 'Service type deleted successfully.',
+
+    // File upload
+    'your_file' => 'Your file',
 ];

@@ -406,6 +406,109 @@
             color: #d1d5db;
         }
         
+        .dark .fc-theme-standard .fc-scrollgrid {
+            border-color: #374151;
+        }
+        
+        .dark .fc-theme-standard td, 
+        .dark .fc-theme-standard th {
+            border-color: #374151;
+        }
+        
+        .dark .fc .fc-col-header-cell-cushion {
+            color: #fecaca;
+        }
+        
+        .dark .fc .fc-daygrid-day-top {
+            color: #d1d5db;
+        }
+        
+        .dark .fc .fc-list-day-cushion {
+            background-color: #1f2937;
+            color: #f3f4f6;
+        }
+        
+        .dark .fc .fc-list-event:hover td {
+            background-color: #374151;
+        }
+        
+        .dark .fc .fc-list-event-title a {
+            color: #f3f4f6;
+        }
+        
+        .dark .fc .fc-list-event-time {
+            color: #9ca3af;
+        }
+        
+        .dark .fc .fc-timegrid-slot-label {
+            color: #9ca3af;
+        }
+        
+        .dark .fc .fc-timegrid-axis-cushion {
+            color: #9ca3af;
+        }
+        
+        .dark .fc .fc-list-empty {
+            background-color: #1f2937;
+            color: #9ca3af;
+        }
+        
+        /* Additional dark mode text colors */
+        .dark .fc,
+        .dark .fc-daygrid-day-frame,
+        .dark .fc-daygrid-day-events,
+        .dark .fc-daygrid-event-harness {
+            color: #e5e7eb;
+        }
+        
+        .dark .fc a {
+            color: #e5e7eb;
+        }
+        
+        .dark .fc-daygrid-day-number,
+        .dark .fc-col-header-cell-cushion,
+        .dark .fc-timegrid-slot-label-cushion,
+        .dark .fc-list-day-text,
+        .dark .fc-list-day-side-text {
+            color: #e5e7eb !important;
+        }
+        
+        .dark .fc-daygrid-day {
+            background-color: #1f2937;
+        }
+        
+        .dark .fc-daygrid-day.fc-day-other {
+            background-color: #111827;
+        }
+        
+        .dark .fc-daygrid-day.fc-day-other .fc-daygrid-day-number {
+            color: #6b7280 !important;
+        }
+        
+        .dark .fc-scrollgrid-section-header {
+            background-color: #1f2937;
+        }
+        
+        .dark .fc-list-table {
+            background-color: #1f2937;
+        }
+        
+        .dark .fc-list-event td {
+            border-color: #374151;
+        }
+        
+        .dark .fc-timegrid-divider {
+            background-color: #374151;
+        }
+        
+        .dark .fc-timegrid-slot {
+            border-color: #374151;
+        }
+        
+        .dark .fc-timegrid-col {
+            background-color: #1f2937;
+        }
+        
         /* Mobile optimizations */
         @media (max-width: 640px) {
             .fc .fc-toolbar {

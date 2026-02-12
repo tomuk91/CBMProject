@@ -396,11 +396,45 @@
 
         function previewImage(event) {
             const file = event.target.files[0];
+            const maxSizeBytes = 2 * 1024 * 1024; // 2MB in bytes
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+            const errorContainer = document.getElementById('imageErrorMessage');
+            const errorText = document.getElementById('imageErrorText');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const previewImg = document.getElementById('imagePreview');
+            const fileInput = event.target;
+
+            // Reset error state
+            errorContainer.classList.add('hidden');
+            fileInput.classList.remove('border-red-500');
+
             if (file) {
+                // Check file type
+                if (!allowedTypes.includes(file.type)) {
+                    errorText.textContent = '{{ __('messages.validation.image_format') }}';
+                    errorContainer.classList.remove('hidden');
+                    fileInput.classList.add('border-red-500');
+                    fileInput.value = '';
+                    previewContainer.classList.add('hidden');
+                    return;
+                }
+
+                // Check file size (2MB = 2 * 1024 * 1024 bytes)
+                if (file.size > maxSizeBytes) {
+                    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                    errorText.textContent = '{{ __('messages.validation.image_size', ['max' => 2]) }} ' + '({{ __('messages.your_file') }}: ' + fileSizeMB + 'MB)';
+                    errorContainer.classList.remove('hidden');
+                    fileInput.classList.add('border-red-500');
+                    fileInput.value = '';
+                    previewContainer.classList.add('hidden');
+                    return;
+                }
+
+                // File is valid, show preview
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('imagePreview').src = e.target.result;
-                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                    previewImg.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
                 }
                 reader.readAsDataURL(file);
             }

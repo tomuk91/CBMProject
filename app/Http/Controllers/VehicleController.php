@@ -7,9 +7,12 @@ use App\Http\Requests\UpdateVehicleRequest;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class VehicleController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
         $vehicles = Auth::user()->vehicles()->latest()->get();

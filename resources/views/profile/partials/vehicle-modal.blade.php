@@ -157,6 +157,15 @@
                                onchange="previewImage(event)"
                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_image_format_hint') }}</p>
+                        <!-- Image Error Message -->
+                        <div id="imageErrorMessage" class="hidden mt-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                            <div class="flex items-center">
+                                <svg class="h-5 w-5 text-red-500 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                </svg>
+                                <span id="imageErrorText" class="text-sm font-medium text-red-700 dark:text-red-300"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

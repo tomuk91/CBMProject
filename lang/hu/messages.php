@@ -1679,4 +1679,7 @@ return [
     'service_type_created' => 'Szolgáltatástípus sikeresen létrehozva.',
     'service_type_updated' => 'Szolgáltatástípus sikeresen frissítve.',
     'service_type_deleted' => 'Szolgáltatástípus sikeresen törölve.',
+
+    // Fájl feltöltés
+    'your_file' => 'Az Ön fájlja',
 ];
