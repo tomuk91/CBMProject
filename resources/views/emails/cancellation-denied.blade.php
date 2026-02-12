@@ -12,7 +12,7 @@
                 <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <!-- Header -->
                     <tr>
-                        <td style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); padding: 40px 30px; text-align: center;">
+                        <td style="background-color: #dc2626; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); padding: 40px 30px; text-align: center;">
                             <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">{{ __('messages.email_cancellation_denied_heading') }}</h1>
                         </td>
                     </tr>

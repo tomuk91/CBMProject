@@ -12,8 +12,9 @@
                 <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <!-- Header -->
                     <tr>
-                        <td style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); padding: 40px 30px; text-align: center;">
-                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">✅ {{ __('messages.email_completed_heading') }}</h1>
+                        <td style="background-color: #16a34a; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); padding: 40px 30px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 15px;">✅</div>
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">{{ __('messages.email_completed_heading') }}</h1>
                         </td>
                     </tr>
                     

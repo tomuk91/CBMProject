@@ -12,7 +12,7 @@
                 <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                     <!-- Header -->
                     <tr>
-                        <td style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); padding: 40px 30px; text-align: center;">
+                        <td style="background-color: #2563eb; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); padding: 40px 30px; text-align: center;">
                             <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">{{ __('messages.email_rescheduled_heading') }}</h1>
                         </td>
                     </tr>
