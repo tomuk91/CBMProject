@@ -63,7 +63,7 @@ class BlockedDateController extends Controller
 
             $blockedDate = BlockedDate::create([
                 'date' => $dateString,
-                'reason' => $validated['reason'] ?? null,
+                'reason' => isset($validated['reason']) ? strip_tags(clean($validated['reason'])) : null,
                 'created_by' => auth()->id(),
             ]);
 

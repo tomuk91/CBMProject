@@ -54,7 +54,9 @@ Route::post('/contact', [ContactController::class, 'submit'])
 
 // Guest appointment slot selection (before login)
 Route::get('/slots', [AppointmentController::class, 'guestSlots'])->name('guest.slots');
-Route::post('/slots/{slot}/select', [AppointmentController::class, 'selectGuestSlot'])->name('guest.slots.select');
+Route::post('/slots/{slot}/select', [AppointmentController::class, 'selectGuestSlot'])
+    ->middleware('throttle:30,1')
+    ->name('guest.slots.select');
 
 Route::get('/dashboard', function () {
     $appointments = Appointment::with('vehicle')
@@ -128,7 +130,9 @@ Route::middleware('auth')->group(function () {
         ->name('appointments.store');
     Route::get('/appointments/confirmation/success', [AppointmentController::class, 'confirmation'])->name('appointments.confirmation');
     Route::get('/appointment/{appointment}/details', [AppointmentController::class, 'showDetails'])->name('appointments.details');
-    Route::post('/appointments/{appointment}/request-cancellation', [AppointmentController::class, 'requestCancellation'])->name('appointments.requestCancellation');
+    Route::post('/appointments/{appointment}/request-cancellation', [AppointmentController::class, 'requestCancellation'])
+        ->middleware('throttle:5,60')
+        ->name('appointments.requestCancellation');
     Route::get('/appointment/{appointment}/reschedule', [AppointmentController::class, 'reschedule'])->name('appointments.reschedule');
     Route::post('/appointment/{appointment}/reschedule', [AppointmentController::class, 'processReschedule'])->name('appointments.processReschedule');
     Route::get('/api/check-vehicle-availability/{vehicle}', [AppointmentController::class, 'checkVehicleAvailability'])->name('api.check-vehicle-availability');
@@ -180,7 +184,9 @@ Route::middleware('auth')->group(function () {
         // Export and Bulk Operations
         Route::get('/appointments/export', [AdminAppointmentController::class, 'exportAppointments'])->name('appointments.export');
         Route::get('/appointments/slots/export', [AdminAppointmentController::class, 'exportSlots'])->name('slots.export');
-        Route::post('/appointments/bulk-email', [AdminAppointmentController::class, 'sendBulkEmail'])->name('appointments.bulk-email');
+        Route::post('/appointments/bulk-email', [AdminAppointmentController::class, 'sendBulkEmail'])
+            ->middleware('throttle:5,60')
+            ->name('appointments.bulk-email');
         
         // Schedule Template routes
         Route::get('/schedule-templates', [\App\Http\Controllers\Admin\ScheduleTemplateController::class, 'index'])->name('schedule-templates.index');

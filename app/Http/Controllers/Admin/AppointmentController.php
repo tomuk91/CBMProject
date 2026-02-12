@@ -10,6 +10,7 @@ use App\Models\ActivityLog;
 use App\Enums\AppointmentStatus;
 use App\Enums\SlotStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
 class AppointmentController extends Controller
@@ -19,32 +20,38 @@ class AppointmentController extends Controller
      */
     public function dashboard()
     {
-        $pendingCount = PendingAppointment::where('status', 'pending')->count();
-        
-        // Add cancellation requests to pending count
-        $cancellationRequestsCount = Appointment::where('cancellation_requested', true)
-            ->where('status', '!=', 'cancelled')
-            ->count();
-        
-        $pendingCount += $cancellationRequestsCount;
-        
-        // Get today's appointments count
-        $todayAppointmentsCount = Appointment::where('status', 'confirmed')
-            ->whereDate('appointment_date', today())
-            ->count();
-        
+        $pendingCount = Cache::remember('dashboard_pending_count', 60, function () {
+            $count = PendingAppointment::where('status', 'pending')->count();
+            $count += Appointment::where('cancellation_requested', true)
+                ->where('status', '!=', 'cancelled')
+                ->count();
+            return $count;
+        });
+
+        $todayAppointmentsCount = Cache::remember('dashboard_today_count_' . today()->toDateString(), 120, function () {
+            return Appointment::where('status', 'confirmed')
+                ->whereDate('appointment_date', today())
+                ->count();
+        });
+
         $upcomingAppointments = Appointment::with(['user', 'vehicle'])
             ->where('status', 'confirmed')
             ->where('appointment_date', '>=', now())
             ->orderBy('appointment_date', 'asc')
             ->take(5)
             ->get();
-        $availableSlotsCount = AvailableSlot::where('status', 'available')
-            ->where('start_time', '>=', now())
-            ->count();
-        $bookedSlotsCount = Appointment::where('status', 'confirmed')
-            ->where('appointment_date', '>=', now())
-            ->count();
+
+        $availableSlotsCount = Cache::remember('dashboard_available_slots', 120, function () {
+            return AvailableSlot::where('status', 'available')
+                ->where('start_time', '>=', now())
+                ->count();
+        });
+
+        $bookedSlotsCount = Cache::remember('dashboard_booked_slots', 120, function () {
+            return Appointment::where('status', 'confirmed')
+                ->where('appointment_date', '>=', now())
+                ->count();
+        });
 
         return view('admin.appointments.dashboard', compact('pendingCount', 'todayAppointmentsCount', 'upcomingAppointments', 'availableSlotsCount', 'bookedSlotsCount'));
     }
@@ -264,6 +271,12 @@ class AppointmentController extends Controller
                 $slot->update(['status' => SlotStatus::Available]);
             }
 
+            // Bust dashboard cache
+            Cache::forget('dashboard_pending_count');
+            Cache::forget('dashboard_booked_slots');
+            Cache::forget('dashboard_available_slots');
+            Cache::forget('dashboard_today_count_' . today()->toDateString());
+
             // Check if request expects JSON (AJAX request)
             if (request()->expectsJson()) {
                 return response()->json([
@@ -295,6 +308,9 @@ class AppointmentController extends Controller
         $deletedCount = AvailableSlot::where('status', 'available')
             ->where('start_time', '<', now())
             ->delete();
+
+        // Bust dashboard cache
+        Cache::forget('dashboard_available_slots');
 
         return response()->json([
             'success' => true,

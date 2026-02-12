@@ -11,6 +11,7 @@ use App\Mail\AppointmentStatusChanged;
 use App\Mail\AppointmentRejected;
 use App\Enums\SlotStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -114,6 +115,8 @@ class PendingAppointmentController extends Controller
             }
 
             // Create the confirmed appointment
+            $sanitizedAdminNotes = $request->admin_notes ? strip_tags(clean($request->admin_notes)) : null;
+
             $appointment = Appointment::create([
                 'user_id' => $pendingAppointment->user_id,
                 'available_slot_id' => $slot->id,
@@ -123,8 +126,8 @@ class PendingAppointmentController extends Controller
                 'phone' => $pendingAppointment->phone,
                 'vehicle' => $vehicleInfo,
                 'service' => $pendingAppointment->service,
-                'notes' => $pendingAppointment->notes,
-                'admin_notes' => $request->admin_notes,
+                'notes' => $pendingAppointment->notes ? strip_tags(clean($pendingAppointment->notes)) : null,
+                'admin_notes' => $sanitizedAdminNotes,
                 'appointment_date' => $slot->start_time,
                 'appointment_end' => $slot->end_time,
                 'status' => 'confirmed',
@@ -136,7 +139,7 @@ class PendingAppointmentController extends Controller
             // Update pending appointment status
             $pendingAppointment->update([
                 'status' => 'approved',
-                'admin_notes' => $request->admin_notes,
+                'admin_notes' => $sanitizedAdminNotes,
             ]);
 
             // Log activity
@@ -150,6 +153,12 @@ class PendingAppointmentController extends Controller
             Mail::to($appointment->email)->queue(new AppointmentStatusChanged($appointment, 'pending'));
 
             DB::commit();
+
+            // Bust dashboard cache
+            Cache::forget('dashboard_pending_count');
+            Cache::forget('dashboard_booked_slots');
+            Cache::forget('dashboard_available_slots');
+            Cache::forget('dashboard_today_count_' . today()->toDateString());
 
             return redirect()->back()
                 ->with('success', 'Appointment approved and added to calendar.');
@@ -172,7 +181,7 @@ class PendingAppointmentController extends Controller
 
         $pendingAppointment->update([
             'status' => 'rejected',
-            'admin_notes' => $request->admin_notes,
+            'admin_notes' => $request->admin_notes ? strip_tags(clean($request->admin_notes)) : null,
         ]);
 
         // Log activity
@@ -185,6 +194,10 @@ class PendingAppointmentController extends Controller
 
         // Send rejection email
         Mail::to($pendingAppointment->email)->queue(new AppointmentRejected($pendingAppointment, $request->admin_notes ?? ''));
+
+        // Bust dashboard cache
+        Cache::forget('dashboard_pending_count');
+        Cache::forget('dashboard_available_slots');
 
         return redirect()->back()
             ->with('success', 'Appointment rejected and slot made available again.');
@@ -229,7 +242,7 @@ class PendingAppointmentController extends Controller
                             'phone' => $pendingAppointment->phone,
                             'vehicle' => $vehicleInfo,
                             'service' => $pendingAppointment->service,
-                            'notes' => $pendingAppointment->notes,
+                            'notes' => $pendingAppointment->notes ? strip_tags(clean($pendingAppointment->notes)) : null,
                             'admin_notes' => 'Bulk approved by admin',
                             'appointment_date' => $slot->start_time,
                             'appointment_end' => $slot->end_time,

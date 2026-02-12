@@ -25,20 +25,23 @@ class AppServiceProvider extends ServiceProvider
     {
         // Set Carbon locale to match application locale
         Carbon::setLocale(App::getLocale());
-        
-        // Log slow queries in production (optional - enable if needed)
-        if (config('app.env') === 'production' && config('app.debug') === true) {
+
+        // Prevent N+1 queries in development (strict mode)
+        if (config('app.env') === 'local') {
+            \Illuminate\Database\Eloquent\Model::preventLazyLoading();
+        }
+
+        // Log slow queries in production (queries > 500ms)
+        if (config('app.env') === 'production') {
             DB::listen(function ($query) {
-                if ($query->time > 1000) { // Log queries taking more than 1 second
+                if ($query->time > 500) {
                     Log::warning('Slow Query Detected', [
                         'sql' => $query->sql,
                         'bindings' => $query->bindings,
-                        'time' => $query->time . 'ms'
+                        'time' => $query->time . 'ms',
                     ]);
                 }
             });
         }
-        
-
     }
 }

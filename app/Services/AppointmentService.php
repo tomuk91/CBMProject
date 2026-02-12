@@ -43,8 +43,8 @@ class AppointmentService
                 'phone' => $pendingAppointment->phone,
                 'vehicle' => $vehicleInfo,
                 'service' => $pendingAppointment->service,
-                'notes' => clean($pendingAppointment->notes), // Sanitize notes
-                'admin_notes' => $adminNotes,
+                'notes' => strip_tags(clean($pendingAppointment->notes)), // Sanitize notes
+                'admin_notes' => $adminNotes ? strip_tags(clean($adminNotes)) : null,
                 'appointment_date' => $slot->start_time,
                 'appointment_end' => $slot->end_time,
                 'status' => AppointmentStatus::Confirmed,

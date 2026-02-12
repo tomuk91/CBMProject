@@ -172,7 +172,7 @@ class AppointmentController extends Controller
                     'email' => $request->email,
                     'phone' => $request->phone,
                     'service' => $request->service,
-                    'notes' => $request->notes,
+                    'notes' => $request->notes ? strip_tags(clean($request->notes)) : null,
                     'status' => 'pending',
                 ]);
 
@@ -327,7 +327,7 @@ class AppointmentController extends Controller
         $appointment->update([
             'cancellation_requested' => true,
             'cancellation_requested_at' => now(),
-            'cancellation_reason' => $request->cancellation_reason,
+            'cancellation_reason' => $request->cancellation_reason ? strip_tags(clean($request->cancellation_reason)) : null,
         ]);
 
         // Log cancellation request

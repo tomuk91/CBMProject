@@ -26,13 +26,13 @@ class ContactController extends Controller
         
         $validated = $request->validated();
 
-        // Store the submission in the database
+        // Store the submission in the database (sanitize user input)
         ContactSubmission::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
             'subject' => $validated['subject'],
-            'message' => $validated['message'],
+            'message' => strip_tags(clean($validated['message'])),
         ]);
 
         // Send email notification to admin

@@ -33,6 +33,11 @@ class VehicleController extends Controller
 
         $validated['user_id'] = Auth::id();
         
+        // Sanitize free-text fields
+        if (isset($validated['notes'])) {
+            $validated['notes'] = strip_tags(clean($validated['notes']));
+        }
+
         // If this is the first vehicle, make it primary
         if (Auth::user()->vehicles()->count() === 0) {
             $validated['is_primary'] = true;
@@ -110,6 +115,11 @@ class VehicleController extends Controller
                     ->withInput()
                     ->with('error', __('messages.image_upload_failed'));
             }
+        }
+
+        // Sanitize free-text fields
+        if (isset($validated['notes'])) {
+            $validated['notes'] = strip_tags(clean($validated['notes']));
         }
 
         $vehicle->update($validated);
