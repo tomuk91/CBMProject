@@ -128,6 +128,32 @@
                 @endif
                 @endauth
 
+                <!-- Help Guides Toggle (Admin Only) -->
+                @auth
+                @if(Auth::user()->is_admin && Route::is('admin.*'))
+                <div x-data="{ helpActive: {{ Auth::user()->show_help_guides ? 'true' : 'false' }}, toggling: false }" class="relative">
+                    <button @click="
+                        if (toggling) return;
+                        toggling = true;
+                        fetch('{{ route('admin.help-guides.toggle') }}', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Accept': 'application/json' }
+                        }).then(r => r.json()).then(d => { window.location.reload(); }).catch(() => { toggling = false; })
+                    "
+                    type="button"
+                    class="relative p-2 rounded-lg transition-all duration-200"
+                    :class="helpActive ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 ring-1 ring-red-200 dark:ring-red-800' : 'text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700'"
+                    :aria-pressed="helpActive.toString()"
+                    :title="helpActive ? '{{ __('messages.help_guides_disable') }}' : '{{ __('messages.help_guides_enable') }}'">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                        </svg>
+                        <span x-show="helpActive" x-transition class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-gray-800"></span>
+                    </button>
+                </div>
+                @endif
+                @endauth
+
                 <!-- Language Toggle -->
                 <div class="lang-toggle">
                     <a href="{{ route('language.switch', 'hu') }}" class="{{ app()->getLocale() == 'hu' ? 'active' : '' }}">

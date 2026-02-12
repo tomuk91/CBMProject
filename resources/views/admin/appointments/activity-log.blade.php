@@ -2,6 +2,7 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('messages.activity_log_title') }}
+            <x-help-hint :text="__('messages.help_activity_log')" position="bottom" />
         </h2>
     </x-slot>
 
@@ -9,7 +10,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 space-y-6">
             
             <!-- Filters -->
-            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+            <div data-tour="activitylog-filters" class="bg-white dark:bg-gray-800 shadow-sm rounded-xl border border-gray-100 dark:border-gray-700 p-6">
                 <form method="GET" action="{{ route('admin.appointments.activityLog') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
                         <label for="action" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
@@ -45,7 +46,7 @@
             </div>
 
             <!-- Activity Log -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
+            <div data-tour="activitylog-list" class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-xl border border-gray-100 dark:border-gray-700">
                 <div class="p-6">
                     @if ($activities->isEmpty())
                         <div class="text-center py-16">
@@ -128,4 +129,38 @@
             </div>
         </div>
     </div>
+
+    @include('admin.partials.tour', [
+        'tourPage' => 'activity-log',
+        'tourSteps' => [
+            [
+                'target' => null,
+                'title' => __('messages.tour_activitylog_welcome_title'),
+                'description' => __('messages.tour_activitylog_welcome_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>',
+                'position' => 'center',
+            ],
+            [
+                'target' => '[data-tour="activitylog-filters"]',
+                'title' => __('messages.tour_activitylog_filters_title'),
+                'description' => __('messages.tour_activitylog_filters_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/></svg>',
+                'position' => 'bottom',
+            ],
+            [
+                'target' => '[data-tour="activitylog-list"]',
+                'title' => __('messages.tour_activitylog_list_title'),
+                'description' => __('messages.tour_activitylog_list_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>',
+                'position' => 'top',
+            ],
+            [
+                'target' => null,
+                'title' => __('messages.tour_activitylog_complete_title'),
+                'description' => __('messages.tour_activitylog_complete_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
+                'position' => 'center',
+            ],
+        ],
+    ])
 </x-app-layout>

@@ -3,8 +3,9 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <h2 class="font-semibold text-lg sm:text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('messages.calendar_title') }}
+                <x-help-hint :text="__('messages.help_calendar')" position="bottom" />
             </h2>
-            <div class="flex items-center gap-2 sm:gap-3">
+            <div data-tour="calendar-actions" class="flex items-center gap-2 sm:gap-3">
                 {{-- Actions Dropdown --}}
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open" type="button" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm px-4 py-2.5 rounded-lg transition-all duration-200 font-medium flex items-center gap-2 min-h-[44px]">
@@ -83,9 +84,9 @@
             @endif
 
             {{-- Calendar Card --}}
-            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-100 dark:border-gray-700">
+            <div data-tour="calendar-view" class="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-100 dark:border-gray-700">
                 {{-- Toolbar --}}
-                <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                <div data-tour="calendar-toolbar" class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         {{-- Left: Filter Toggle & Quick Filters --}}
                         <div class="flex items-center gap-3">
@@ -1136,4 +1137,45 @@
             </div>
         </div>
     </div>
+
+    @include('admin.partials.tour', [
+        'tourPage' => 'calendar',
+        'tourSteps' => [
+            [
+                'target' => null,
+                'title' => __('messages.tour_calendar_welcome_title'),
+                'description' => __('messages.tour_calendar_welcome_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>',
+                'position' => 'center',
+            ],
+            [
+                'target' => '[data-tour="calendar-actions"]',
+                'title' => __('messages.tour_calendar_actions_title'),
+                'description' => __('messages.tour_calendar_actions_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4z"/></svg>',
+                'position' => 'bottom',
+            ],
+            [
+                'target' => '[data-tour="calendar-toolbar"]',
+                'title' => __('messages.tour_calendar_toolbar_title'),
+                'description' => __('messages.tour_calendar_toolbar_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/></svg>',
+                'position' => 'bottom',
+            ],
+            [
+                'target' => '[data-tour="calendar-view"]',
+                'title' => __('messages.tour_calendar_view_title'),
+                'description' => __('messages.tour_calendar_view_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>',
+                'position' => 'top',
+            ],
+            [
+                'target' => null,
+                'title' => __('messages.tour_calendar_complete_title'),
+                'description' => __('messages.tour_calendar_complete_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
+                'position' => 'center',
+            ],
+        ],
+    ])
 </x-app-layout>

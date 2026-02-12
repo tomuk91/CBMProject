@@ -1710,4 +1710,128 @@ return [
 
     // File upload
     'your_file' => 'Your file',
+
+    // Help Guides System
+    'help_guides_enable' => 'Enable help guides',
+    'help_guides_disable' => 'Disable help guides',
+    'help_hint_label' => 'Help information',
+
+    // Help Hints (contextual tooltips shown when help guides are enabled)
+    'help_dashboard' => 'Your central hub — see pending requests, available slots, and today\'s appointments at a glance. Use the sidebar to navigate.',
+    'help_calendar' => 'View all appointments in a calendar format. Click appointments to see details, use filters to narrow results, and export data.',
+    'help_pending' => 'Review and approve or reject new booking requests. Cancellation requests also appear here for your review.',
+    'help_analytics' => 'Track key metrics like total users, appointment counts, and conversion rates. Change the time period and export data as CSV.',
+    'help_activity_log' => 'A chronological record of all admin actions — approvals, rejections, completions, and deletions. Filter by action type or date.',
+    'help_customers' => 'Browse and search all registered customers. Sort by name, email, registration date, or total bookings.',
+    'help_contact_submissions' => 'Messages from the public contact form. Filter by read/unread status. Click to expand and reply.',
+    'help_notifications' => 'A combined feed of pending approvals, cancellation requests, and system events requiring your attention.',
+    'help_settings' => 'View your current system configuration. Use the quick links below to manage service types, templates, and blocked dates.',
+    'help_service_types' => 'Define the services your business offers. Set names, durations, prices, and toggle active/inactive status.',
+    'help_blocked_dates' => 'Block specific dates to prevent bookings. Useful for holidays, maintenance days, or any day you\'re not available.',
+    'help_slots' => 'Create and manage individual appointment time slots. Slots can be created one at a time, in daily batches, or as weekly recurring patterns.',
+    'help_schedule_templates' => 'Set up recurring slot patterns that automatically generate available time slots. Group templates by day of the week.',
+
+    // Calendar Tour
+    'tour_calendar_welcome_title' => 'Appointment Calendar',
+    'tour_calendar_welcome_description' => 'This is your visual appointment calendar. See all bookings at a glance, manage appointments, and stay organised.',
+    'tour_calendar_actions_title' => 'Calendar Actions',
+    'tour_calendar_actions_description' => 'Export appointments, send bulk emails, or quickly jump to slot management from these action buttons.',
+    'tour_calendar_toolbar_title' => 'Calendar Toolbar',
+    'tour_calendar_toolbar_description' => 'Use filters, toggle full-width mode, show/hide cancelled appointments, and see pending request counts right here.',
+    'tour_calendar_view_title' => 'Calendar View',
+    'tour_calendar_view_description' => 'Click on any appointment to view details or change its status. Drag to reschedule. Colour coding shows the appointment status.',
+    'tour_calendar_complete_title' => 'You\'re All Set!',
+    'tour_calendar_complete_description' => 'You now know how to use the calendar! Keep track of all appointments and manage them visually. Replay this tour anytime.',
+
+    // Pending Tour
+    'tour_pending_welcome_title' => 'Pending Requests',
+    'tour_pending_welcome_description' => 'This page shows all booking requests awaiting your approval. Review, approve, or reject them here.',
+    'tour_pending_filters_title' => 'Search & Filter',
+    'tour_pending_filters_description' => 'Narrow down requests by searching names, filtering by service type, or selecting a date range.',
+    'tour_pending_cancellations_title' => 'Cancellation Requests',
+    'tour_pending_cancellations_description' => 'When customers request to cancel, their requests appear in this highlighted section. Approve or deny each cancellation.',
+    'tour_pending_complete_title' => 'Ready to Review!',
+    'tour_pending_complete_description' => 'You now know how to manage pending requests! Approve or reject bookings and handle cancellations. Replay this tour anytime.',
+
+    // Activity Log Tour
+    'tour_activitylog_welcome_title' => 'Activity Log',
+    'tour_activitylog_welcome_description' => 'The activity log records every admin action — approvals, rejections, completions, and more. A full audit trail.',
+    'tour_activitylog_filters_title' => 'Filter Activities',
+    'tour_activitylog_filters_description' => 'Filter by action type (approved, rejected, completed, etc.) or narrow down by date range to find specific events.',
+    'tour_activitylog_list_title' => 'Activity Timeline',
+    'tour_activitylog_list_description' => 'Each entry shows the action taken, who performed it, and when. Colour coding helps distinguish different action types.',
+    'tour_activitylog_complete_title' => 'All Caught Up!',
+    'tour_activitylog_complete_description' => 'You now know how to review the activity log! Track all admin actions and maintain accountability. Replay this tour anytime.',
+
+    // Analytics Tour
+    'tour_analytics_welcome_title' => 'Analytics Dashboard',
+    'tour_analytics_welcome_description' => 'Get insights into your business performance with key metrics, charts, and trends all in one place.',
+    'tour_analytics_controls_title' => 'Period & Export',
+    'tour_analytics_controls_description' => 'Select a time period (7, 30, or 90 days) to adjust all stats and charts. Export the data as CSV for reporting.',
+    'tour_analytics_stats_title' => 'Key Metrics',
+    'tour_analytics_stats_description' => 'At-a-glance stats including total users, pending appointments, total bookings, cancellation requests, and conversion rate.',
+    'tour_analytics_charts_title' => 'Visual Charts',
+    'tour_analytics_charts_description' => 'Interactive charts show appointment trends over time, popular service types, and booking patterns.',
+    'tour_analytics_complete_title' => 'Data Master!',
+    'tour_analytics_complete_description' => 'You now know how to analyse your business data! Change periods, review metrics, and export reports. Replay this tour anytime.',
+
+    // Customers Tour
+    'tour_customers_welcome_title' => 'Customer Management',
+    'tour_customers_welcome_description' => 'View and manage all registered customers. Search, sort, and review their booking history.',
+    'tour_customers_search_title' => 'Search Customers',
+    'tour_customers_search_description' => 'Search by name, email, or phone number to quickly find a specific customer in your database.',
+    'tour_customers_table_title' => 'Customer List',
+    'tour_customers_table_description' => 'View all customers with sortable columns. See their contact info, registration date, and total bookings at a glance.',
+    'tour_customers_complete_title' => 'All Set!',
+    'tour_customers_complete_description' => 'You now know how to manage customers! Search, sort, and review customer details. Replay this tour anytime.',
+
+    // Contact Submissions Tour
+    'tour_contacts_welcome_title' => 'Contact Submissions',
+    'tour_contacts_welcome_description' => 'Review messages sent through your website\'s contact form. Track read/unread status and respond to enquiries.',
+    'tour_contacts_filter_title' => 'Search & Filter',
+    'tour_contacts_filter_description' => 'Search by name or content, and filter by read/unread status to prioritise new messages.',
+    'tour_contacts_list_title' => 'Message List',
+    'tour_contacts_list_description' => 'Click on any submission to expand it and see the full message, contact details, and respond. Unread messages are highlighted.',
+    'tour_contacts_complete_title' => 'Inbox Ready!',
+    'tour_contacts_complete_description' => 'You now know how to handle contact submissions! Stay on top of enquiries and respond promptly. Replay this tour anytime.',
+
+    // Notifications Tour
+    'tour_notifications_welcome_title' => 'Notifications Centre',
+    'tour_notifications_welcome_description' => 'Stay informed about important events — pending approvals, cancellation requests, and system updates.',
+    'tour_notifications_header_title' => 'Notifications Overview',
+    'tour_notifications_header_description' => 'This banner gives you a quick overview of your notification centre and its purpose.',
+    'tour_notifications_list_title' => 'Notification Feed',
+    'tour_notifications_list_description' => 'Each notification shows the type (pending, cancellation, info), a description, and a link to take action. Click to navigate.',
+    'tour_notifications_complete_title' => 'Stay Informed!',
+    'tour_notifications_complete_description' => 'You now know how notifications work! Check here regularly for items requiring your attention. Replay this tour anytime.',
+
+    // Settings Tour
+    'tour_settings_welcome_title' => 'Admin Settings',
+    'tour_settings_welcome_description' => 'View your system configuration and access quick links to manage different aspects of your service.',
+    'tour_settings_info_title' => 'Configuration Note',
+    'tour_settings_info_description' => 'This banner explains that settings are configured through environment variables. Contact your developer for changes.',
+    'tour_settings_links_title' => 'Quick Links',
+    'tour_settings_links_description' => 'Quickly jump to Service Types, Schedule Templates, Blocked Dates, or Activity Log from these shortcut cards.',
+    'tour_settings_complete_title' => 'Settings Explored!',
+    'tour_settings_complete_description' => 'You now know the settings page! Use quick links to navigate to configuration sections. Replay this tour anytime.',
+
+    // Service Types Tour
+    'tour_servicetypes_welcome_title' => 'Service Types',
+    'tour_servicetypes_welcome_description' => 'Define and manage the services your business offers. Set pricing, durations, and availability.',
+    'tour_servicetypes_create_title' => 'Add Service Type',
+    'tour_servicetypes_create_description' => 'Click this button to create a new service type with a name, description, duration, and price.',
+    'tour_servicetypes_table_title' => 'Service Types List',
+    'tour_servicetypes_table_description' => 'View all your services with their sort order, duration, price, and active status. Click the status badge to toggle a service on or off.',
+    'tour_servicetypes_complete_title' => 'Services Configured!',
+    'tour_servicetypes_complete_description' => 'You now know how to manage service types! Add, edit, and toggle services as your business needs change. Replay this tour anytime.',
+
+    // Blocked Dates Tour
+    'tour_blocked_welcome_title' => 'Blocked Dates',
+    'tour_blocked_welcome_description' => 'Prevent bookings on specific dates — holidays, maintenance days, or any day you\'re unavailable.',
+    'tour_blocked_guidelines_title' => 'How It Works',
+    'tour_blocked_guidelines_description' => 'Expand the guidelines to learn how blocked dates affect your schedule and what happens to existing bookings.',
+    'tour_blocked_form_title' => 'Add a Blocked Date',
+    'tour_blocked_form_description' => 'Select a date and optionally add a reason. The system will prevent any new bookings on that day.',
+    'tour_blocked_complete_title' => 'Dates Protected!',
+    'tour_blocked_complete_description' => 'You now know how to block dates! Keep your schedule accurate by blocking days you\'re unavailable. Replay this tour anytime.',
 ];

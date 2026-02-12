@@ -8,6 +8,7 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('messages.schedule_templates') }}
+                <x-help-hint :text="__('messages.help_schedule_templates')" position="bottom" />
             </h2>
             <div data-tour="templates-header-actions">
                 <a href="{{ route('admin.schedule-templates.create') }}"

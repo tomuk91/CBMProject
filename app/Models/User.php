@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'is_admin',
         'completed_tours',
+        'show_help_guides',
         'phone',
         'address',
         'city',
@@ -53,6 +54,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_admin' => 'boolean',
             'completed_tours' => 'array',
+            'show_help_guides' => 'boolean',
         ];
     }
 

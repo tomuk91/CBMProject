@@ -3,6 +3,7 @@
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('messages.slots_title') }}
+                <x-help-hint :text="__('messages.help_slots')" position="bottom" />
             </h2>
             <div data-tour="slots-header-actions" class="flex flex-wrap gap-2 sm:gap-3">
                 <a href="{{ route('admin.slots.export') }}" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 font-medium flex items-center">

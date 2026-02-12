@@ -3,6 +3,7 @@
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('messages.dashboard_admin') }}
+                <x-help-hint :text="__('messages.help_dashboard')" position="bottom" />
             </h2>
             <div class="text-xs text-gray-500 dark:text-gray-400">
                 {{ now()->format('l, F j, Y') }}

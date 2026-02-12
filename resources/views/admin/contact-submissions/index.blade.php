@@ -3,6 +3,7 @@
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('messages.admin_contact_submissions') }}
+                <x-help-hint :text="__('messages.help_contact_submissions')" position="bottom" />
             </h2>
         </div>
     </x-slot>
@@ -10,7 +11,7 @@
     <div class="py-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 space-y-6">
                 {{-- Search & Filter --}}
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
+                <div data-tour="contacts-filter" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
                     <form method="GET" action="{{ route('admin.contact-submissions.index') }}" class="flex flex-col sm:flex-row gap-4">
                         <div class="flex-1">
                             <input type="text" name="search" value="{{ request('search') }}"
@@ -29,7 +30,7 @@
                 </div>
 
                 {{-- Submissions List --}}
-                <div class="space-y-4">
+                <div data-tour="contacts-list" class="space-y-4">
                     @forelse($submissions as $submission)
                         <div x-data="{ expanded: false }" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden {{ !$submission->is_read ? 'ring-2 ring-red-200 dark:ring-red-900/50' : '' }}">
                             {{-- Header row --}}
@@ -132,4 +133,38 @@
                 </div>
             </div>
     </div>
+
+    @include('admin.partials.tour', [
+        'tourPage' => 'contact-submissions',
+        'tourSteps' => [
+            [
+                'target' => null,
+                'title' => __('messages.tour_contacts_welcome_title'),
+                'description' => __('messages.tour_contacts_welcome_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>',
+                'position' => 'center',
+            ],
+            [
+                'target' => '[data-tour="contacts-filter"]',
+                'title' => __('messages.tour_contacts_filter_title'),
+                'description' => __('messages.tour_contacts_filter_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>',
+                'position' => 'bottom',
+            ],
+            [
+                'target' => '[data-tour="contacts-list"]',
+                'title' => __('messages.tour_contacts_list_title'),
+                'description' => __('messages.tour_contacts_list_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>',
+                'position' => 'top',
+            ],
+            [
+                'target' => null,
+                'title' => __('messages.tour_contacts_complete_title'),
+                'description' => __('messages.tour_contacts_complete_description'),
+                'icon' => '<svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',
+                'position' => 'center',
+            ],
+        ],
+    ])
 </x-app-layout>

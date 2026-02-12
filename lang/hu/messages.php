@@ -1692,4 +1692,128 @@ return [
 
     // Fájl feltöltés
     'your_file' => 'Az Ön fájlja',
+
+    // Segédlet rendszer
+    'help_guides_enable' => 'Segédletek bekapcsolása',
+    'help_guides_disable' => 'Segédletek kikapcsolása',
+    'help_hint_label' => 'Segítő információ',
+
+    // Segédlet szövegek (kontextuális tippek)
+    'help_dashboard' => 'Központi áttekintés — lásd a függőben lévő kéréseket, szabad időpontokat és a mai foglalásokat. Használja az oldalsávot a navigációhoz.',
+    'help_calendar' => 'Tekintse meg az összes foglalást naptár formátumban. Kattintson egy foglalásra a részletekért, szűrjön vagy exportáljon adatokat.',
+    'help_pending' => 'Tekintse át és hagyja jóvá vagy utasítsa el az új foglalási kéréseket. A lemondási kérések is itt jelennek meg.',
+    'help_analytics' => 'Kövesse nyomon a fő mutatókat: összes felhasználó, foglalások száma, konverziós arány. Változtassa az időszakot és exportáljon CSV-be.',
+    'help_activity_log' => 'Az összes adminisztrátori tevékenység időrendi naplója — jóváhagyások, elutasítások, befejezések és törlések. Szűrjön típus vagy dátum szerint.',
+    'help_customers' => 'Böngésszen és keressen az összes regisztrált ügyfél között. Rendezés név, email, regisztráció dátuma vagy foglalások száma szerint.',
+    'help_contact_submissions' => 'A nyilvános kapcsolatfelvételi űrlapon érkezett üzenetek. Szűrjön olvasott/olvasatlan állapot szerint. Kattintson a kibontáshoz és válaszoláshoz.',
+    'help_notifications' => 'Függőben lévő jóváhagyások, lemondási kérések és figyelmet igénylő rendszeresemények egyesített hírfolyama.',
+    'help_settings' => 'Tekintse meg a jelenlegi rendszerkonfigurációt. Használja az alábbi gyorslinkeket a szolgáltatástípusok, sablonok és letiltott dátumok kezeléséhez.',
+    'help_service_types' => 'Határozza meg a vállalkozása által kínált szolgáltatásokat. Állítson be nevet, időtartamot, árat és kapcsolja be/ki az aktív állapotot.',
+    'help_blocked_dates' => 'Tiltson le konkrét dátumokat a foglalások megelőzéséhez. Hasznos ünnepnapokra, karbantartási napokra vagy bármely nem elérhető napra.',
+    'help_slots' => 'Hozzon létre és kezeljen egyedi időpontokat. Az időpontok egyesével, napi kötegekben vagy heti ismétlődő mintákként is létrehozhatók.',
+    'help_schedule_templates' => 'Állítson be ismétlődő időpont-mintákat, amelyek automatikusan generálnak szabad időpontokat. Csoportosítsa a sablonokat hét napja szerint.',
+
+    // Naptár túra
+    'tour_calendar_welcome_title' => 'Foglalási naptár',
+    'tour_calendar_welcome_description' => 'Ez a vizuális foglalási naptárad. Tekints át minden foglalást egy pillantás alatt, kezeld az időpontokat és maradj szervezett.',
+    'tour_calendar_actions_title' => 'Naptár műveletek',
+    'tour_calendar_actions_description' => 'Exportálj foglalásokat, küldj tömeges emaileket, vagy ugorj gyorsan az időpont-kezeléshez ezekkel a gombokkal.',
+    'tour_calendar_toolbar_title' => 'Naptár eszköztár',
+    'tour_calendar_toolbar_description' => 'Használj szűrőket, váltsd a teljes szélességet, jelenítsd meg/rejtsd el a lemondott foglalásokat és lásd a függőben lévő kérések számát.',
+    'tour_calendar_view_title' => 'Naptár nézet',
+    'tour_calendar_view_description' => 'Kattints bármelyik foglalásra a részletekért vagy állapotváltáshoz. Húzd az átütemezéshez. A színkódolás jelzi a foglalás állapotát.',
+    'tour_calendar_complete_title' => 'Minden kész!',
+    'tour_calendar_complete_description' => 'Most már tudod használni a naptárat! Kövesd nyomon és kezeld vizuálisan az összes foglalást. Bármikor újraindíthatod ezt a túrát.',
+
+    // Függőben lévő kérések túra
+    'tour_pending_welcome_title' => 'Függőben lévő kérések',
+    'tour_pending_welcome_description' => 'Ez az oldal mutatja az összes jóváhagyásra váró foglalási kérést. Tekintsd át, hagyd jóvá vagy utasítsd el őket itt.',
+    'tour_pending_filters_title' => 'Keresés és szűrés',
+    'tour_pending_filters_description' => 'Szűkítsd a kéréseket név kereséssel, szolgáltatástípus szűréssel vagy dátumtartomány kiválasztásával.',
+    'tour_pending_cancellations_title' => 'Lemondási kérések',
+    'tour_pending_cancellations_description' => 'Ha az ügyfelek lemondást kérnek, kéréseik ebben a kiemelt szekcióban jelennek meg. Hagyd jóvá vagy utasítsd el a lemondásokat.',
+    'tour_pending_complete_title' => 'Felkészültél!',
+    'tour_pending_complete_description' => 'Most már tudod kezelni a függőben lévő kéréseket! Hagyd jóvá vagy utasítsd el a foglalásokat és kezeld a lemondásokat. Bármikor újraindíthatod.',
+
+    // Tevékenységnapló túra
+    'tour_activitylog_welcome_title' => 'Tevékenységnapló',
+    'tour_activitylog_welcome_description' => 'A tevékenységnapló rögzíti az összes adminisztrátori műveletet — jóváhagyások, elutasítások, befejezések és egyebek. Teljes audit nyomvonal.',
+    'tour_activitylog_filters_title' => 'Tevékenységek szűrése',
+    'tour_activitylog_filters_description' => 'Szűrj művelettípus (jóváhagyott, elutasított, befejezett, stb.) vagy dátumtartomány szerint konkrét események megkereséséhez.',
+    'tour_activitylog_list_title' => 'Tevékenység idővonal',
+    'tour_activitylog_list_description' => 'Minden bejegyzés mutatja a végrehajtott műveletet, ki végezte és mikor. A színkódolás segít megkülönböztetni a különböző típusokat.',
+    'tour_activitylog_complete_title' => 'Naprakész vagy!',
+    'tour_activitylog_complete_description' => 'Most már tudod áttekinteni a tevékenységnaplót! Kövesd nyomon az összes adminisztrátori műveletet. Bármikor újraindíthatod.',
+
+    // Analitika túra
+    'tour_analytics_welcome_title' => 'Analitika irányítópult',
+    'tour_analytics_welcome_description' => 'Nyerj betekintést vállalkozásod teljesítményébe a fő mutatókkal, diagramokkal és trendekkel egy helyen.',
+    'tour_analytics_controls_title' => 'Időszak és exportálás',
+    'tour_analytics_controls_description' => 'Válassz időszakot (7, 30 vagy 90 nap) az összes statisztika és diagram frissítéséhez. Exportáld az adatokat CSV-be jelentésekhez.',
+    'tour_analytics_stats_title' => 'Fő mutatók',
+    'tour_analytics_stats_description' => 'Gyors áttekintésű statisztikák: összes felhasználó, függőben lévő foglalások, összes foglalás, lemondási kérések és konverziós arány.',
+    'tour_analytics_charts_title' => 'Vizuális diagramok',
+    'tour_analytics_charts_description' => 'Interaktív diagramok mutatják a foglalási trendeket, népszerű szolgáltatástípusokat és foglalási mintákat.',
+    'tour_analytics_complete_title' => 'Adatmester!',
+    'tour_analytics_complete_description' => 'Most már tudod elemezni vállalkozásod adatait! Változtasd az időszakot, tekintsd át a mutatókat és exportálj jelentéseket. Bármikor újraindíthatod.',
+
+    // Ügyfelek túra
+    'tour_customers_welcome_title' => 'Ügyfélkezelés',
+    'tour_customers_welcome_description' => 'Tekintsd meg és kezeld az összes regisztrált ügyfelet. Keress, rendezz és tekintsd át foglalási előzményeiket.',
+    'tour_customers_search_title' => 'Ügyfelek keresése',
+    'tour_customers_search_description' => 'Keress név, email vagy telefonszám alapján egy konkrét ügyfél gyors megtalálásához az adatbázisban.',
+    'tour_customers_table_title' => 'Ügyféllista',
+    'tour_customers_table_description' => 'Tekintsd meg az összes ügyfelet rendezhető oszlopokkal. Lásd a kapcsolattartási adatokat, regisztráció dátumát és foglalások számát.',
+    'tour_customers_complete_title' => 'Minden kész!',
+    'tour_customers_complete_description' => 'Most már tudod kezelni az ügyfeleket! Keress, rendezz és tekintsd át az ügyfél adatokat. Bármikor újraindíthatod.',
+
+    // Kapcsolatfelvételi beküldések túra
+    'tour_contacts_welcome_title' => 'Kapcsolatfelvételi beküldések',
+    'tour_contacts_welcome_description' => 'Tekintsd át a weboldal kapcsolatfelvételi űrlapján érkezett üzeneteket. Kövesd az olvasott/olvasatlan állapotot és válaszolj a megkeresésekre.',
+    'tour_contacts_filter_title' => 'Keresés és szűrés',
+    'tour_contacts_filter_description' => 'Keress név vagy tartalom alapján, és szűrj olvasott/olvasatlan állapot szerint az új üzenetek priorizálásához.',
+    'tour_contacts_list_title' => 'Üzenetlista',
+    'tour_contacts_list_description' => 'Kattints bármelyik beküldésre a kibontásához és a teljes üzenet, kapcsolattartási adatok megtekintéséhez és válaszoláshoz. Az olvasatlan üzenetek kiemeltek.',
+    'tour_contacts_complete_title' => 'Postaláda készen áll!',
+    'tour_contacts_complete_description' => 'Most már tudod kezelni a kapcsolatfelvételi beküldéseket! Maradj naprakész és válaszolj azonnal. Bármikor újraindíthatod.',
+
+    // Értesítések túra
+    'tour_notifications_welcome_title' => 'Értesítési központ',
+    'tour_notifications_welcome_description' => 'Maradj tájékozott a fontos eseményekről — függőben lévő jóváhagyások, lemondási kérések és rendszerfrissítések.',
+    'tour_notifications_header_title' => 'Értesítések áttekintése',
+    'tour_notifications_header_description' => 'Ez a fejléc gyors áttekintést ad az értesítési központról és céljáról.',
+    'tour_notifications_list_title' => 'Értesítési hírfolyam',
+    'tour_notifications_list_description' => 'Minden értesítés mutatja a típust (függőben, lemondás, információ), leírást és cselekvési linket. Kattints a navigáláshoz.',
+    'tour_notifications_complete_title' => 'Maradj tájékozott!',
+    'tour_notifications_complete_description' => 'Most már tudod hogyan működnek az értesítések! Nézd meg rendszeresen a figyelmet igénylő tételeket. Bármikor újraindíthatod.',
+
+    // Beállítások túra
+    'tour_settings_welcome_title' => 'Admin beállítások',
+    'tour_settings_welcome_description' => 'Tekintsd meg a rendszerkonfigurációt és érd el a gyorslinkeket a szolgáltatásod különböző aspektusainak kezeléséhez.',
+    'tour_settings_info_title' => 'Konfigurációs megjegyzés',
+    'tour_settings_info_description' => 'Ez a szalag elmagyarázza, hogy a beállítások környezeti változókon keresztül vannak konfigurálva. Változtatásokért lépj kapcsolatba a fejlesztőddel.',
+    'tour_settings_links_title' => 'Gyorslinkek',
+    'tour_settings_links_description' => 'Ugorj gyorsan a Szolgáltatástípusokhoz, Ütemezési sablonokhoz, Letiltott dátumokhoz vagy a Tevékenységnaplóhoz ezekről a kártyákról.',
+    'tour_settings_complete_title' => 'Beállítások felfedezve!',
+    'tour_settings_complete_description' => 'Most már ismered a beállítások oldalt! Használd a gyorslinkeket a konfigurációs szekciókhoz. Bármikor újraindíthatod.',
+
+    // Szolgáltatástípusok túra
+    'tour_servicetypes_welcome_title' => 'Szolgáltatástípusok',
+    'tour_servicetypes_welcome_description' => 'Határozd meg és kezeld a vállalkozásod által kínált szolgáltatásokat. Állítsd be az árakat, időtartamokat és elérhetőséget.',
+    'tour_servicetypes_create_title' => 'Szolgáltatástípus hozzáadása',
+    'tour_servicetypes_create_description' => 'Kattints erre a gombra egy új szolgáltatástípus létrehozásához névvel, leírással, időtartammal és árral.',
+    'tour_servicetypes_table_title' => 'Szolgáltatástípusok listája',
+    'tour_servicetypes_table_description' => 'Tekintsd meg az összes szolgáltatást a sorrend, időtartam, ár és aktív állapot oszlopokkal. Kattints az állapot jelvényre a ki/bekapcsoláshoz.',
+    'tour_servicetypes_complete_title' => 'Szolgáltatások konfigurálva!',
+    'tour_servicetypes_complete_description' => 'Most már tudod kezelni a szolgáltatástípusokat! Adj hozzá, szerkessz és kapcsold be/ki a szolgáltatásokat. Bármikor újraindíthatod.',
+
+    // Letiltott dátumok túra
+    'tour_blocked_welcome_title' => 'Letiltott dátumok',
+    'tour_blocked_welcome_description' => 'Akadályozd meg a foglalásokat konkrét dátumokon — ünnepnapok, karbantartási napok vagy bármely nem elérhető nap.',
+    'tour_blocked_guidelines_title' => 'Hogyan működik',
+    'tour_blocked_guidelines_description' => 'Bontsd ki az útmutatót, hogy megtudd, hogyan hatnak a letiltott dátumok az ütemtervedre és mi történik a meglévő foglalásokkal.',
+    'tour_blocked_form_title' => 'Letiltott dátum hozzáadása',
+    'tour_blocked_form_description' => 'Válassz egy dátumot és opcionálisan adj meg egy okot. A rendszer megakadályozza az új foglalásokat azon a napon.',
+    'tour_blocked_complete_title' => 'Dátumok védve!',
+    'tour_blocked_complete_description' => 'Most már tudod letiltani a dátumokat! Tartsd pontosan az ütemterved a nem elérhető napok blokkolásával. Bármikor újraindíthatod.',
 ];

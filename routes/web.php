@@ -223,7 +223,7 @@ Route::middleware('auth')->group(function () {
 
         // Admin Tour
         Route::post('/tour/{page}/complete', function (string $page) {
-            $allowed = ['dashboard', 'slots', 'schedule-templates'];
+            $allowed = ['dashboard', 'slots', 'schedule-templates', 'calendar', 'pending', 'activity-log', 'analytics', 'customers', 'contact-submissions', 'notifications', 'settings', 'service-types', 'blocked-dates'];
             if (!in_array($page, $allowed)) {
                 return response()->json(['error' => 'Invalid page'], 422);
             }
@@ -231,13 +231,20 @@ Route::middleware('auth')->group(function () {
             return response()->json(['success' => true]);
         })->name('tour.complete');
         Route::post('/tour/{page}/reset', function (string $page) {
-            $allowed = ['dashboard', 'slots', 'schedule-templates'];
+            $allowed = ['dashboard', 'slots', 'schedule-templates', 'calendar', 'pending', 'activity-log', 'analytics', 'customers', 'contact-submissions', 'notifications', 'settings', 'service-types', 'blocked-dates'];
             if (!in_array($page, $allowed)) {
                 return response()->json(['error' => 'Invalid page'], 422);
             }
             auth()->user()->resetTour($page);
             return response()->json(['success' => true]);
         })->name('tour.reset');
+
+        // Help Guides Toggle
+        Route::post('/help-guides/toggle', function () {
+            $user = auth()->user();
+            $user->update(['show_help_guides' => !$user->show_help_guides]);
+            return response()->json(['show_help_guides' => $user->show_help_guides]);
+        })->name('help-guides.toggle');
 
         // API endpoint to get user vehicles
         Route::get('/api/users/{user}/vehicles', function(\App\Models\User $user) {
