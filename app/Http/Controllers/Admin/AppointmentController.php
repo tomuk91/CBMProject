@@ -242,6 +242,11 @@ class AppointmentController extends Controller
         // This allows the scheduled command to send a reminder 1 year after completion
         if ($appointment->service === 'MOT Service') {
             $appointment->update(['reminder_sent_at' => null]);
+            
+            // Update the user's MOT next due date
+            if ($appointment->user_id) {
+                $appointment->user->updateMOTNextDue();
+            }
         }
 
         return response()->json([

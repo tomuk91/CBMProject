@@ -25,36 +25,59 @@
                             <div class="flex-shrink-0 h-16 w-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
                                 <span class="text-red-600 dark:text-red-400 font-bold text-2xl">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                             </div>
-                            <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.name') }}</p>
-                                    <p class="text-gray-900 dark:text-gray-100 font-medium">{{ $user->name }}</p>
+                            <div class="flex-1">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.name') }}</p>
+                                        <p class="text-gray-900 dark:text-gray-100 font-medium">{{ $user->name }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.email') }}</p>
+                                        <p class="text-gray-900 dark:text-gray-100">{{ $user->email }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.phone') }}</p>
+                                        <p class="text-gray-900 dark:text-gray-100">{{ $user->phone ?? '—' }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.profile_address') }}</p>
+                                        <p class="text-gray-900 dark:text-gray-100">
+                                            @if($user->address || $user->city)
+                                                {{ $user->address }}{{ $user->city ? ', ' . $user->city : '' }}{{ $user->postal_code ? ' ' . $user->postal_code : '' }}
+                                            @else
+                                                —
+                                            @endif
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.admin_customer_since') }}</p>
+                                        <p class="text-gray-900 dark:text-gray-100">{{ $user->created_at->format('Y-m-d') }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.admin_total_bookings') }}</p>
+                                        <p class="text-red-600 dark:text-red-400 font-bold text-lg">{{ $user->appointments->count() }}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.email') }}</p>
-                                    <p class="text-gray-900 dark:text-gray-100">{{ $user->email }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.phone') }}</p>
-                                    <p class="text-gray-900 dark:text-gray-100">{{ $user->phone ?? '—' }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.profile_address') }}</p>
-                                    <p class="text-gray-900 dark:text-gray-100">
-                                        @if($user->address || $user->city)
-                                            {{ $user->address }}{{ $user->city ? ', ' . $user->city : '' }}{{ $user->postal_code ? ' ' . $user->postal_code : '' }}
+
+                                {{-- MOT Next Due Section --}}
+                                <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold mb-2">{{ __('messages.admin_mot_next_due') }}</p>
+                                    @if($user->mot_next_due === 'Unknown')
+                                        <p class="text-gray-600 dark:text-gray-300 font-medium">{{ $user->mot_next_due }}</p>
+                                    @else
+                                        @php
+                                            $motDate = \Carbon\Carbon::parse($user->mot_next_due);
+                                            $daysUntil = (int) now()->diffInDays($motDate, false);
+                                        @endphp
+                                        <p class="text-gray-900 dark:text-gray-100 font-medium">{{ $motDate->format('d M Y') }}</p>
+                                        @if($daysUntil < 0)
+                                            <p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ __('messages.admin_mot_overdue', ['days' => abs($daysUntil)]) }}</p>
+                                        @elseif($daysUntil <= 30)
+                                            <p class="text-xs text-orange-600 dark:text-orange-400 mt-1">{{ __('messages.admin_mot_due_soon', ['days' => $daysUntil]) }}</p>
                                         @else
-                                            —
+                                            <p class="text-xs text-green-600 dark:text-green-400 mt-1">{{ __('messages.admin_mot_current', ['days' => $daysUntil]) }}</p>
                                         @endif
-                                    </p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.admin_customer_since') }}</p>
-                                    <p class="text-gray-900 dark:text-gray-100">{{ $user->created_at->format('Y-m-d') }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">{{ __('messages.admin_total_bookings') }}</p>
-                                    <p class="text-red-600 dark:text-red-400 font-bold text-lg">{{ $user->appointments->count() }}</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>

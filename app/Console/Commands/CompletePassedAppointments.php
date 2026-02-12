@@ -65,6 +65,11 @@ class CompletePassedAppointments extends Command
             // Send follow-up email
             Mail::to($appointment->email)->queue(new AppointmentCompleted($appointment));
 
+            // For MOT appointments, update user's MOT next due date
+            if ($appointment->service === 'MOT Service' && $appointment->user_id) {
+                $appointment->user->updateMOTNextDue();
+            }
+
             $completed++;
         }
 

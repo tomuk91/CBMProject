@@ -37,6 +37,7 @@ class SendMOTReminders extends Command
         // We'll look for appointments where 1 year - $daysAhead days has passed
         $expiryThreshold = now()->subYear()->addDays($daysAhead);
         
+        // Load full Appointment models with relationships for email mailable
         $appointments = Appointment::with(['user', 'vehicle'])
             ->where('status', 'completed')
             ->where('service', 'MOT Service')

@@ -30,6 +30,7 @@ class User extends Authenticatable
         'city',
         'postal_code',
         'country',
+        'mot_next_due',
     ];
 
     /**
@@ -118,5 +119,26 @@ class User extends Authenticatable
     public function activityLogs(): HasMany
     {
         return $this->hasMany(ActivityLog::class);
+    }
+
+    /**
+     * Update the MOT next due date based on the most recent completed MOT appointment.
+     */
+    public function updateMOTNextDue(): void
+    {
+        $lastMOT = $this->appointments()
+            ->where('service', 'MOT Service')
+            ->where('status', 'completed')
+            ->orderBy('appointment_date', 'desc')
+            ->first();
+
+        if ($lastMOT) {
+            // Calculate next due date (1 year from completion)
+            $nextDue = \Carbon\Carbon::parse($lastMOT->appointment_date)->addYear()->format('Y-m-d');
+            $this->update(['mot_next_due' => $nextDue]);
+        } else {
+            // No MOT found, set to Unknown
+            $this->update(['mot_next_due' => 'Unknown']);
+        }
     }
 }
