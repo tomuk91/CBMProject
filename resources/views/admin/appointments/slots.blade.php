@@ -538,8 +538,9 @@
             </script>
 
             <!-- Conflict Warning Modal -->
-            <div id="conflictModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
-                <div class="relative mx-auto w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all border border-gray-200 dark:border-gray-700">
+            <div id="conflictModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm z-50 overflow-y-auto">
+                <div class="min-h-screen px-4 py-6 flex items-start sm:items-center justify-center">
+                <div class="relative w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all border border-gray-200 dark:border-gray-700 my-4 max-h-[calc(100vh-3rem)] overflow-y-auto">
                     <!-- Modal Header -->
                     <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-t-xl px-6 py-5">
                         <div class="flex items-center space-x-3">
@@ -587,6 +588,7 @@
                             {{ __('messages.proceed_anyway') }}
                         </button>
                     </div>
+                </div>
                 </div>
             </div>
 
@@ -894,8 +896,9 @@
             </div>
 
             <!-- Book Appointment Modal -->
-            <div id="bookingModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
-                <div class="relative mx-auto w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all border border-gray-200 dark:border-gray-700">
+            <div id="bookingModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm z-50 overflow-y-auto">
+                <div class="min-h-screen px-4 py-6 flex items-start sm:items-center justify-center">
+                    <div class="relative w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all border border-gray-200 dark:border-gray-700 my-4 max-h-[calc(100vh-3rem)] overflow-y-auto">
                     <!-- Modal Header -->
                     <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-xl px-6 py-5">
                         <div class="flex items-center justify-between">
@@ -1190,6 +1193,7 @@
                             </button>
                         </div>
                     </form>
+                </div>
                 </div>
             </div>
 

@@ -1671,6 +1671,16 @@ return [
     'email_completed_cta' => 'Book Another Appointment',
     'email_completed_thanks' => 'Thank you for choosing :app. We look forward to serving you again!',
 
+    // MOT Reminder email
+    'email_mot_reminder_subject' => 'Your MOT is Due for Renewal - :app',
+    'email_mot_reminder_heading' => 'Your MOT is Due!',
+    'email_mot_reminder_body' => 'It\'s time to renew your MOT! Your previous MOT was completed one year ago and is now due for renewal. Please book an appointment at your earliest convenience to ensure your vehicle remains roadworthy and compliant.',
+    'email_mot_reminder_details_title' => 'MOT Details',
+    'email_label_date_completed' => 'Date Completed:',
+    'email_label_expires' => 'Expires:',
+    'email_mot_reminder_action' => 'Don\'t let your MOT lapse! Book your renewal appointment now to maintain your vehicle\'s certification and stay safe on the road.',
+    'email_cta_book_mot' => 'Book MOT Renewal',
+
     // Service Types admin CRUD
     'sidebar_service_types' => 'Service Types',
     'service_types_title' => 'Service Types',

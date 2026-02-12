@@ -1653,6 +1653,16 @@ return [
     'email_completed_cta' => 'Új időpont foglalása',
     'email_completed_thanks' => 'Köszönjük, hogy a :app szolgáltatásait választotta. Várjuk Önt legközelebb is!',
 
+    // MOT emlékeztetõ email
+    'email_mot_reminder_subject' => 'Az Ön MOT vizsgája esedékes - :app',
+    'email_mot_reminder_heading' => 'Az Ön MOT vizsgája esedékes!',
+    'email_mot_reminder_body' => 'Ideje megújítani az MOT vizsgáját! Az előző MOT vizsgája egy évvel ezelõtt készült el, és mostantól esedékes. Kérjük, foglaljon időpontot a lehető leghamarabb, hogy járműve továbbra is megfeleljen az előírásoknak.',
+    'email_mot_reminder_details_title' => 'MOT adatok',
+    'email_label_date_completed' => 'Elkészülés dátuma:',
+    'email_label_expires' => 'Lejár:',
+    'email_mot_reminder_action' => 'Ne hagyja, hogy az MOT vizsgája lejárjon! Foglaljon új vizsgálatra most, hogy járműve továbbra is megfeleljen az előírásoknak.',
+    'email_cta_book_mot' => 'MOT vizsgálat foglalása',
+
     // Szolgáltatástípusok admin CRUD
     'sidebar_service_types' => 'Szolgáltatások',
     'service_types_title' => 'Szolgáltatástípusok',

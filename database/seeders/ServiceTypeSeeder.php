@@ -14,6 +14,15 @@ class ServiceTypeSeeder extends Seeder
     {
         $services = [
             [
+                'name' => 'MOT Service',
+                'icon' => '🚗',
+                'description' => 'Ministry of Transport (MOT) compliance test and certification. Valid for 1 year. We will remind you when your MOT is due for renewal.',
+                'estimated_duration' => '45-60 min',
+                'price_from' => null,
+                'price_to' => null,
+                'sort_order' => 0,
+            ],
+            [
                 'name' => 'Oil Change',
                 'icon' => '🛢️',
                 'description' => 'Complete oil change with filter replacement',

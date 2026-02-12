@@ -238,6 +238,12 @@ class AppointmentController extends Controller
         // Send completion follow-up email
         Mail::to($appointment->email)->queue(new AppointmentCompleted($appointment));
 
+        // For MOT appointments, reset reminder_sent_at so the yearly reminder can be scheduled
+        // This allows the scheduled command to send a reminder 1 year after completion
+        if ($appointment->service === 'MOT Service') {
+            $appointment->update(['reminder_sent_at' => null]);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Appointment marked as completed.',

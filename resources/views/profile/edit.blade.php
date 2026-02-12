@@ -451,8 +451,9 @@
     </div>
 
     <!-- Account Deletion Confirmation Modal -->
-    <div id="deletionModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
-        <div class="relative mx-auto w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-h-[calc(100vh-2rem)] overflow-y-auto">
+    <div id="deletionModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm z-50 overflow-y-auto">
+        <div class="min-h-screen px-4 py-6 flex items-start sm:items-center justify-center">
+        <div class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 my-4 max-h-[calc(100vh-3rem)] overflow-y-auto">
             <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-xl px-6 py-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-xl font-bold text-white">{{ __('messages.gdpr_delete_confirm_title') }}</h3>
@@ -503,6 +504,7 @@
                     </div>
                 </form>
             </div>
+        </div>
         </div>
     </div>
 

@@ -210,9 +210,9 @@
     </div>
 
     <!-- Appointment Details Modal -->
-    <div id="appointmentModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full z-50 backdrop-blur-sm">
-        <div class="relative top-4 sm:top-20 mx-auto p-2 sm:p-1 w-full max-w-lg">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden max-h-[calc(100vh-2rem)] overflow-y-auto">
+    <div id="appointmentModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 z-50 overflow-y-auto backdrop-blur-sm">
+        <div class="min-h-screen px-4 py-6 flex items-start sm:items-center justify-center">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden w-full max-w-lg my-4 max-h-[calc(100vh-3rem)] overflow-y-auto">
                 <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
                     <h3 class="text-xl font-bold text-white flex items-center">
                         <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -250,9 +250,9 @@
     </div>
 
     <!-- Drag/Drop Confirmation Modal -->
-    <div id="rescheduleModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full z-50 backdrop-blur-sm">
-        <div class="relative top-4 sm:top-20 mx-auto p-2 sm:p-1 w-full max-w-md">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div id="rescheduleModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 z-50 overflow-y-auto backdrop-blur-sm">
+        <div class="min-h-screen px-4 py-6 flex items-start sm:items-center justify-center">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden w-full max-w-md my-4 max-h-[calc(100vh-3rem)] overflow-y-auto">
                 <!-- Modal Header -->
                 <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-t-xl px-6 py-4">
                     <div class="flex items-center space-x-3">
@@ -1042,8 +1042,9 @@
     </script>
 
     <!-- Bulk Email Modal -->
-    <div id="bulkEmailModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4">
-        <div class="relative mx-auto w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700">
+    <div id="bulkEmailModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm z-50 overflow-y-auto">
+        <div class="min-h-screen px-4 py-6 flex items-start sm:items-center justify-center">
+        <div class="relative w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 my-4 max-h-[calc(100vh-3rem)] overflow-y-auto">
             <!-- Modal Header -->
             <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 rounded-t-xl">
                 <div class="flex items-center justify-between">
@@ -1135,6 +1136,7 @@
                     </div>
                 </form>
             </div>
+        </div>
         </div>
     </div>
 
