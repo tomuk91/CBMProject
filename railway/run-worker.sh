@@ -2,6 +2,11 @@
 # Queue worker optimized for Railway
 # Make sure this file has executable permissions
 
+# Exit on error so Railway shows the failure
+set -e
+
+echo "[$(date)] Starting Laravel queue worker"
+
 # Run with restart limits to prevent memory leaks
 # --verbose: Output detailed logs to stdout for Railway
 # --tries=3: Retry failed jobs 3 times
@@ -9,7 +14,7 @@
 # --sleep=3: Sleep 3 seconds when queue is empty (reduces database polling)
 # --max-time=3600: Restart worker after 1 hour (prevents memory accumulation)
 
-php artisan queue:work \
+exec php artisan queue:work \
   --verbose \
   --tries=3 \
   --timeout=90 \
