@@ -5,7 +5,7 @@
 # Exit on error so Railway shows the failure
 set -e
 
-echo "[$(date)] Starting Laravel queue worker"
+echo "[$(date)] Starting Laravel queue worker..."
 
 # Run with restart limits to prevent memory leaks
 # --verbose: Output detailed logs to stdout for Railway
