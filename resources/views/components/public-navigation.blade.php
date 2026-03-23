@@ -12,7 +12,7 @@
             <!-- Logo -->
             <div class="flex items-center">
                 <a href="{{ route('home') }}" class="flex items-center" aria-label="{{ __('messages.go_to_home') }}">
-                    <img src="{{ asset('images/logo.png') }}" alt="CBM Auto" class="h-16 w-auto max-w-none">
+                    <img src="{{ asset('images/logo-white.png') }}" alt="CBM Auto" class="h-16 w-auto max-w-none">
                 </a>
             </div>
 

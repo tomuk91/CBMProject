@@ -19,7 +19,7 @@
                 <!-- Logo -->
                 <div class="flex items-center">
                     <a href="/" class="flex items-center">
-                        <img src="{{ asset('images/logo.png') }}" alt="CBM Auto" class="h-20 w-auto max-w-none">
+                        <img src="{{ asset('images/logo-white.png') }}" alt="CBM Auto" class="h-20 w-auto max-w-none">
                     </a>
                 </div>
 

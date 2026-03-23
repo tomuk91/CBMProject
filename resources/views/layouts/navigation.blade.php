@@ -67,7 +67,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" aria-label="{{ __('messages.go_to_dashboard') }}">
-                        <img src="{{ asset('images/logo.png') }}" alt="CBM Auto {{ __('messages.logo_alt') }}" class="h-10 w-auto">
+                        <img src="{{ asset('images/logo-white.png') }}" alt="CBM Auto {{ __('messages.logo_alt') }}" class="h-10 w-auto">
                     </a>
                 </div>
 
