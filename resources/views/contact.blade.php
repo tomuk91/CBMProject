@@ -154,7 +154,7 @@
                         }
                     });
                 })();
-                <\/script>
+                </script>
 
                 <div>
                     <label for="message" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
