@@ -23,7 +23,7 @@
         </div>
 
         <!-- Modal Body -->
-        <form id="vehicleForm" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+        <form id="vehicleForm" method="POST" class="p-6 space-y-6">
             @csrf
             <input type="hidden" id="vehicleMethod" name="_method" value="POST">
 
@@ -56,17 +56,22 @@
                         <label for="make" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.vehicle_make') }} <span class="text-red-600">*</span>
                         </label>
-                        <input type="text" id="make" name="make" required
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                               placeholder="e.g., Toyota">
+                        <select id="make" name="make" required
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                            <option value="">{{ __('messages.vehicle_select_make') }}</option>
+                            @foreach($carMakes as $carMake)
+                                <option value="{{ $carMake->name }}" data-make-id="{{ $carMake->id }}">{{ $carMake->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
                         <label for="model" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.vehicle_model') }} <span class="text-red-600">*</span>
                         </label>
-                        <input type="text" id="model" name="model" required
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                               placeholder="e.g., Camry">
+                        <select id="model" name="model" required
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
+                            <option value="">{{ __('messages.vehicle_select_model') }}</option>
+                        </select>
                     </div>
                     <div>
                         <label for="year" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
@@ -96,8 +101,9 @@
                             {{ __('messages.vehicle_plate') }}
                         </label>
                         <input type="text" id="plate" name="plate"
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                               placeholder="e.g., ABC-123">
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 uppercase"
+                               placeholder="ABC-123"
+                               style="text-transform:uppercase">
                     </div>
                     <div>
                         <label for="fuel_type" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
@@ -128,45 +134,9 @@
                         <label for="engine_size" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('messages.vehicle_engine_size') }}
                         </label>
-                        <input type="text" id="engine_size" name="engine_size"
+                        <input type="text" id="engine_size" name="engine_size" inputmode="decimal"
                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                               placeholder="e.g., 2.0L">
-                    </div>
-                    <div>
-                        <label for="mileage" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('messages.vehicle_mileage') }}
-                        </label>
-                        <input type="text" id="mileage" name="mileage"
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200"
-                               placeholder="e.g., 50000">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vehicle Image Upload -->
-            <div>
-                <h4 class="text-base font-bold text-gray-900 dark:text-gray-100 mb-4">{{ __('messages.vehicle_image') }}</h4>
-                <div class="flex items-center space-x-4">
-                    <div id="imagePreviewContainer" class="hidden">
-                        <img id="imagePreview" class="h-32 w-32 object-cover rounded-lg border-2 border-gray-300 dark:border-gray-600" src="" alt="Preview">
-                    </div>
-                    <div class="flex-1">
-                        <label for="image" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('messages.vehicle_upload_image') }}
-                        </label>
-                        <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg,image/gif"
-                               onchange="previewImage(event)"
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200">
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.vehicle_image_format_hint') }}</p>
-                        <!-- Image Error Message -->
-                        <div id="imageErrorMessage" class="hidden mt-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                            <div class="flex items-center">
-                                <svg class="h-5 w-5 text-red-500 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                                </svg>
-                                <span id="imageErrorText" class="text-sm font-medium text-red-700 dark:text-red-300"></span>
-                            </div>
-                        </div>
+                               placeholder="e.g., 2.0">
                     </div>
                 </div>
             </div>
@@ -209,3 +179,64 @@
     </div>
     </div>
 </div>
+<script>
+(function() {
+    var makeSelect  = document.getElementById('make');
+    var modelSelect = document.getElementById('model');
+
+    function loadModels(makeName, selectedModel) {
+        // Find the option with the matching name to get data-make-id
+        var option = makeSelect.querySelector('option[value="' + CSS.escape(makeName) + '"]');
+        if (!option || !option.dataset.makeId) {
+            modelSelect.innerHTML = '<option value="">{{ __("messages.vehicle_select_model") }}</option>';
+            return;
+        }
+        var makeId = option.dataset.makeId;
+
+        fetch('/api/car-makes/' + makeId + '/models', {
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(models) {
+            modelSelect.innerHTML = '<option value="">{{ __("messages.vehicle_select_model") }}</option>';
+            models.forEach(function(name) {
+                var opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                if (name === selectedModel) opt.selected = true;
+                modelSelect.appendChild(opt);
+            });
+        })
+        .catch(function() {
+            modelSelect.innerHTML = '<option value="">{{ __("messages.vehicle_select_model") }}</option>';
+        });
+    }
+
+    makeSelect.addEventListener('change', function() {
+        loadModels(this.value, null);
+    });
+
+    // Expose loader so vehicles.blade.php can call it when editing
+    window.loadVehicleModels = loadModels;
+
+    var plateInput = document.getElementById('plate');
+    if (plateInput) {
+        plateInput.addEventListener('input', function() {
+            var pos = this.selectionStart;
+            var val = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g, '');
+            this.value = val;
+            this.setSelectionRange(pos, pos);
+        });
+    }
+
+    var engineInput = document.getElementById('engine_size');
+    if (engineInput) {
+        engineInput.addEventListener('input', function() {
+            var val = this.value.replace(/[^0-9.]/g, '');
+            var parts = val.split('.');
+            if (parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
+            this.value = val;
+        });
+    }
+})();
+</script>

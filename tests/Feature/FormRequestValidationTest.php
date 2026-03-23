@@ -136,56 +136,14 @@ class FormRequestValidationTest extends TestCase
         $response->assertSessionHasErrors('email');
     }
 
-    public function test_contact_form_requires_subject(): void
-    {
-        $response = $this->post(route('contact.submit'), [
-            'name' => 'Jane Doe',
-            'email' => 'jane@example.com',
-            'message' => 'This is a test message for contact form.',
-        ]);
-
-        $response->assertSessionHasErrors('subject');
-    }
-
     public function test_contact_form_requires_message(): void
     {
         $response = $this->post(route('contact.submit'), [
             'name' => 'Jane Doe',
             'email' => 'jane@example.com',
-            'subject' => 'general_inquiry',
         ]);
 
         $response->assertSessionHasErrors('message');
-    }
-
-    public function test_contact_form_rejects_invalid_subject(): void
-    {
-        $response = $this->post(route('contact.submit'), [
-            'name' => 'Jane Doe',
-            'email' => 'jane@example.com',
-            'subject' => 'invalid_subject_value',
-            'message' => 'This is a valid test message for contact form.',
-        ]);
-
-        $response->assertSessionHasErrors('subject');
-    }
-
-    public function test_contact_form_accepts_valid_subjects(): void
-    {
-        \Illuminate\Support\Facades\Mail::fake();
-
-        $validSubjects = ['service_inquiry', 'booking_inquiry', 'general_inquiry', 'feedback', 'other'];
-
-        foreach ($validSubjects as $subject) {
-            $response = $this->post(route('contact.submit'), [
-                'name' => 'Jane Doe',
-                'email' => 'jane@example.com',
-                'subject' => $subject,
-                'message' => 'This is a valid test message for contact form.',
-            ]);
-
-            $response->assertSessionDoesntHaveErrors('subject');
-        }
     }
 
     public function test_contact_form_rejects_short_message(): void
@@ -193,7 +151,6 @@ class FormRequestValidationTest extends TestCase
         $response = $this->post(route('contact.submit'), [
             'name' => 'Jane Doe',
             'email' => 'jane@example.com',
-            'subject' => 'general_inquiry',
             'message' => 'Short',
         ]);
 

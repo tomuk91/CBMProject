@@ -122,38 +122,39 @@
                     </div>
                 </div>
 
-                <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
-                    <div>
-                        <label for="phone" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('messages.contact_phone') }}
-                        </label>
-                        <input type="tel" id="phone" name="phone" value="{{ old('phone') }}"
-                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-base"
-                               placeholder="{{ __('messages.contact_phone_placeholder') }}"
-                               inputmode="tel"
-                               autocomplete="tel">
-                    </div>
-
-                    <div>
-                        <label for="subject" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            {{ __('messages.contact_subject') }} <span class="text-red-600" aria-label="{{ __('messages.required_field') }}">*</span>
-                        </label>
-                        <select id="subject" name="subject" required
-                                aria-required="true"
-                                aria-describedby="subject-hint"
-                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-base">
-                            <option value="">{{ __('messages.contact_subject_select') }}</option>
-                            <option value="service_inquiry" {{ old('subject') == 'service_inquiry' ? 'selected' : '' }}>{{ __('messages.contact_subject_service') }}</option>
-                            <option value="booking_inquiry" {{ old('subject') == 'booking_inquiry' ? 'selected' : '' }}>{{ __('messages.contact_subject_booking') }}</option>
-                            <option value="general_inquiry" {{ old('subject') == 'general_inquiry' ? 'selected' : '' }}>{{ __('messages.contact_subject_general') }}</option>
-                            <option value="feedback" {{ old('subject') == 'feedback' ? 'selected' : '' }}>{{ __('messages.contact_subject_feedback') }}</option>
-                            <option value="other" {{ old('subject') == 'other' ? 'selected' : '' }}>{{ __('messages.contact_subject_other') }}</option>
-                        </select>
-                        @error('subject')
-                            <p class="text-red-600 text-sm mt-1" id="subject-error" role="alert">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <div>
+                    <label for="phone" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        {{ __('messages.contact_phone') }}
+                    </label>
+                    <input type="tel" id="phone" name="phone" value="{{ old('phone', '+36 ') }}"
+                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:ring-red-900/30 transition-all duration-200 text-base"
+                           placeholder="+36 30 123 4567"
+                           inputmode="tel"
+                           autocomplete="tel">
                 </div>
+                <script>
+                (function() {
+                    var prefix = '+36 ';
+                    var input = document.getElementById('phone');
+                    if (!input) return;
+                    if (!input.value.startsWith(prefix)) input.value = prefix;
+                    input.addEventListener('input', function() {
+                        if (!this.value.startsWith(prefix)) {
+                            this.value = prefix + this.value.replace(/^\+36\s?/, '');
+                        }
+                    });
+                    input.addEventListener('keydown', function(e) {
+                        if (this.selectionStart <= prefix.length && (e.key === 'Backspace' || e.key === 'Delete')) {
+                            e.preventDefault();
+                        }
+                    });
+                    input.addEventListener('click', function() {
+                        if (this.selectionStart < prefix.length) {
+                            this.setSelectionRange(prefix.length, prefix.length);
+                        }
+                    });
+                })();
+                <\/script>
 
                 <div>
                     <label for="message" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">

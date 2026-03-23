@@ -291,16 +291,6 @@
                                             <span class="capitalize">{{ __('messages.vehicle_transmission_' . $vehicle->transmission) }}</span>
                                         </div>
                                     @endif
-                                    @if($vehicle->mileage)
-                                        <div class="flex items-center text-gray-600 dark:text-gray-400">
-                                            <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-900/20 mr-3">
-                                                <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                                </svg>
-                                            </div>
-                                            <span class="font-semibold">{{ number_format($vehicle->mileage) }} km</span>
-                                        </div>
-                                    @endif
                                 </div>
                                 
                                 @if(!$vehicle->is_primary)
@@ -350,7 +340,11 @@
             document.getElementById('vehicleForm').action = '{{ route("vehicles.store") }}';
             document.getElementById('vehicleMethod').value = 'POST';
             document.getElementById('vehicleForm').reset();
-            document.getElementById('imagePreviewContainer').classList.add('hidden');
+            // Reset model dropdown to empty
+            const modelSelect = document.getElementById('model');
+            if (modelSelect) {
+                modelSelect.innerHTML = '<option value="">{{ __("messages.vehicle_select_model") }}</option>';
+            }
             document.getElementById('vehicleModal').classList.remove('hidden');
         }
 
@@ -363,26 +357,22 @@
                     document.getElementById('vehicleForm').action = `/vehicles/${vehicleId}`;
                     document.getElementById('vehicleMethod').value = 'PUT';
                     
-                    // Populate form fields
-                    document.getElementById('make').value = vehicle.make;
-                    document.getElementById('model').value = vehicle.model;
+                    // Set make first, then load models and pre-select model
+                    const makeSelect = document.getElementById('make');
+                    makeSelect.value = vehicle.make;
+
+                    if (typeof window.loadVehicleModels === 'function') {
+                        window.loadVehicleModels(vehicle.make, vehicle.model);
+                    }
+
                     document.getElementById('year').value = vehicle.year;
                     document.getElementById('color').value = vehicle.color || '';
                     document.getElementById('plate').value = vehicle.plate || '';
                     document.getElementById('fuel_type').value = vehicle.fuel_type || '';
                     document.getElementById('transmission').value = vehicle.transmission || '';
                     document.getElementById('engine_size').value = vehicle.engine_size || '';
-                    document.getElementById('mileage').value = vehicle.mileage || '';
                     document.getElementById('notes').value = vehicle.notes || '';
                     document.getElementById('is_primary').checked = vehicle.is_primary;
-                    
-                    // Show current image if exists
-                    if (vehicle.image_url) {
-                        document.getElementById('imagePreview').src = vehicle.image_url;
-                        document.getElementById('imagePreviewContainer').classList.remove('hidden');
-                    } else {
-                        document.getElementById('imagePreviewContainer').classList.add('hidden');
-                    }
                     
                     document.getElementById('vehicleModal').classList.remove('hidden');
                 });
@@ -391,53 +381,6 @@
         function closeVehicleModal() {
             document.getElementById('vehicleModal').classList.add('hidden');
             document.getElementById('vehicleForm').reset();
-            document.getElementById('imagePreviewContainer').classList.add('hidden');
-        }
-
-        function previewImage(event) {
-            const file = event.target.files[0];
-            const maxSizeBytes = 2 * 1024 * 1024; // 2MB in bytes
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-            const errorContainer = document.getElementById('imageErrorMessage');
-            const errorText = document.getElementById('imageErrorText');
-            const previewContainer = document.getElementById('imagePreviewContainer');
-            const previewImg = document.getElementById('imagePreview');
-            const fileInput = event.target;
-
-            // Reset error state
-            errorContainer.classList.add('hidden');
-            fileInput.classList.remove('border-red-500');
-
-            if (file) {
-                // Check file type
-                if (!allowedTypes.includes(file.type)) {
-                    errorText.textContent = '{{ __('messages.validation.image_format') }}';
-                    errorContainer.classList.remove('hidden');
-                    fileInput.classList.add('border-red-500');
-                    fileInput.value = '';
-                    previewContainer.classList.add('hidden');
-                    return;
-                }
-
-                // Check file size (2MB = 2 * 1024 * 1024 bytes)
-                if (file.size > maxSizeBytes) {
-                    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-                    errorText.textContent = '{{ __('messages.validation.image_size', ['max' => 2]) }} ' + '({{ __('messages.your_file') }}: ' + fileSizeMB + 'MB)';
-                    errorContainer.classList.remove('hidden');
-                    fileInput.classList.add('border-red-500');
-                    fileInput.value = '';
-                    previewContainer.classList.add('hidden');
-                    return;
-                }
-
-                // File is valid, show preview
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    previewContainer.classList.remove('hidden');
-                }
-                reader.readAsDataURL(file);
-            }
         }
 
         // Mobile Menu Toggle

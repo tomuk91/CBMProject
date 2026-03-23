@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ContactSubmissionController;
 use App\Http\Controllers\Admin\ServiceTypeController;
 use App\Http\Controllers\Admin\AdminSettingsController;
+use App\Http\Controllers\Admin\CarMakeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Models\Appointment;
@@ -112,15 +113,17 @@ Route::middleware('auth')->group(function () {
             abort(403, 'Unauthorized access to vehicle data');
         }
         
-        $data = $vehicle->only(['id', 'make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size', 'mileage', 'notes', 'is_primary', 'image']);
-        
-        // Add temporary URL for image if exists
-        if ($vehicle->image) {
-            $data['image_url'] = Storage::disk(config('filesystems.default'))->temporaryUrl($vehicle->image, now()->addHours(1));
-        }
+        $data = $vehicle->only(['id', 'make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size', 'notes', 'is_primary']);
         
         return response()->json($data);
     })->middleware('throttle:60,1');
+
+    // API: load models for a given car make (used by vehicle form dropdowns)
+    Route::get('/api/car-makes/{carMake}/models', function(\App\Models\CarMake $carMake) {
+        return response()->json(
+            $carMake->carModels()->active()->orderBy('name')->pluck('name')
+        );
+    })->middleware('throttle:120,1')->name('api.car-makes.models');
     
     // Customer appointment routes
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
@@ -213,6 +216,17 @@ Route::middleware('auth')->group(function () {
         Route::delete('/service-types/{serviceType}', [ServiceTypeController::class, 'destroy'])->name('service-types.destroy');
         Route::post('/service-types/{serviceType}/toggle', [ServiceTypeController::class, 'toggleActive'])->name('service-types.toggle');
 
+        // Car Makes / Models routes
+        Route::get('/car-makes', [CarMakeController::class, 'index'])->name('car-makes.index');
+        Route::get('/car-makes/create', [CarMakeController::class, 'create'])->name('car-makes.create');
+        Route::post('/car-makes', [CarMakeController::class, 'store'])->name('car-makes.store');
+        Route::get('/car-makes/{carMake}/edit', [CarMakeController::class, 'edit'])->name('car-makes.edit');
+        Route::put('/car-makes/{carMake}', [CarMakeController::class, 'update'])->name('car-makes.update');
+        Route::delete('/car-makes/{carMake}', [CarMakeController::class, 'destroy'])->name('car-makes.destroy');
+        Route::post('/car-makes/{carMake}/models', [CarMakeController::class, 'storeModel'])->name('car-makes.models.store');
+        Route::put('/car-makes/{carMake}/models/{carModel}', [CarMakeController::class, 'updateModel'])->name('car-makes.models.update');
+        Route::delete('/car-makes/{carMake}/models/{carModel}', [CarMakeController::class, 'destroyModel'])->name('car-makes.models.destroy');
+
         // Admin Settings
         Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings');
 
@@ -223,7 +237,7 @@ Route::middleware('auth')->group(function () {
 
         // Admin Tour
         Route::post('/tour/{page}/complete', function (string $page) {
-            $allowed = ['dashboard', 'slots', 'schedule-templates', 'calendar', 'pending', 'activity-log', 'analytics', 'customers', 'contact-submissions', 'notifications', 'settings', 'service-types', 'blocked-dates'];
+            $allowed = ['dashboard', 'slots', 'schedule-templates', 'calendar', 'pending', 'activity-log', 'analytics', 'customers', 'contact-submissions', 'notifications', 'settings', 'service-types', 'blocked-dates', 'car-makes'];
             if (!in_array($page, $allowed)) {
                 return response()->json(['error' => 'Invalid page'], 422);
             }
@@ -231,7 +245,7 @@ Route::middleware('auth')->group(function () {
             return response()->json(['success' => true]);
         })->name('tour.complete');
         Route::post('/tour/{page}/reset', function (string $page) {
-            $allowed = ['dashboard', 'slots', 'schedule-templates', 'calendar', 'pending', 'activity-log', 'analytics', 'customers', 'contact-submissions', 'notifications', 'settings', 'service-types', 'blocked-dates'];
+            $allowed = ['dashboard', 'slots', 'schedule-templates', 'calendar', 'pending', 'activity-log', 'analytics', 'customers', 'contact-submissions', 'notifications', 'settings', 'service-types', 'blocked-dates', 'car-makes'];
             if (!in_array($page, $allowed)) {
                 return response()->json(['error' => 'Invalid page'], 422);
             }

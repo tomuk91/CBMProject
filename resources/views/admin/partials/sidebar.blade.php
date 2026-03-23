@@ -145,6 +145,16 @@
                 <span class="ml-auto"><x-help-hint :text="__('messages.help_service_types')" position="right" /></span>
             </a>
 
+            {{-- Car Makes & Models --}}
+            <a href="{{ route('admin.car-makes.index') }}"
+               class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
+                      {{ request()->routeIs('admin.car-makes.*') ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500 pl-2' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-red-600 dark:hover:text-red-400' }}">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM3 4h1.05M3 4l1 9h12l1-9H3zM7 4h10"/>
+                </svg>
+                {{ __('messages.sidebar_car_makes') }}
+            </a>
+
             {{-- REPORTS SECTION --}}
             <div class="px-3 pt-4 pb-1" data-tour="sidebar-reports">
                 <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">{{ __('messages.sidebar_section_reports') }}</p>

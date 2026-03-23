@@ -7,8 +7,7 @@ You have received a new contact form submission from your website.
 
 **Name:** {{ $contactData['name'] }}  
 **Email:** {{ $contactData['email'] }}  
-**Phone:** {{ $contactData['phone'] ?? 'Not provided' }}  
-**Subject:** {{ ucfirst(str_replace('_', ' ', $contactData['subject'])) }}
+**Phone:** {{ $contactData['phone'] ?? 'Not provided' }}
 
 ## Message
 

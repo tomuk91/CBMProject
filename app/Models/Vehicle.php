@@ -20,10 +20,8 @@ class Vehicle extends Model
         'fuel_type',
         'transmission',
         'engine_size',
-        'mileage',
         'notes',
         'is_primary',
-        'image',
     ];
 
     protected function casts(): array

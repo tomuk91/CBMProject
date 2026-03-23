@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreVehicleRequest;
 use App\Http\Requests\UpdateVehicleRequest;
+use App\Models\CarMake;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,8 @@ class VehicleController extends Controller
     public function index()
     {
         $vehicles = Auth::user()->vehicles()->latest()->get();
-        return view('profile.vehicles', compact('vehicles'));
+        $carMakes = CarMake::active()->orderBy('name')->get(['id', 'name']);
+        return view('profile.vehicles', compact('vehicles', 'carMakes'));
     }
 
     public function store(StoreVehicleRequest $request)
@@ -46,32 +48,6 @@ class VehicleController extends Controller
             $validated['is_primary'] = true;
         }
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            try {
-                $file = $request->file('image');
-                $disk = config('filesystems.default');
-                
-                // Store file with public visibility
-                $path = $file->store('vehicles', ['disk' => $disk, 'visibility' => 'public']);
-                
-                if (!$path) {
-                    throw new \Exception(__('messages.image_upload_failed'));
-                }
-                
-                $validated['image'] = $path;
-            } catch (\Exception $e) {
-                \Log::error('Vehicle image upload failed', [
-                    'error' => $e->getMessage(),
-                    'user_id' => Auth::id(),
-                ]);
-                
-                return redirect()->back()
-                    ->withInput()
-                    ->with('error', __('messages.image_upload_failed'));
-            }
-        }
-
         Vehicle::create($validated);
 
         return redirect()->back()->with('success', __('messages.vehicle_added_successfully'));
@@ -86,38 +62,6 @@ class VehicleController extends Controller
         // If this is set as primary, unset all other primary vehicles
         if ($request->boolean('is_primary')) {
             Auth::user()->vehicles()->where('id', '!=', $vehicle->id)->update(['is_primary' => false]);
-        }
-
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            try {
-                $file = $request->file('image');
-                $disk = config('filesystems.default');
-                
-                // Delete old image if exists
-                if ($vehicle->image) {
-                    Storage::disk($disk)->delete($vehicle->image);
-                }
-                
-                // Store file with public visibility
-                $path = $file->store('vehicles', ['disk' => $disk, 'visibility' => 'public']);
-                
-                if (!$path) {
-                    throw new \Exception(__('messages.image_upload_failed'));
-                }
-                
-                $validated['image'] = $path;
-            } catch (\Exception $e) {
-                \Log::error('Vehicle image upload failed', [
-                    'error' => $e->getMessage(),
-                    'vehicle_id' => $vehicle->id,
-                    'user_id' => Auth::id(),
-                ]);
-                
-                return redirect()->back()
-                    ->withInput()
-                    ->with('error', __('messages.image_upload_failed'));
-            }
         }
 
         // Sanitize free-text fields

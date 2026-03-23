@@ -71,7 +71,7 @@
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('messages.account_status') }}</h3>
-                                <p class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ __('messages.status_confirmed') }}</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ __('messages.status_active') }}</p>
                             </div>
                         </div>
                     </div>
@@ -332,12 +332,6 @@
                                     <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
                                         <dt class="font-medium">{{ __('messages.vehicle_engine_size') }}:</dt>
                                         <dd class="font-semibold text-gray-900 dark:text-gray-100">{{ $primaryVehicle->engine_size }}</dd>
-                                    </div>
-                                    @endif
-                                    @if($primaryVehicle->mileage)
-                                    <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-                                        <dt class="font-medium">{{ __('messages.vehicle_mileage') }}:</dt>
-                                        <dd class="font-semibold text-gray-900 dark:text-gray-100">{{ number_format((float)$primaryVehicle->mileage) }} km</dd>
                                     </div>
                                     @endif
                                 </dl>

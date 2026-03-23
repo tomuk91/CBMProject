@@ -39,7 +39,6 @@ class ProfileUpdateRequest extends FormRequest
             'vehicle_fuel_type' => ['nullable', 'string', 'in:petrol,diesel,electric,hybrid'],
             'vehicle_transmission' => ['nullable', 'string', 'in:manual,automatic,semi-automatic'],
             'vehicle_engine_size' => ['nullable', 'string', 'max:50'],
-            'vehicle_mileage' => ['nullable', 'integer', 'min:0'],
         ];
     }
 

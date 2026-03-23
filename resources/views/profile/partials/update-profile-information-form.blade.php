@@ -39,10 +39,33 @@
                                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
                             </svg>
                         </div>
-                        <x-text-input id="phone" name="phone" type="tel" class="pl-10 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-red-500 focus:ring-red-500 dark:focus:border-red-500 dark:focus:ring-red-500 transition" :value="old('phone', $user->phone)" autocomplete="tel" :placeholder="__('messages.phone_placeholder')" />
+                        <x-text-input id="phone" name="phone" type="tel" class="pl-10 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-red-500 focus:ring-red-500 dark:focus:border-red-500 dark:focus:ring-red-500 transition" :value="old('phone', $user->phone ?? '+36 ')" autocomplete="tel" :placeholder="__('messages.phone_placeholder')" />
                     </div>
                     <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('messages.profile_phone_hint') }}</p>
                     <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                    <script>
+                    (function() {
+                        var prefix = '+36 ';
+                        var input = document.getElementById('phone');
+                        if (!input) return;
+                        if (!input.value.startsWith(prefix)) input.value = prefix;
+                        input.addEventListener('input', function() {
+                            if (!this.value.startsWith(prefix)) {
+                                this.value = prefix + this.value.replace(/^\+36\s?/, '');
+                            }
+                        });
+                        input.addEventListener('keydown', function(e) {
+                            if (this.selectionStart <= prefix.length && (e.key === 'Backspace' || e.key === 'Delete')) {
+                                e.preventDefault();
+                            }
+                        });
+                        input.addEventListener('click', function() {
+                            if (this.selectionStart < prefix.length) {
+                                this.setSelectionRange(prefix.length, prefix.length);
+                            }
+                        });
+                    })();
+                    <\/script>
                 </div>
             </div>
         </div>

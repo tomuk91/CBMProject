@@ -138,7 +138,6 @@
                             <option value="">{{ __('messages.any_time') }}</option>
                             <option value="morning" {{ request('time_period') == 'morning' ? 'selected' : '' }}>{{ __('messages.morning') }}</option>
                             <option value="afternoon" {{ request('time_period') == 'afternoon' ? 'selected' : '' }}>{{ __('messages.afternoon') }}</option>
-                            <option value="evening" {{ request('time_period') == 'evening' ? 'selected' : '' }}>{{ __('messages.evening') }}</option>
                         </select>
                     </div>
 

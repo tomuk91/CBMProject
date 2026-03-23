@@ -38,7 +38,6 @@ class AvailableSlot extends Model
         $ranges = [
             'morning'   => [6, 12],
             'afternoon' => [12, 17],
-            'evening'   => [17, 21],
         ];
 
         if (! isset($ranges[$period])) {

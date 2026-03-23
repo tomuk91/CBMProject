@@ -95,7 +95,7 @@ class ProfileController extends Controller
                 'phone' => $user->phone,
                 'created_at' => $user->created_at?->toIso8601String(),
             ],
-            'vehicles' => $user->vehicles->map(fn($v) => $v->only(['make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size', 'mileage']))->toArray(),
+            'vehicles' => $user->vehicles->map(fn($v) => $v->only(['make', 'model', 'year', 'color', 'plate', 'fuel_type', 'transmission', 'engine_size']))->toArray(),
             'appointments' => $user->appointments->map(fn($a) => [
                 'service' => $a->service,
                 'status' => $a->status->value ?? $a->status,

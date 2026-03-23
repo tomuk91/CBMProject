@@ -159,12 +159,37 @@
                                     <input type="tel" 
                                            id="phone" 
                                            name="phone" 
-                                           value="{{ old('phone', Auth::user()->phone ?? '') }}" 
+                                           value="{{ old('phone', Auth::user()->phone ?? '+36 ') }}" 
                                            {{ Auth::user()->phone ? 'readonly' : 'required' }}
-                                           placeholder="{{ Auth::user()->phone ? '' : '+36 1 234 5678' }}"
+                                           placeholder="{{ Auth::user()->phone ? '' : '+36 30 123 4567' }}"
                                            inputmode="tel"
                                            autocomplete="tel"
                                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-gray-100 transition shadow-sm hover:border-gray-400 dark:hover:border-gray-500 text-base {{ Auth::user()->phone ? 'bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed' : '' }}">
+                                    @if(!Auth::user()->phone)
+                                    <script>
+                                    (function() {
+                                        var prefix = '+36 ';
+                                        var input = document.getElementById('phone');
+                                        if (!input || input.readOnly) return;
+                                        if (!input.value.startsWith(prefix)) input.value = prefix;
+                                        input.addEventListener('input', function() {
+                                            if (!this.value.startsWith(prefix)) {
+                                                this.value = prefix + this.value.replace(/^\+36\s?/, '');
+                                            }
+                                        });
+                                        input.addEventListener('keydown', function(e) {
+                                            if (this.selectionStart <= prefix.length && (e.key === 'Backspace' || e.key === 'Delete')) {
+                                                e.preventDefault();
+                                            }
+                                        });
+                                        input.addEventListener('click', function() {
+                                            if (this.selectionStart < prefix.length) {
+                                                this.setSelectionRange(prefix.length, prefix.length);
+                                            }
+                                        });
+                                    })();
+                                    <\/script>
+                                    @endif
                                     @if(Auth::user()->phone)
                                         <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400 flex items-center">
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
