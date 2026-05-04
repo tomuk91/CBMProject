@@ -109,7 +109,7 @@
                                 CBM Auto - {{ __('messages.your_trusted_service') }}
                             </p>
                             <p style="margin: 0; font-size: 12px; color: #6b7280;">
-                                📞 +36 1 234 5678 | 📧 info@cbmauto.com
+                                📞 +36 27 546 475 | 📧 info@cbmauto.com
                             </p>
                         </td>
                     </tr>

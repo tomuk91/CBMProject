@@ -31,7 +31,10 @@ Route::get('/language/{locale}', function ($locale) {
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 Route::get('/', function () {
-    return view('home');
+    if (Auth::check() && Auth::user()->is_admin) {
+        return view('home');
+    }
+    return view('coming-soon');
 })->name('home');
 
 // About page

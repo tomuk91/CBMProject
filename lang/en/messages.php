@@ -1191,7 +1191,7 @@ return [
     'booking_need_help_description' => 'If you have questions or need to speak with us, feel free to reach out.',
 
     // Contact Page
-    'contact_address_value' => 'Budapest, Hungary',
+    'contact_address_value' => 'Hunyadi János u. 18, Dunakeszi, 2120, Hungary',
     'contact_hours_weekday' => '8:00 AM - 6:00 PM',
     'contact_hours_saturday' => '9:00 AM - 2:00 PM',
 
@@ -1313,7 +1313,7 @@ return [
     // Home Page - Footer Contact Labels
     'footer_email_label' => 'Email:',
     'footer_phone_label' => 'Phone:',
-    'footer_address_label' => 'Address: Budapest, Hungary',
+    'footer_address_label' => 'Address: Hunyadi János u. 18, Dunakeszi, 2120',
 
     // Appointment Details Page
     'appointment_details' => 'Appointment Details',
@@ -1890,4 +1890,14 @@ return [
     'tour_blocked_form_description' => 'Select a date and optionally add a reason. The system will prevent any new bookings on that day.',
     'tour_blocked_complete_title' => 'Dates Protected!',
     'tour_blocked_complete_description' => 'You now know how to block dates! Keep your schedule accurate by blocking days you\'re unavailable. Replay this tour anytime.',
+
+    // Coming Soon page
+    'coming_soon_title' => 'We\'re coming soon',
+    'coming_soon_subtitle' => 'Professional Car Service',
+    'coming_soon_body' => 'We\'re putting the finishing touches on something great. Come back soon to book your next service appointment.',
+    'coming_soon_address_label' => 'Address',
+    'coming_soon_phone_label' => 'Phone',
+    'coming_soon_admin_label' => 'Admin access',
+    'coming_soon_admin_login' => 'Admin Login',
+    'coming_soon_footer' => 'All rights reserved.',
 ];

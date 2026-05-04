@@ -79,9 +79,9 @@
                     <tr>
                         <td style="padding: 30px; background-color: #f9fafb; text-align: center; border-top: 1px solid #e5e7eb;">
                             <p style="margin: 0 0 10px; color: #111827; font-size: 16px; font-weight: 600;">{{ config('app.name') }}</p>
-                            <p style="margin: 0 0 5px; color: #6b7280; font-size: 14px;">{{ config('services.business.phone', '+36 1 234 5678') }}</p>
+                            <p style="margin: 0 0 5px; color: #6b7280; font-size: 14px;">{{ config('services.business.phone', '+36 27 546 475') }}</p>
                             <p style="margin: 0 0 5px; color: #6b7280; font-size: 14px;">{{ config('services.business.email', 'info@cbmauto.com') }}</p>
-                            <p style="margin: 0; color: #6b7280; font-size: 14px;">{{ config('services.business.address', 'Budapest, Hungary') }}</p>
+                            <p style="margin: 0; color: #6b7280; font-size: 14px;">{{ config('services.business.address', 'Hunyadi János u. 18, Dunakeszi, 2120, Hungary') }}</p>
                         </td>
                     </tr>
                 </table>

@@ -32,19 +32,21 @@ class SecurityHeaders
         }
         
         // Content Security Policy
-        $csp = implode('; ', [
+        $viteDevOrigin = config('app.env') !== 'production' ? 'http://127.0.0.1:5173 ws://127.0.0.1:5173' : '';
+
+        $csp = implode('; ', array_filter([
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://fonts.bunny.net",
-            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.bunny.net",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://fonts.bunny.net" . ($viteDevOrigin ? " $viteDevOrigin" : ''),
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.bunny.net" . ($viteDevOrigin ? " $viteDevOrigin" : ''),
             "font-src 'self' https://fonts.bunny.net data:",
             "img-src 'self' data: https: http:",
-            "connect-src 'self' https://cdn.jsdelivr.net",
+            "connect-src 'self' https://cdn.jsdelivr.net" . ($viteDevOrigin ? " $viteDevOrigin" : ''),
             "frame-src 'self' https://www.google.com",
             "frame-ancestors 'self'",
             "object-src 'none'",
             "base-uri 'self'",
             "form-action 'self'",
-        ]);
+        ]));
         $response->headers->set('Content-Security-Policy', $csp);
         
         // Referrer Policy

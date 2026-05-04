@@ -490,7 +490,7 @@
                     <h4 class="font-bold text-lg mb-4">{{ __('messages.footer_contact') }}</h4>
                     <ul class="space-y-3 text-gray-400">
                         <li>{{ __('messages.footer_email_label') }} info@cbmauto.com</li>
-                        <li>{{ __('messages.footer_phone_label') }} +36 1 234 5678</li>
+                        <li>{{ __('messages.footer_phone_label') }} +36 27 546 475</li>
                         <li>{{ __('messages.footer_address_label') }}</li>
                     </ul>
                 </div>

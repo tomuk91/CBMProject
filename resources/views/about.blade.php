@@ -190,8 +190,8 @@
                                     <div>
                                         <h4 class="font-bold text-gray-900 dark:text-white mb-2">{{ __('messages.about_address_label') }}</h4>
                                         <p class="text-gray-600 dark:text-gray-400">
-                                            1234 Example Street<br>
-                                            Budapest, 1051<br>
+                                            Hunyadi János u. 18<br>
+                                            Dunakeszi, 2120<br>
                                             Hungary
                                         </p>
                                     </div>
@@ -206,7 +206,7 @@
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-gray-900 dark:text-white mb-2">{{ __('messages.about_phone_label') }}</h4>
-                                        <p class="text-gray-600 dark:text-gray-400">+36 1 234 5678</p>
+                                        <p class="text-gray-600 dark:text-gray-400">+36 27 546 475</p>
                                     </div>
                                 </div>
 
@@ -312,8 +312,8 @@
                     <h4 class="font-bold text-lg mb-4">{{ __('messages.footer_contact') }}</h4>
                     <ul class="space-y-3 text-gray-400">
                         <li>Email: info@cbmauto.com</li>
-                        <li>Phone: +36 1 234 5678</li>
-                        <li>Address: Budapest, Hungary</li>
+                        <li>Phone: +36 27 546 475</li>
+                        <li>Address: Dunakeszi, Hungary</li>
                     </ul>
                 </div>
             </div>

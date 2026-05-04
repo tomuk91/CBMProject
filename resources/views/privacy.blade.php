@@ -104,8 +104,8 @@
                     <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 mt-4">
                         <p class="text-gray-900 dark:text-white font-semibold mb-2">{{ config('app.name') }}</p>
                         <p class="text-gray-600 dark:text-gray-400">Email: info@cbmauto.com</p>
-                        <p class="text-gray-600 dark:text-gray-400">Phone: +36 1 234 5678</p>
-                        <p class="text-gray-600 dark:text-gray-400">Address: 1234 Example Street, Budapest, 1051, Hungary</p>
+                        <p class="text-gray-600 dark:text-gray-400">Phone: +36 27 546 475</p>
+                        <p class="text-gray-600 dark:text-gray-400">Address: Hunyadi János u. 18, Dunakeszi, 2120, Hungary</p>
                     </div>
                 </section>
 
@@ -150,8 +150,8 @@
                     <h4 class="font-bold text-lg mb-4">{{ __('messages.footer_contact') }}</h4>
                     <ul class="space-y-3 text-gray-400">
                         <li>Email: info@cbmauto.com</li>
-                        <li>Phone: +36 1 234 5678</li>
-                        <li>Address: Budapest, Hungary</li>
+                        <li>Phone: +36 27 546 475</li>
+                        <li>Address: Dunakeszi, Hungary</li>
                     </ul>
                 </div>
             </div>

@@ -1173,7 +1173,7 @@ return [
     'booking_need_help_description' => 'Ha kérdése van, vagy szeretne beszélni velünk, bátran keressen minket.',
 
     // Kapcsolat oldal
-    'contact_address_value' => 'Budapest, Magyarország',
+    'contact_address_value' => 'Dunakeszi, Hunyadi János u. 18, 2120, Magyarország',
     'contact_hours_weekday' => '8:00 - 18:00',
     'contact_hours_saturday' => '9:00 - 14:00',
 
@@ -1295,7 +1295,7 @@ return [
     // Home Page - Footer Contact Labels
     'footer_email_label' => 'E-mail:',
     'footer_phone_label' => 'Telefon:',
-    'footer_address_label' => 'Cím: Budapest, Magyarország',
+    'footer_address_label' => 'Cím: Dunakeszi, Hunyadi János u. 18, 2120',
 
     // Appointment Details Page
     'appointment_details' => 'Időpont részletei',
@@ -1872,4 +1872,14 @@ return [
     'tour_blocked_form_description' => 'Válassz egy dátumot és opcionálisan adj meg egy okot. A rendszer megakadályozza az új foglalásokat azon a napon.',
     'tour_blocked_complete_title' => 'Dátumok védve!',
     'tour_blocked_complete_description' => 'Most már tudod letiltani a dátumokat! Tartsd pontosan az ütemterved a nem elérhető napok blokkolásával. Bármikor újraindíthatod.',
+
+    // Hamarosan oldal
+    'coming_soon_title' => 'Hamarosan megnyitunk',
+    'coming_soon_subtitle' => 'Professzionális autószerviz',
+    'coming_soon_body' => 'Az utolsó simításokat végezzük valami nagyszerűn. Nézz vissza hamarosan, hogy lefoglald a következő szervizidőpontodat.',
+    'coming_soon_address_label' => 'Cím',
+    'coming_soon_phone_label' => 'Telefon',
+    'coming_soon_admin_label' => 'Admin hozzáférés',
+    'coming_soon_admin_login' => 'Admin bejelentkezés',
+    'coming_soon_footer' => 'Minden jog fenntartva.',
 ];

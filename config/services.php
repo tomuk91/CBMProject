@@ -46,11 +46,11 @@ return [
 
     'business' => [
         'name' => env('BUSINESS_NAME', 'CBM Auto'),
-        'phone' => env('BUSINESS_PHONE', '+36 1 234 5678'),
+        'phone' => env('BUSINESS_PHONE', '+36 27 546 475'),
         'email' => env('BUSINESS_EMAIL', 'info@cbmauto.com'),
-        'address' => env('BUSINESS_ADDRESS', '1234 Budapest, Example Street 12'),
-        'city' => env('BUSINESS_CITY', 'Budapest'),
-        'postal_code' => env('BUSINESS_POSTAL_CODE', '1234'),
+        'address' => env('BUSINESS_ADDRESS', 'Hunyadi János u. 18, Dunakeszi, 2120, Hungary'),
+        'city' => env('BUSINESS_CITY', 'Dunakeszi'),
+        'postal_code' => env('BUSINESS_POSTAL_CODE', '2120'),
         'country' => env('BUSINESS_COUNTRY', 'Hungary'),
         'latitude' => env('BUSINESS_LATITUDE', '47.4979'),
         'longitude' => env('BUSINESS_LONGITUDE', '19.0402'),

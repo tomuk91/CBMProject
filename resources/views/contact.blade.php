@@ -43,7 +43,7 @@
                     </svg>
                 </div>
                 <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-2">{{ __('messages.contact_phone') }}</h3>
-                <a href="tel:+3612345678" class="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition">+36 1 234 5678</a>
+                <a href="tel:+3627546475" class="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition">+36 27 546 475</a>
             </div>
 
             <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition">

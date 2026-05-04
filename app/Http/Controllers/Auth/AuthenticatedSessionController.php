@@ -40,7 +40,11 @@ class AuthenticatedSessionController extends Controller
                 ->with('success', __('messages.flash_welcome_back_booking'));
         }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(
+            Auth::user()->is_admin
+                ? route('home', absolute: false)
+                : route('dashboard', absolute: false)
+        );
     }
 
     /**
